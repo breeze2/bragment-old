@@ -1,0 +1,32 @@
+@import './Values.less';
+
+.board-card {
+    border-radius: @border-radius;
+    opacity: 0.82;
+    &:hover {
+        opacity: 1;
+    }
+
+    .ant-card-body {
+        padding: 8px 12px;
+        height: 96px;
+        overflow: hidden;
+    }
+    .card-title {
+        color: @white-color;
+        width: 100%;
+        font-weight: 600;
+        margin: 0;
+
+        overflow: hidden;
+        word-break: break-word;
+    }
+    &.board-creating {
+        background-color: @none-board-color;
+        .card-title {
+            color: @light-black-text-color;
+            text-align: center;
+            line-height: 80px;
+        }
+    }
+}

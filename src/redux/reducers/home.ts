@@ -1,8 +1,7 @@
 import Immutable from 'immutable'
 import { HomeActionTypes, InterfaceAction } from '../actions'
 
-const MenuKeyDefault = 'ALL_ITEMS'
-const LanguageDefault = localStorage.getItem('LANGUAGE') || navigator.language
+const MenuKeyDefault = 'BOARDS'
 const InitialMenuState = Immutable.fromJS({
     selectedMenuKey: MenuKeyDefault,
 })

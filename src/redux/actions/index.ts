@@ -3,4 +3,5 @@ export interface InterfaceAction {
     type: string,
 }
 
+export * from './app'
 export * from './home'
