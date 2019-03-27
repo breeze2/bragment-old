@@ -7,7 +7,17 @@ import BoardCard from './BoardCard'
 
 import '../styles/HomeBoards.less'
 
-class HomeBoards extends Component {
+interface InterfaceHomeBoardsProps {
+    setCreateBoardModalVisible: (visible: boolean) => any
+}
+
+class HomeBoards extends Component<InterfaceHomeBoardsProps> {
+    public constructor(props: InterfaceHomeBoardsProps) {
+        super(props)
+    }
+    public handleCreatingCardClick = () => {
+        this.props.setCreateBoardModalVisible(true)
+    }
     public render() {
         return (
             <div className="home-boards">
@@ -41,7 +51,7 @@ class HomeBoards extends Component {
                     <div className="boards-grid">
                         <Row gutter={12}>
                             <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard isCreatingEntry />
+                                <BoardCard isCreatingCard onClick={this.handleCreatingCardClick} />
                             </Col>
                         </Row>
                     </div>

@@ -7,7 +7,8 @@ import '../styles/BoardCard.less'
 interface InterfaceBoardCardProps {
     color?: string,
     image?: string,
-    isCreatingEntry?: boolean,
+    isCreatingCard?: boolean,
+    onClick?: (param: any) => any
 }
 
 const colors = {
@@ -26,10 +27,15 @@ class BoardCard extends Component<InterfaceBoardCardProps> {
     public constructor(props: any) {
         super(props)
     }
+    public handleClick = (e: any) => {
+        if (typeof this.props.onClick === 'function') {
+            this.props.onClick({})
+        }
+    }
     public render() {
-        if (this.props.isCreatingEntry) {
+        if (this.props.isCreatingCard) {
             return (
-                <Card className="board-card board-creating" hoverable>
+                <Card className="board-card board-creating" hoverable onClick={this.handleClick}>
                     <p className="card-title"><FormattedMessage id="createNewBoard" /></p>
                 </Card>
             )
@@ -37,7 +43,7 @@ class BoardCard extends Component<InterfaceBoardCardProps> {
         return (
             <Card className="board-card" hoverable style={{
                 backgroundColor: this.props.color || BoardCard.defaultColor,
-            }}>
+            }} onClick={this.handleClick}>
                 <p className="card-title">Card content</p>
             </Card>
         )

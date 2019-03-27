@@ -1,12 +1,10 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import App from '../components/App'
+import HomeBoards from '../components/HomeBoards'
 import { setCreateBoardModalVisible } from '../redux/actions'
 
 const mapStateToProps = (store: any, props: any) => {
     return {
-        createBoardModalVisible: store.app.get('createBoardModalVisible'),
-        language: store.app.get('language'),
     }
 }
 
@@ -17,4 +15,4 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(App)
+)(HomeBoards)

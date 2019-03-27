@@ -3,8 +3,8 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link, Route, RouteComponentProps } from 'react-router-dom'
 
-import HomeBoards from '../components/HomeBoards'
 import HomeLogs from '../components/HomeLogs'
+import HomeBoards from '../containers//HomeBoards'
 
 import '../styles/HomePage.less'
 
