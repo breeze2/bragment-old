@@ -1,75 +1,73 @@
-import { Input, message as Message, Modal } from 'antd'
-import React, { Component } from 'react'
+import { Icon, Input, message as Message, Modal } from 'antd'
+import React, { Component, RefObject } from 'react'
 import { FormattedMessage, InjectedIntlProps, injectIntl, intlShape } from 'react-intl'
+import SelectBackgroundPopover, { InterfaceBackground } from './SelectBackgroundPopover'
+
+import Utils from '../utils'
 
 import '../styles/CreateBoardModal.less'
 
-interface InterfaceCreateBoardModalProps {
+interface InterfaceCreateBoardModalProps extends InjectedIntlProps {
     visible: boolean
     onOk: (e: any) => any
     onCancel: (e: any) => any
 }
 
 interface InterfaceCreateBoardModalState {
-    readonly title: string
+    selectedType: string
+    selectedIndex: number
+    colors: string[]
+    images: string[]
+    path: string
+    title: string
 }
 
-class CreateBoardModal extends Component<InterfaceCreateBoardModalProps & InjectedIntlProps, {}> {
+class CreateBoardModal extends Component<InterfaceCreateBoardModalProps> {
     public static propTypes: React.ValidationMap<any> = {
         intl: intlShape.isRequired,
     }
     public state: InterfaceCreateBoardModalState
-    public constructor(props: any) {
+    public constructor(props: InterfaceCreateBoardModalProps) {
         super(props)
-        this.state = {
-            title: '',
+        this.state = { colors: Utils.board.colors, images: [], path: '', selectedIndex: 0, selectedType: 'color', title: '' }
+    }
+    public componentWillReceiveProps(props: InterfaceCreateBoardModalProps) {
+        if (props.visible && !this.props.visible) {
+            
         }
     }
-    public handleSummit = (e: any) => {
-        const title = this.state.title
-        const a = window.document.createElement('a')
-        a.href = title
-
-        if (a.host && (a.host !== window.location.host) &&
-            ((a.protocol === 'http:') || (a.protocol === 'https:'))) {
-            this.props.onOk(title)
-        } else {
-            Message.warning(this.props.intl.formatMessage({ id: 'invalidtitle' }))
-        }
+    public handleFolderIconClick = () => {
+        const path = Utils.openDirectoryDialog()
     }
-    public handleChange = (e: any) => {
+    public handleBackgroundSelect = (param: InterfaceBackground) => {
         this.setState({
-            title: e.target.value,
+            selectedIndex: param.index,
+            selectedType: param.type,
         })
-    }
-    public componentWillReceiveProps() {
-        this.setState({
-            title: '',
-        })
-    }
-    public componentDidUpdate() {
-        if (this.props.visible) {
-            setTimeout(() => {
-                const input: any = document.querySelector('.input-feed-url')
-                if (input) {
-                    input.focus()
-                }
-            }, 100)
-        }
     }
     public render() {
         return (
-            <Modal className="add-board-modal"
+            <Modal className="create-board-modal"
                 title={<FormattedMessage id="createBoard" />}
-                width={376}
+                width={494}
                 visible={this.props.visible}
                 onCancel={this.props.onCancel}
-                onOk={this.handleSummit}
+                // onOk={this.handleSummit}
             >
-                <Input className="input-feed-url"
-                    placeholder={this.props.intl.formatMessage({ id: 'addBoardTitle' })}
-                    value={this.state.title} onChange={this.handleChange}
-                    onPressEnter={this.handleSummit} />
+                <div className="board-field-wrap board-title-wrap">
+                    <Input className="board-title-input" value={this.state.title}
+                        placeholder={this.props.intl.formatMessage({ id: 'addBoardTitle' })} />
+                    <SelectBackgroundPopover onSelect={this.handleBackgroundSelect}
+                        selectedType={this.state.selectedType} selectedIndex={this.state.selectedIndex}
+                        colors={this.state.colors} images={this.state.images} />
+                </div>
+
+                <div className="board-field-wrap board-path-wrap">
+                    <Input className="board-path-input" value={this.state.path}
+                        placeholder={this.props.intl.formatMessage({ id: 'inputLocalPath' })}
+                    />
+                    <Icon type="folder" className="folder-icon" onClick={this.handleFolderIconClick} />
+                </div>
             </Modal>
         )
     }

@@ -1,1 +1,36 @@
 @import './Values.less';
+
+.create-board-modal {
+    .board-field-wrap {
+        display: flex;
+        align-items: center;
+        .antd-input {
+            flex: 1 1 auto;
+        }
+        .anticon {
+            cursor: pointer;
+            opacity: 0.82;
+            flex: 0 0 40px;
+            height: 30px;
+            margin-left: 12px;
+            padding-top: 4px;
+            line-height: 26px;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+        .anticon:hover {
+            opacity: 1;
+        }
+    }
+
+    .board-path-wrap {
+        margin-top: 16px; 
+    }
+
+    .edit-icon {
+        color: @white-color;
+    }
+    .folder-icon {
+        background-color: #dbdbdb;
+    }
+}

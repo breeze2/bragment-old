@@ -2,6 +2,8 @@ import { Card } from 'antd'
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
+import Utils from '../utils'
+
 import '../styles/BoardCard.less'
 
 interface InterfaceBoardCardProps {
@@ -11,19 +13,8 @@ interface InterfaceBoardCardProps {
     onClick?: (param: any) => any
 }
 
-const colors = {
-    'blue': '#2196f3',
-    'cyan': '#00bcd4',
-    'green': '#4caf50',
-    'grey': '#9e9e9e',
-    'orange': '#ff9800',
-    'purple': '#9c27b0',
-    'red': '#f44336',
-    'yellow': '#fbc02d',
-}
-
 class BoardCard extends Component<InterfaceBoardCardProps> {
-    public static defaultColor = colors.grey
+    public defaultColor: string = Utils.board.defaultColor
     public constructor(props: any) {
         super(props)
     }
@@ -41,9 +32,8 @@ class BoardCard extends Component<InterfaceBoardCardProps> {
             )
         }
         return (
-            <Card className="board-card" hoverable style={{
-                backgroundColor: this.props.color || BoardCard.defaultColor,
-            }} onClick={this.handleClick}>
+            <Card className={`board-card ${this.props.color ? this.props.color : this.defaultColor}-background-color`}
+            hoverable onClick={this.handleClick}>
                 <p className="card-title">Card content</p>
             </Card>
         )
