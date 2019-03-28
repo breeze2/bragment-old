@@ -1,6 +1,5 @@
 export const HomeActionTypes = {
     ASYNC_SELECT_MENU_KEY: 'ASYNC_SELECT_MENU_KEY',
-
     SET_SELECTED_MENU_KEY: 'SET_SELECTED_MENU_KEY',
 }
 

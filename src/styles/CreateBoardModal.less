@@ -1,6 +1,15 @@
 @import './Values.less';
 
 .create-board-modal {
+    .ant-modal-body {
+        padding: 0;
+        border-radius: 4px;
+    }
+    .create-board-modal-body {
+        padding: 24px;
+        border-radius: 4px;
+        background-color: rgba(255, 255, 255, 0.6)
+    }
     .board-field-wrap {
         display: flex;
         align-items: center;
@@ -11,15 +20,21 @@
             cursor: pointer;
             opacity: 0.82;
             flex: 0 0 40px;
-            height: 30px;
+            height: 32px;
             margin-left: 12px;
-            padding-top: 4px;
-            line-height: 26px;
+            padding-top: 3px;
+            line-height: 29px;
             font-size: 16px;
             border-radius: 4px;
+            border: #dbdbdb 0.5px solid;
         }
         .anticon:hover {
             opacity: 1;
+        }
+        .ant-input {
+            background-color: rgba(25, 25, 25, 0.5);
+            font-weight: 700;
+            color: @white-color;
         }
     }
 
@@ -28,9 +43,9 @@
     }
 
     .edit-icon {
-        color: @white-color;
+        background-size: cover;
     }
     .folder-icon {
-        background-color: #dbdbdb;
+        background-color: @white-color;
     }
 }

@@ -1,7 +1,7 @@
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
-import { HomeActionTypes, InterfaceAction } from '../actions'
+import { HomeActionTypes, IAction } from '../actions'
 
-export function* selectMenuKeySaga(action: InterfaceAction) {
+export function* selectMenuKeySaga(action: IAction) {
     try {
         yield put({ type: HomeActionTypes.SET_SELECTED_MENU_KEY, payload: action.payload })
     } catch (e) {

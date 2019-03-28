@@ -1,18 +1,21 @@
 import { Col, Icon, Popover, Row } from 'antd'
+import { List } from 'immutable'
 import React, { Component } from 'react'
+
+import IUnsplashPhoto from '../schemas/IUnsplashPhoto'
 
 import '../styles/SelectBackgroundPopover.less'
 
 export interface IBackground {
-    type: string,
-    index: number,
+    color: string
+    image: IUnsplashPhoto | null
 }
 
 interface ISelectBackgroundPopoverProps {
-    colors: string[]
-    images: string[]
-    selectedType: string,
-    selectedIndex: number,
+    colors: List<string>
+    images: List<IUnsplashPhoto>
+    selectedImage: IUnsplashPhoto | null,
+    selectedColor: string,
     onSelect: (param: IBackground) => any
 }
 
@@ -21,32 +24,57 @@ class SelectBackgroundPopover extends Component<ISelectBackgroundPopoverProps> {
         super(props)
     }
     public handleContentClick = (e: any) => {
-        const i = e.target.closest('.anticon')
-        if (i) {
-            this.props.onSelect({
-                index: parseInt(i.dataset.index, 10),
-                type: i.dataset.type,
-            })
+        const i: HTMLElement = e.target.closest('.anticon')
+        if (i && i.dataset.index && i.dataset.type) {
+            const index = parseInt(i.dataset.index, 10)
+            const type = i.dataset.type
+            if (type === 'image') {
+                const image = this.props.images.get(index)
+                if (image) {
+                    return this.props.onSelect({ color: image.color, image })
+                }
+            }
+            if (type === 'color') {
+                const color = this.props.colors.get(index)
+                if (color) {
+                    return this.props.onSelect({ color, image: null })
+                }
+            }
         }
     }
 
     public render() {
-        const selectedImage = this.props.selectedType === 'image' ? this.props.images[this.props.selectedIndex] : undefined
-        const selectedColor = this.props.selectedType === 'color' ? this.props.colors[this.props.selectedIndex] : undefined
         return (
-            <Popover overlayClassName="select-background-popver" trigger="click" content={<div className="select-background-content" onClick={this.handleContentClick} >
+            <Popover overlayClassName="select-background-popver" trigger="click" content={
+            <div className="select-background-content" onClick={this.handleContentClick} >
+                <Row gutter={16}>
+                    {this.props.images.map((image: IUnsplashPhoto, i) => {
+                        return (
+                            <Col span={6} key={image.id}>
+                                <Icon type="check" data-type="image" data-index={i} style={{
+                                    backgroundColor: image.color,
+                                    backgroundImage: `url(${image.urls.thumb})`,
+                                }} className={`image-icon ${this.props.selectedImage === image ? 'selected' : ''}`} />
+                            </Col>
+                        )
+                    })}
+                </Row>
                 <Row gutter={16}>
                     {this.props.colors.map((color, i) => {
                         return (
                             <Col span={6} key={color}>
-                                <Icon type="check" data-type="color" data-index={i}
-                                className={`color-icon ${color}-background-color ${selectedColor === color ? 'selected' : ''}`} />
+                                <Icon type="check" data-type="color" data-index={i} style={{
+                                    backgroundColor: color,
+                                }} className={`color-icon ${this.props.selectedColor === color ? 'selected' : ''}`} />
                             </Col>
                         )
                     })}
                 </Row>
             </div>}>
-                <Icon type="edit" className={`edit-icon ${selectedColor ? selectedColor + '-background-color' : ''}`} />
+                <Icon type="edit" className="edit-icon" style={{
+                    backgroundColor: this.props.selectedColor,
+                    backgroundImage: this.props.selectedImage ? `url(${this.props.selectedImage.urls.thumb})` : undefined,
+                }} />
             </Popover>
         )
     }

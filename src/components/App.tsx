@@ -6,7 +6,7 @@ import HomePage from '../containers/HomePage'
 import messages from '../locales'
 import BoardPage from '../pages/Board'
 
-import CreateBoardModal from './CreateBoardModal'
+import CreateBoardModal from '../containers/CreateBoardModal'
 
 import '../styles/App.less'
 

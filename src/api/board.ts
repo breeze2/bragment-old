@@ -1,12 +1,12 @@
 const colors: string[] = [
-    'blue',
-    'cyan',
-    'green',
-    'orange',
-    'purple',
-    'red',
-    'yellow',
-    'grey',
+    'var(--blue)',
+    'var(--cyan)',
+    'var(--green)',
+    'var(--orange)',
+    'var(--purple)',
+    'var(--red)',
+    'var(--yellow)',
+    'var(--grey)',
 ]
 
 const board = {

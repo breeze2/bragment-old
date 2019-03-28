@@ -5,9 +5,9 @@ const unsplash = new Unsplash({
     secret: '',
 })
 
-function getRandomPhoto() {
+function getRandomPhoto(count: number = 1) {
     return unsplash.photos.getRandomPhoto({
-        count: 4,
+        count,
         height: 1080,
         query: 'wallpapers',
         width: 1920,

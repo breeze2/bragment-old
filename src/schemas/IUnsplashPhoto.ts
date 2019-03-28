@@ -3,8 +3,9 @@ interface IUnsplashPhotoLinks {
 }
 
 interface IUnsplashPhotoUrls {
-    small: string
     full: string
+    small: string
+    thumb: string
 }
 
 export default interface IUnsplashPhoto {
