@@ -1,9 +1,9 @@
 import { Icon, Input, message as Message, Modal } from 'antd'
-import React, { Component, RefObject } from 'react'
+import React, { ChangeEvent, Component } from 'react'
 import { FormattedMessage, InjectedIntlProps, injectIntl, intlShape } from 'react-intl'
 import SelectBackgroundPopover, { InterfaceBackground } from './SelectBackgroundPopover'
 
-import Utils from '../utils'
+import Api from '../api'
 
 import '../styles/CreateBoardModal.less'
 
@@ -29,15 +29,21 @@ class CreateBoardModal extends Component<InterfaceCreateBoardModalProps> {
     public state: InterfaceCreateBoardModalState
     public constructor(props: InterfaceCreateBoardModalProps) {
         super(props)
-        this.state = { colors: Utils.board.colors, images: [], path: '', selectedIndex: 0, selectedType: 'color', title: '' }
+        Api.unsplash.getRandomPhoto().then(res => { console.log(res) })
+        this.state = { colors: Api.board.colors, images: [], path: '', selectedIndex: 0, selectedType: 'color', title: '' }
     }
     public componentWillReceiveProps(props: InterfaceCreateBoardModalProps) {
-        if (props.visible && !this.props.visible) {
-            
-        }
+        if (props.visible && !this.props.visible) {}
+    }
+    public hanleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
+        this.setState({ title: e.target.value })
+    }
+    public hanlePathChange = (e: ChangeEvent<HTMLInputElement>) => {
+        this.setState({ path: e.target.value })
     }
     public handleFolderIconClick = () => {
-        const path = Utils.openDirectoryDialog()
+        const path = Api.electron.openDirectoryDialog()
+        this.setState({ path })
     }
     public handleBackgroundSelect = (param: InterfaceBackground) => {
         this.setState({
@@ -56,6 +62,7 @@ class CreateBoardModal extends Component<InterfaceCreateBoardModalProps> {
             >
                 <div className="board-field-wrap board-title-wrap">
                     <Input className="board-title-input" value={this.state.title}
+                        onChange={this.hanleTitleChange}
                         placeholder={this.props.intl.formatMessage({ id: 'addBoardTitle' })} />
                     <SelectBackgroundPopover onSelect={this.handleBackgroundSelect}
                         selectedType={this.state.selectedType} selectedIndex={this.state.selectedIndex}
@@ -64,6 +71,7 @@ class CreateBoardModal extends Component<InterfaceCreateBoardModalProps> {
 
                 <div className="board-field-wrap board-path-wrap">
                     <Input className="board-path-input" value={this.state.path}
+                        onChange={this.hanlePathChange}
                         placeholder={this.props.intl.formatMessage({ id: 'inputLocalPath' })}
                     />
                     <Icon type="folder" className="folder-icon" onClick={this.handleFolderIconClick} />

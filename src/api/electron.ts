@@ -4,18 +4,23 @@ interface InterfaceElectron {
     shell: any
 }
 const electron: InterfaceElectron = (window as any).require('electron')
-export const remote = electron.remote
-export const ipcRenderer = electron.ipcRenderer
-export const shell = electron.shell
+const ipcRenderer = electron.ipcRenderer
+const remote = electron.remote
+const shell = electron.shell
 
-export function openExternalUrl(url: string) {
+function openExternalUrl(url: string): boolean {
     return shell.openExternal(url)
 }
 
-export function openDirectoryDialog() {
+function openDirectoryDialog(): string[] | undefined {
     return remote.dialog.showOpenDialog({
         properties: ['openDirectory', 'createDirectory', 'promptToCreate'],
     })
 }
 
-export default electron
+export default {
+    openDirectoryDialog,
+    openExternalUrl,
+    remote,
+    shell,
+}

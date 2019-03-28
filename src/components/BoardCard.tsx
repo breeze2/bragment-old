@@ -2,7 +2,7 @@ import { Card } from 'antd'
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import Utils from '../utils'
+import Api from '../api'
 
 import '../styles/BoardCard.less'
 
@@ -14,7 +14,7 @@ interface InterfaceBoardCardProps {
 }
 
 class BoardCard extends Component<InterfaceBoardCardProps> {
-    public defaultColor: string = Utils.board.defaultColor
+    public defaultColor: string = Api.board.defaultColor
     public constructor(props: any) {
         super(props)
     }
