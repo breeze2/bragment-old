@@ -10,13 +10,13 @@ import CreateBoardModal from './CreateBoardModal'
 
 import '../styles/App.less'
 
-interface InterfaceAppProps {
+interface IAppProps {
     createBoardModalVisible: boolean,
     language: string,
     setCreateBoardModalVisible: (visible: boolean) => any
 }
 
-class App extends Component<InterfaceAppProps> {
+class App extends Component<IAppProps> {
     public constructor(props: any) {
         super(props)
     }

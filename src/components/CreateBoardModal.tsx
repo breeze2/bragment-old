@@ -1,38 +1,38 @@
 import { Icon, Input, message as Message, Modal } from 'antd'
 import React, { ChangeEvent, Component } from 'react'
 import { FormattedMessage, InjectedIntlProps, injectIntl, intlShape } from 'react-intl'
-import SelectBackgroundPopover, { InterfaceBackground } from './SelectBackgroundPopover'
+import SelectBackgroundPopover, { IBackground } from './SelectBackgroundPopover'
 
 import Api from '../api'
 
 import '../styles/CreateBoardModal.less'
 
-interface InterfaceCreateBoardModalProps extends InjectedIntlProps {
+interface ICreateBoardModalProps extends InjectedIntlProps {
     visible: boolean
     onOk: (e: any) => any
     onCancel: (e: any) => any
 }
 
 interface InterfaceCreateBoardModalState {
-    selectedType: string
-    selectedIndex: number
+    selectedBgType: string
+    selectedBgIndex: number
     colors: string[]
     images: string[]
     path: string
     title: string
 }
 
-class CreateBoardModal extends Component<InterfaceCreateBoardModalProps> {
+class CreateBoardModal extends Component<ICreateBoardModalProps> {
     public static propTypes: React.ValidationMap<any> = {
         intl: intlShape.isRequired,
     }
     public state: InterfaceCreateBoardModalState
-    public constructor(props: InterfaceCreateBoardModalProps) {
+    public constructor(props: ICreateBoardModalProps) {
         super(props)
         Api.unsplash.getRandomPhoto().then(res => { console.log(res) })
-        this.state = { colors: Api.board.colors, images: [], path: '', selectedIndex: 0, selectedType: 'color', title: '' }
+        this.state = { colors: Api.board.colors, images: [], path: '', selectedBgIndex: 0, selectedBgType: 'color', title: '' }
     }
-    public componentWillReceiveProps(props: InterfaceCreateBoardModalProps) {
+    public componentWillReceiveProps(props: ICreateBoardModalProps) {
         if (props.visible && !this.props.visible) {}
     }
     public hanleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -45,10 +45,10 @@ class CreateBoardModal extends Component<InterfaceCreateBoardModalProps> {
         const path = Api.electron.openDirectoryDialog()
         this.setState({ path })
     }
-    public handleBackgroundSelect = (param: InterfaceBackground) => {
+    public handleBackgroundSelect = (param: IBackground) => {
         this.setState({
-            selectedIndex: param.index,
-            selectedType: param.type,
+            selectedBgIndex: param.index,
+            selectedBgType: param.type,
         })
     }
     public render() {
@@ -65,7 +65,7 @@ class CreateBoardModal extends Component<InterfaceCreateBoardModalProps> {
                         onChange={this.hanleTitleChange}
                         placeholder={this.props.intl.formatMessage({ id: 'addBoardTitle' })} />
                     <SelectBackgroundPopover onSelect={this.handleBackgroundSelect}
-                        selectedType={this.state.selectedType} selectedIndex={this.state.selectedIndex}
+                        selectedType={this.state.selectedBgType} selectedIndex={this.state.selectedBgIndex}
                         colors={this.state.colors} images={this.state.images} />
                 </div>
 

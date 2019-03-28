@@ -14,6 +14,11 @@ function getRandomPhoto() {
     }).then(toJson).catch(err => {
         console.error(err)
         return []
+    }).then(rst => {
+        if (Array.isArray(rst)) {
+            return rst
+        }
+        return []
     })
 }
 

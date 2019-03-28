@@ -3,21 +3,21 @@ import React, { Component } from 'react'
 
 import '../styles/SelectBackgroundPopover.less'
 
-export interface InterfaceBackground {
+export interface IBackground {
     type: string,
     index: number,
 }
 
-interface InterfaceSelectBackgroundPopoverProps {
+interface ISelectBackgroundPopoverProps {
     colors: string[]
     images: string[]
     selectedType: string,
     selectedIndex: number,
-    onSelect: (param: InterfaceBackground) => any
+    onSelect: (param: IBackground) => any
 }
 
-class SelectBackgroundPopover extends Component<InterfaceSelectBackgroundPopoverProps> {
-    public constructor(props: InterfaceSelectBackgroundPopoverProps) {
+class SelectBackgroundPopover extends Component<ISelectBackgroundPopoverProps> {
+    public constructor(props: ISelectBackgroundPopoverProps) {
         super(props)
     }
     public handleContentClick = (e: any) => {

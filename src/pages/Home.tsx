@@ -8,14 +8,14 @@ import HomeBoards from '../containers//HomeBoards'
 
 import '../styles/HomePage.less'
 
-interface InterfaceHomePageProps extends RouteComponentProps {
+interface IHomePageProps extends RouteComponentProps {
     selectedMenuKey: string
 }
 
 const { Header, Content, Footer, Sider } = Layout
 
-class Home extends Component<InterfaceHomePageProps> {
-    public constructor(props: InterfaceHomePageProps) {
+class Home extends Component<IHomePageProps> {
+    public constructor(props: IHomePageProps) {
         super(props)
     }
     public handleMenuSelect = (param: any) => {

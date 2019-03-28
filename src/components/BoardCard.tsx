@@ -6,14 +6,14 @@ import Api from '../api'
 
 import '../styles/BoardCard.less'
 
-interface InterfaceBoardCardProps {
+interface IBoardCardProps {
     color?: string,
     image?: string,
     isCreatingCard?: boolean,
     onClick?: (param: any) => any
 }
 
-class BoardCard extends Component<InterfaceBoardCardProps> {
+class BoardCard extends Component<IBoardCardProps> {
     public defaultColor: string = Api.board.defaultColor
     public constructor(props: any) {
         super(props)

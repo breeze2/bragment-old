@@ -7,12 +7,12 @@ import BoardCard from './BoardCard'
 
 import '../styles/HomeBoards.less'
 
-interface InterfaceHomeBoardsProps {
+interface IHomeBoardsProps {
     setCreateBoardModalVisible: (visible: boolean) => any
 }
 
-class HomeBoards extends Component<InterfaceHomeBoardsProps> {
-    public constructor(props: InterfaceHomeBoardsProps) {
+class HomeBoards extends Component<IHomeBoardsProps> {
+    public constructor(props: IHomeBoardsProps) {
         super(props)
     }
     public handleCreatingCardClick = () => {
