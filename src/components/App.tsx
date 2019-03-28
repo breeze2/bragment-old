@@ -33,11 +33,11 @@ class App extends Component<IAppProps> {
                     <Router>
                         <Route exact path={['/', '/home', '/home/boards', '/home/logs']} component={HomePage} />
                         <Route exact path="/board/:id" component={BoardPage} />
+                        <Route path="/" render={props => <CreateBoardModal visible={this.props.createBoardModalVisible}
+                            onCancel={this.handleCreateBoardModalCancel}
+                            onOk={this.handleCreateBoardModalOk} {...props}
+                        />} />
                     </Router>
-                    <CreateBoardModal visible={this.props.createBoardModalVisible}
-                        onCancel={this.handleCreateBoardModalCancel}
-                        onOk={this.handleCreateBoardModalOk}
-                    />
                 </div>
             </IntlProvider>
         )

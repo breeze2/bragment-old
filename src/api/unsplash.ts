@@ -9,7 +9,7 @@ function getRandomPhoto(count: number = 1) {
     return unsplash.photos.getRandomPhoto({
         count,
         height: 1080,
-        query: 'wallpapers',
+        query: 'desktop wallpapers',
         width: 1920,
     }).then(toJson).catch(err => {
         console.error(err)

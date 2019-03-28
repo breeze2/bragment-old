@@ -4,11 +4,34 @@
     .ant-modal-body {
         padding: 0;
         border-radius: 4px;
+        background-size: 100% auto;
+        background-repeat: no-repeat;
     }
-    .create-board-modal-body {
-        padding: 24px;
+    .modal-body {
+        padding: 0px 24px;
         border-radius: 4px;
-        background-color: rgba(255, 255, 255, 0.6)
+        background-color: rgba(255, 255, 255, 0.6);
+
+        .anticon {
+            cursor: pointer;
+            opacity: 0.82;
+            font-size: 16px;
+        }
+        .anticon:hover {
+            opacity: 1;
+            font-size: 18px;
+        }
+        .close-icon:hover {
+            font-size: 16px;
+        }
+    }
+    .modal-body-top {
+        text-align: right;
+        padding: 14px 0;
+        line-height: 24px;
+    }
+    .modal-body-bottom {
+        padding: 20px 0;
     }
     .board-field-wrap {
         display: flex;
@@ -17,19 +40,13 @@
             flex: 1 1 auto;
         }
         .anticon {
-            cursor: pointer;
-            opacity: 0.82;
             flex: 0 0 40px;
             height: 32px;
             margin-left: 12px;
             padding-top: 3px;
             line-height: 29px;
-            font-size: 16px;
             border-radius: 4px;
             border: #dbdbdb 0.5px solid;
-        }
-        .anticon:hover {
-            opacity: 1;
         }
         .ant-input {
             background-color: rgba(25, 25, 25, 0.5);
@@ -43,6 +60,7 @@
     }
 
     .edit-icon {
+        color: @white-color;
         background-size: cover;
     }
     .folder-icon {

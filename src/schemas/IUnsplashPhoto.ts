@@ -6,6 +6,7 @@ interface IUnsplashPhotoUrls {
     full: string
     small: string
     thumb: string
+    regular: string
 }
 
 export default interface IUnsplashPhoto {

@@ -1,15 +1,17 @@
-import { Icon, Input, message as Message, Modal } from 'antd'
+import { Button, Icon, Input, message as Message, Modal } from 'antd'
 import { List } from 'immutable'
 import React, { ChangeEvent, Component } from 'react'
 import { FormattedMessage, InjectedIntlProps, injectIntl, intlShape } from 'react-intl'
+import { RouteComponentProps } from 'react-router-dom'
 import SelectBackgroundPopover, { IBackground } from './SelectBackgroundPopover'
 
 import Api from '../api'
 import IUnsplashPhoto from '../schemas/IUnsplashPhoto'
+import Utils from '../utils'
 
 import '../styles/CreateBoardModal.less'
 
-interface ICreateBoardModalProps extends InjectedIntlProps {
+interface ICreateBoardModalProps extends InjectedIntlProps, RouteComponentProps {
     bgColors: List<string>
     bgImages: List<IUnsplashPhoto>
     visible: boolean
@@ -23,6 +25,7 @@ interface InterfaceCreateBoardModalState {
     selectedBgImage: IUnsplashPhoto | null
     path: string
     title: string
+    isSubmitting: boolean
 }
 
 class CreateBoardModal extends Component<ICreateBoardModalProps> {
@@ -32,7 +35,7 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
     public state: InterfaceCreateBoardModalState
     public constructor(props: ICreateBoardModalProps) {
         super(props)
-        this.state = { path: '', selectedBgColor: '', selectedBgImage: null, title: '' }
+        this.state = { path: '', title: '', selectedBgColor: '', selectedBgImage: null, isSubmitting: false }
     }
     public componentDidMount() {
         this.props.asyncFetchStandbyBgImages()
@@ -51,12 +54,17 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
     public hanleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         this.setState({ title: e.target.value })
     }
-    public hanlePathChange = (e: ChangeEvent<HTMLInputElement>) => {
-        this.setState({ path: e.target.value })
-    }
     public handleFolderIconClick = () => {
-        const path = Api.electron.openDirectoryDialog()
-        this.setState({ path })
+        const paths = Api.electron.openDirectoryDialog()
+        if (paths && paths.length) {
+            const path = paths[0]
+            const basename = Utils.getPathBasename(path)
+            if (this.state.title.trim() === '') {
+                this.setState({path, title: basename})
+            } else {
+                this.setState({ path })
+            }
+        }
     }
     public handleBackgroundSelect = (param: IBackground) => {
         this.setState({
@@ -64,21 +72,40 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
             selectedBgImage: param.image,
         })
     }
+    public handleSubmit = () => {
+        const path = this.state.path.trim()
+        const title = this.state.title.trim()
+        if (!path || !title) {
+            return
+        }
+        this.setState({ isSubmitting: true })
+        Api.board.createBoard({
+            color: this.state.selectedBgColor,
+            image: this.state.selectedBgImage ? this.state.selectedBgImage.urls.regular : '',
+            path,
+            title,
+        }).then((response) => {
+            this.props.onOk(response)
+            this.props.asyncFetchStandbyBgImages()
+            this.props.history.push(`/board/${response.id}`)
+        }).finally(() => {
+            this.setState({ isSubmitting: false })
+        })
+    }
     public render() {
         return (
             <Modal className="create-board-modal"
-                // title={<FormattedMessage id="createBoard" />}
-                footer={null}
-                closable={false}
+                footer={null} closable={false} maskClosable={false}
                 visible={this.props.visible}
-                onCancel={this.props.onCancel}
-                // onOk={this.handleSummit}
                 bodyStyle={{
                     backgroundColor: this.state.selectedBgColor ? this.state.selectedBgColor : '',
                     backgroundImage: this.state.selectedBgImage ? `url(${this.state.selectedBgImage.urls.small})` : '',
                 }}
             >
-                <div className="create-board-modal-body">
+                <div className="modal-body">
+                    <div className="modal-body-top">
+                        <Icon type="close" className="close-icon" onClick={this.props.onCancel} />
+                    </div>
                     <div className="board-field-wrap board-title-wrap">
                         <Input className="board-title-input" value={this.state.title}
                             onChange={this.hanleTitleChange}
@@ -87,13 +114,14 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
                             selectedColor={this.state.selectedBgColor} selectedImage={this.state.selectedBgImage}
                             colors={this.props.bgColors} images={this.props.bgImages} />
                     </div>
-
                     <div className="board-field-wrap board-path-wrap">
-                        <Input className="board-path-input" value={this.state.path}
-                            onChange={this.hanlePathChange}
-                            placeholder={this.props.intl.formatMessage({ id: 'inputLocalPath' })}
+                        <Input className="board-path-input" value={this.state.path} disabled
+                            placeholder={this.props.intl.formatMessage({ id: 'selectLocalPath' })}
                         />
                         <Icon type="folder" className="folder-icon" onClick={this.handleFolderIconClick} />
+                    </div>
+                    <div className="modal-body-bottom">
+                        <Button type="primary" onClick={this.handleSubmit} loading={this.state.isSubmitting}><FormattedMessage id="createBoard" /></Button>
                     </div>
                 </div>
             </Modal>

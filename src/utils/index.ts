@@ -1,3 +1,31 @@
+const NodeJSPath = (window as any).require('path')
+const NodeJSFS = (window as any).require('fs')
+const downloader = (window as any).require('image-downloader')
+
+export function joinPath(...paths: string[]) {
+    return NodeJSPath.join(...paths)
+}
+
+export function getPathBasename (path: string) {
+    return NodeJSPath.basename(path)
+}
+
+export function createDirectory(path: string) {
+    return new Promise((resolve, reject) => {
+        NodeJSFS.mkdir(path, { recursive: true }, (error: any) => {
+            if (error && error.code !== 'EEXIST') {
+                reject(error)
+            } else {
+                resolve(true)
+            }
+        })
+    })
+}
+
+export function downloadImage(url: string, dest: string): Promise<string> {
+    return downloader.image({ url, dest }) as Promise<string>
+}
+
 export function debounce<F extends (...params: any[]) => void>(fn: F, delay: number) {
     let timeoutID: number
     const wrapper = function (this: any, ...args: any[]) {
@@ -36,6 +64,11 @@ export function throttle<F extends (...params: any[]) => void>(fn: F, delay: num
 const Utils = {
     debounce,
     throttle,
+
+    createDirectory,
+    downloadImage,
+    getPathBasename,
+    joinPath,
 }
 
 export default Utils
