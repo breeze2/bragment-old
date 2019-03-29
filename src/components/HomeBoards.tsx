@@ -48,6 +48,54 @@ class HomeBoards extends Component<IHomeBoardsProps> {
                             <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
                                 <BoardCard />
                             </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <Link to={`/board/1`}><BoardCard /></Link>
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <Link to={`/board/1`}><BoardCard /></Link>
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <Link to={`/board/1`}><BoardCard /></Link>
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <Link to={`/board/1`}><BoardCard /></Link>
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
+                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                <BoardCard />
+                            </Col>
                         </Row>
                     </div>
                 </div>

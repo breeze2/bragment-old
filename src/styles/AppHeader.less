@@ -1,0 +1,23 @@
+@import './Values.less';
+
+.app-header {
+    background: linear-gradient(60deg,#0e90d2,#2d3e50);
+    color: @white-text-color;
+    font-size: 18px;
+    text-align: center;
+    line-height: 42px;
+    height: 42px;
+    padding: 0 24px;
+    .header-right {
+        float: right;
+        .anticon {
+            cursor: pointer;
+            height: 36px;
+            width: 36px;
+        }
+        .anticon:hover {
+            font-size: 19px;
+            color: @white-color;
+        }
+    }
+}

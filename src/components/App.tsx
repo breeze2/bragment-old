@@ -1,3 +1,4 @@
+import { Layout } from 'antd'
 import React, { Component } from 'react'
 import { IntlProvider } from 'react-intl'
 import { HashRouter as Router, Route } from 'react-router-dom'
@@ -6,6 +7,7 @@ import HomePage from '../containers/HomePage'
 import messages from '../locales'
 import BoardPage from '../pages/Board'
 
+import AppHeader from '../containers/AppHeader'
 import CreateBoardModal from '../containers/CreateBoardModal'
 
 import '../styles/App.less'
@@ -29,16 +31,19 @@ class App extends Component<IAppProps> {
     public render() {
         return (
             <IntlProvider locale={this.props.language} messages={messages[this.props.language]}>
-                <div className="app">
+                <Layout className="app">
                     <Router>
-                        <Route exact path={['/', '/home', '/home/boards', '/home/logs']} component={HomePage} />
-                        <Route exact path="/board/:id" component={BoardPage} />
-                        <Route path="/" render={props => <CreateBoardModal visible={this.props.createBoardModalVisible}
-                            onCancel={this.handleCreateBoardModalCancel}
-                            onOk={this.handleCreateBoardModalOk} {...props}
-                        />} />
+                        <AppHeader />
+                        <Layout.Content className="app-content">
+                            <Route exact path={['/', '/home', '/home/boards', '/home/logs']} component={HomePage} />
+                            <Route exact path="/board/:id" component={BoardPage} />
+                            <Route path="/" render={props => <CreateBoardModal visible={this.props.createBoardModalVisible}
+                                onCancel={this.handleCreateBoardModalCancel}
+                                onOk={this.handleCreateBoardModalOk} {...props}
+                            />} />
+                        </Layout.Content>
                     </Router>
-                </div>
+                </Layout>
             </IntlProvider>
         )
     }
