@@ -24,8 +24,8 @@ async function createBoard(board: IBoardBase) {
 
     // 2. download image
     if (board.image) {
-        const background = Utils.joinPath(board.path, '.brag', 'assets/background.jpg')
-        Utils.downloadImage(board.image, background)
+        const background = '.brag' + '/assets/background.jpg'
+        Utils.downloadImage(board.image, Utils.joinPath(board.path, background))
         board.image = background
     }
 
@@ -37,16 +37,15 @@ async function createBoard(board: IBoardBase) {
         created_at: time,
         updated_at: time,
     }
-    const result = await pouch.find({
-        selector: {path: board.path},
-    })
-    if (result.docs.length) {
-        const oldBoard: IBoard = result.docs[0]
+    const oldBoard = await pouch.findOne(
+        { path: board.path }, undefined,
+        ['path'],
+    )
+    if (oldBoard) {
         newBoard._id = oldBoard._id
         newBoard._rev = oldBoard._rev
         newBoard.created_at = oldBoard.created_at
     }
-
     // 4. save in pouch db
     const response = await pouch.put(newBoard)
 
@@ -57,8 +56,18 @@ async function createBoard(board: IBoardBase) {
     return response
 }
 
+async function getAllBoards() {
+    const boards = await pouch.findAll(
+        { path: { $gt: null }, updated_at: { $gt: null } },
+        [{updated_at: 'desc'}],
+        ['path', 'updated_at'])
+    return boards
+}
+
 export default {
     colors,
-    createBoard,
     defaultColor: colors[0],
+
+    createBoard,
+    getAllBoards,
 }

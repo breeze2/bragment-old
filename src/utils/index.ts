@@ -1,9 +1,21 @@
 const NodeJSPath = (window as any).require('path')
 const NodeJSFS = (window as any).require('fs')
+const NodeJSUrl = (window as any).require('url')
 const downloader = (window as any).require('image-downloader')
 
 export function joinPath(...paths: string[]) {
     return NodeJSPath.join(...paths)
+}
+
+export function formatFileUrl(...paths: string[]) {
+    const pathname = joinPath(...paths)
+    const url = NodeJSUrl.format({
+        pathname,
+        protocol: 'file',
+        slashes: true,
+    })
+    console.log(url)
+    return url
 }
 
 export function getPathBasename (path: string) {
@@ -67,6 +79,7 @@ const Utils = {
 
     createDirectory,
     downloadImage,
+    formatFileUrl,
     getPathBasename,
     joinPath,
 }

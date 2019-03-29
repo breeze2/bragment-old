@@ -1,19 +1,27 @@
 import { Col, Icon, Row } from 'antd'
+import Immutable, { List } from 'immutable'
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
 
 import BoardCard from './BoardCard'
 
+import IBoard from '../schemas/IBoard'
 import '../styles/HomeBoards.less'
 
 interface IHomeBoardsProps {
+    personalList: List<IBoard>
+    recentlyList: List<IBoard>
+    asyncFetchBoardList: () => any
     setCreateBoardModalVisible: (visible: boolean) => any
 }
 
 class HomeBoards extends Component<IHomeBoardsProps> {
     public constructor(props: IHomeBoardsProps) {
         super(props)
+    }
+    public componentDidMount() {
+        this.props.asyncFetchBoardList()
     }
     public handleCreatingCardClick = () => {
         this.props.setCreateBoardModalVisible(true)
@@ -53,6 +61,11 @@ class HomeBoards extends Component<IHomeBoardsProps> {
                             <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
                                 <BoardCard isCreatingCard onClick={this.handleCreatingCardClick} />
                             </Col>
+                            {this.props.personalList.map(board => (
+                                <Col key={board._id} className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                    <BoardCard color={board.color} image={board.image} path={board.path} />
+                                </Col>
+                            ))}
                         </Row>
                     </div>
                 </div>

@@ -12,6 +12,19 @@ export function* fetchUnsplashStandbyImages(action: IAction) {
     }
 }
 
+export function* fetchBoardList(action: IAction) {
+    try {
+        const boards = yield call(Api.board.getAllBoards)
+        yield put({ type: BoardActionTypes.SET_BOARD_LIST, payload: { boards } })
+    } catch (e) {
+        console.error(e)
+    }
+}
+
 export function* watchFetchUnsplashStandbyImages() {
     yield takeLatest(BoardActionTypes.ASYNC_FETCH_STANDBY_BG_IMAGES, fetchUnsplashStandbyImages)
+}
+
+export function* watchFetchBoardList() {
+    yield takeLatest(BoardActionTypes.ASYNC_FETCH_BOARD_LIST, fetchBoardList)
 }

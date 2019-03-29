@@ -3,12 +3,14 @@ import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import Api from '../api'
+import Utils from '../utils'
 
 import '../styles/BoardCard.less'
 
 interface IBoardCardProps {
     color?: string,
     image?: string,
+    path?: string,
     isCreatingCard?: boolean,
     onClick?: (param: any) => any
 }
@@ -32,8 +34,11 @@ class BoardCard extends Component<IBoardCardProps> {
             )
         }
         return (
-            <Card className={`board-card ${this.props.color ? this.props.color : this.defaultColor}-background-color`}
-            hoverable onClick={this.handleClick}>
+            <Card className="board-card" hoverable onClick={this.handleClick} style={{
+                backgroundColor: this.props.color,
+                backgroundImage: this.props.image && this.props.path ?
+                    `url(${Utils.formatFileUrl(this.props.path, this.props.image)})` : '',
+            }}>
                 <p className="card-title">Card content</p>
             </Card>
         )

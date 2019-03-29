@@ -3,7 +3,7 @@ import lowdb from 'lowdb'
 const FileSync = (window as any).require('lowdb/adapters/FileSync')
 const FileAsync = (window as any).require('lowdb/adapters/FileAsync')
 
-class LowDB {
+class LowDBWrapper {
     private path: string
     public constructor(path: string) {
         this.path = path
@@ -19,7 +19,7 @@ class LowDB {
 }
 
 function getBoardLowDB(boardPath: string) {
-    const db = new LowDB(boardPath + '/.brag/lowdb.json')
+    const db = new LowDBWrapper(boardPath + '/.brag/lowdb.json')
     return db
 }
 

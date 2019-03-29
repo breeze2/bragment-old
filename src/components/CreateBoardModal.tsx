@@ -41,15 +41,15 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
         this.props.asyncFetchStandbyBgImages()
     }
     public componentWillReceiveProps(props: ICreateBoardModalProps) {
-        if (props.bgImages !== this.props.bgImages) {
+        if (props.bgImages.size === 0) {
+            this.setState({ selectedBgColor: this.props.bgColors.get(0), selectedBgImage: null })
+        } else if (props.bgImages !== this.props.bgImages) {
             const image = props.bgImages.get(0)
             if (image) {
-                this.setState({ selectedBgColor: image.color, selectedBgImage: image})
-            } else {
-                this.setState({ selectedBgColor: this.props.bgColors.get(0), selectedBgImage: null})
+                this.setState({ selectedBgColor: image.color, selectedBgImage: image })
             }
         }
-        if (props.visible && !this.props.visible) {}
+        // if (props.visible && !this.props.visible) {}
     }
     public hanleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         this.setState({ title: e.target.value })
