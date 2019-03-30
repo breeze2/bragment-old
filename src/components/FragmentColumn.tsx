@@ -1,10 +1,15 @@
 import React, { Component } from 'react'
-import { DragDropContext, Draggable, DraggableProvided, DraggableStateSnapshot, Droppable } from 'react-beautiful-dnd'
-// import FragmentColumnHeader from './FragmentColumnHeader'
+import { Draggable, DraggableProvided, DraggableStateSnapshot, Droppable } from 'react-beautiful-dnd'
+import FragmentColumnContent from './FragmentColumnContent'
+import FragmentColumnFooter from './FragmentColumnFooter'
+import FragmentColumnHeader from './FragmentColumnHeader'
+
+import '../styles/FragmentColumn.less'
 
 interface IFragmentColumnProps {
     index: number
     title: string
+    fragmetns: any[]
 }
 
 class FragmentColumn extends Component<IFragmentColumnProps> {
@@ -12,9 +17,13 @@ class FragmentColumn extends Component<IFragmentColumnProps> {
         return (
             <Draggable draggableId={this.props.title} index={this.props.index}>
                 {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-                    <div className="fragment-column" ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                        {/* <FragmentColumnHeader title={this.props.title} isDragging={snapshot.isDragging} {...provided.dragHandleProps} /> */}
-                        <h2>sdfsdfs</h2>
+                    <div className="fragment-column" ref={provided.innerRef} {...provided.draggableProps}>
+                        <FragmentColumnHeader
+                            title={this.props.title}
+                            isDragging={snapshot.isDragging}
+                            dragHandleProps={provided.dragHandleProps} />
+                        <FragmentColumnContent title={this.props.title} fragmetns={this.props.fragmetns} />
+                        <FragmentColumnFooter />
                     </div>
                 )}
             </Draggable>

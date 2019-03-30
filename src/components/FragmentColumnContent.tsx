@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
-import { Draggable, DraggableProvided, DraggableStateSnapshot, Droppable,  DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
+import { Droppable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
 import FragmentCard from './FragmentCard'
-// interface IFragmentListContentPropsBase {
-//     fragmetns: any[],
-// }
 
-interface IFragmentListContentProps {
+interface IFragmentColumnContentProps {
+    title: string,
     fragmetns: any[],
 }
 
-class FragmentListContent extends Component<IFragmentListContentProps> {
+class FragmentColumnContent extends Component<IFragmentColumnContentProps> {
     public render() {
         return (
-            <Droppable droppableId={'sdfsf'}>
-                {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) => (
-                    <div className="fragment-list-content">
-                        <FragmentCard />
+            <Droppable droppableId={this.props.title} type="QUOTE" >
+                {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
+                    <div className="fragment-column-content" ref={provided.innerRef} {...provided.droppableProps}>
+                        {this.props.fragmetns.map((fragment, i) => (
+                            <FragmentCard key={fragment.title} title={fragment.title} index={i} />
+                        ))}
+                        {provided.placeholder}
                     </div>
                 )}
             </Droppable>
@@ -23,4 +24,4 @@ class FragmentListContent extends Component<IFragmentListContentProps> {
     }
 }
 
-export default FragmentListContent
+export default FragmentColumnContent

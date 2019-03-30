@@ -1,5 +1,5 @@
 import { Col, Icon, Row } from 'antd'
-import Immutable, { List } from 'immutable'
+import { List } from 'immutable'
 import React, { Component } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link } from 'react-router-dom'
@@ -21,7 +21,7 @@ class HomeBoards extends Component<IHomeBoardsProps> {
         super(props)
     }
     public componentDidMount() {
-        this.props.asyncFetchBoardList()
+        // this.props.asyncFetchBoardList()
     }
     public handleCreatingCardClick = () => {
         this.props.setCreateBoardModalVisible(true)

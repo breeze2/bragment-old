@@ -1,18 +1,22 @@
+import { Icon } from 'antd'
 import React, { Component } from 'react'
 import { DraggableProvidedDragHandleProps } from 'react-beautiful-dnd'
 
-interface IFragmentColumnHeaderPropsBase {
+interface IFragmentColumnHeaderProps {
     isDragging: boolean,
     title: string,
+    dragHandleProps: DraggableProvidedDragHandleProps | null
 }
 
-interface IFragmentColumnHeaderProps extends IFragmentColumnHeaderPropsBase, DraggableProvidedDragHandleProps {}
-
-class FragmentColumnHeader extends Component<IFragmentColumnHeaderPropsBase | IFragmentColumnHeaderProps> {
+class FragmentColumnHeader extends Component<IFragmentColumnHeaderProps> {
     public render() {
         return (
-            <div className="fragment-column-header">
-                <h2>{this.props.title}</h2>
+            <div className="fragment-column-header" {...this.props.dragHandleProps}>
+                <div className="header-right">
+                    <Icon type="ellipsis" />
+                </div>
+                <p className="column-title">{this.props.title}</p>
+
             </div>
         )
     }

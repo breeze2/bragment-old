@@ -1,17 +1,23 @@
+import { Card } from 'antd'
 import React, { Component } from 'react'
-import { DragDropContext, Draggable, DraggableProvided, DraggableStateSnapshot, Droppable } from 'react-beautiful-dnd'
+import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 
-class FragmentCard extends Component {
+interface IFragmentCard {
+    title: string
+    index: number
+}
+
+class FragmentCard extends Component<IFragmentCard> {
     public render() {
         return (
-            <Draggable draggableId={'sdfssd'} index={1}>
+            <Draggable draggableId={this.props.title} index={this.props.index}>
                 {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-                    <div className="fragment-card"
-                        ref={provided.innerRef}
+                    <div className="fragment-card" ref={provided.innerRef}
                         style={{ backgroundColor: snapshot.draggingOver ? 'blue' : 'grey' }}
-                        {...provided.draggableProps}
-                    >
-                        sdfsfsfsfsfs
+                        {...provided.draggableProps} {...provided.dragHandleProps}>
+                        <Card hoverable>
+                            <p className="card-title">{this.props.title}</p>
+                        </Card>
                     </div>
                 )}
             </Draggable>

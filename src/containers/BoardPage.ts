@@ -1,21 +1,21 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import App from '../components/App'
-import { setCreateBoardModalVisible } from '../redux/actions'
+import BoardPage from '../pages/Board'
+import { setCurrentBoard } from '../redux/actions'
+import IBoard from '../schemas/IBoard'
 
 const mapStateToProps = (store: any, props: any) => {
     return {
-        createBoardModalVisible: store.app.get('createBoardModalVisible'),
+        boardList: store.board.get('list'),
         currentBoard: store.board.get('current'),
-        language: store.app.get('language'),
     }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
-    setCreateBoardModalVisible: (visible: boolean) => dispatch(setCreateBoardModalVisible(visible)),
+    setCurrentBoard: (board: IBoard | null) => dispatch(setCurrentBoard(board)),
 })
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps,
-)(App)
+)(BoardPage)

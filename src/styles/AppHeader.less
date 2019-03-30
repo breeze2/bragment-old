@@ -1,7 +1,11 @@
 @import './Values.less';
 
 .app-header {
-    background: linear-gradient(60deg,#0e90d2,#2d3e50);
+    background: linear-gradient(60deg, rgba(29, 145, 207, 1), rgba(46, 62, 79, 1));
+    &.has-background-image {
+        background: linear-gradient(60deg,  rgba(46, 62, 79, 0.7), rgba(46, 62, 79, 1));
+    }
+
     color: @white-text-color;
     font-size: 18px;
     text-align: center;
