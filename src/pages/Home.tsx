@@ -14,7 +14,7 @@ interface IHomePageProps extends RouteComponentProps {
 
 const { Header, Content, Footer, Sider } = Layout
 
-class Home extends Component<IHomePageProps> {
+class HomePage extends Component<IHomePageProps> {
     public constructor(props: IHomePageProps) {
         super(props)
     }
@@ -58,4 +58,4 @@ class Home extends Component<IHomePageProps> {
     }
 }
 
-export default Home
+export default HomePage

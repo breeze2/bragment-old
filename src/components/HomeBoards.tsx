@@ -111,7 +111,9 @@ class HomeBoards extends Component<IHomeBoardsProps> {
                             </Col>
                             {this.props.personalList.map(board => (
                                 <Col key={board._id} className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                    <BoardCard color={board.color} image={board.image} path={board.path} />
+                                    <Link to={`/board/${board._id}`}>
+                                        <BoardCard color={board.color} image={board.image} path={board.path} />
+                                    </Link>
                                 </Col>
                             ))}
                         </Row>
