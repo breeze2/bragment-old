@@ -44,7 +44,7 @@ class BoardPage extends Component<IBoardPageProps> {
                                 ))}
                                 { provided.placeholder }
                                 <div className="board-action">
-                                    <CreateFragmentColumnForm />
+                                    <CreateFragmentColumnForm boardPath={this.props.currentBoard ? this.props.currentBoard.path : ''} />
                                 </div>
                             </div>
                         )}

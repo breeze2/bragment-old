@@ -83,6 +83,14 @@ class TextInputChanger extends Component<ITextInputChangerProps> {
             innerInputValue: input.value,
         })
     }
+    public resetInputValue = (value?: string) => {
+        this.setState({
+            innerStatus: value || this.props.inputValue,
+        })
+    }
+    public getInputValue = () => {
+        return this.state.innerInputValue
+    }
     public render() {
         return (
             <div className={`text-input-changer ${this.state.innerStatus}-status ${this.props.className || ''}`} ref={this._ref}>
