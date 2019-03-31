@@ -2,12 +2,12 @@ import { Card } from 'antd'
 import React, { Component } from 'react'
 import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 
-interface IFragmentCard {
+interface IFragmentCardProps {
     title: string
     index: number
 }
 
-class FragmentCard extends Component<IFragmentCard> {
+class FragmentCard extends Component<IFragmentCardProps> {
     public render() {
         return (
             <Draggable draggableId={this.props.title} index={this.props.index}>

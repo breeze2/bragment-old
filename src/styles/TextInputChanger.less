@@ -1,0 +1,26 @@
+@import './Values.less';
+
+.text-input-changer {
+    padding: 8px;
+    font-size: 14px;
+    .changer-text {
+        line-height: 21px;
+        padding: 0 4px;
+        margin-bottom: 0;
+        .anticon {
+            line-height: 21px;
+            font-size: 12px;
+            vertical-align: middle;
+        }
+    }
+    &.text-status {
+        .changer-input, .changer-input-addon {
+            display: none;
+        }
+    }
+    &.input-status {
+        .changer-text {
+            display: none;
+        }
+    }
+}

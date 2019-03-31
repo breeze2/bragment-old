@@ -54,7 +54,7 @@ class SelectBackgroundPopover extends Component<ISelectBackgroundPopoverProps> {
                                 <Icon type="check" data-type="image" data-index={i} style={{
                                     backgroundColor: image.color,
                                     backgroundImage: `url(${image.urls.thumb})`,
-                                }} className={`image-icon ${this.props.selectedImage === image ? 'selected' : ''}`} />
+                                }} className={`handler image-icon ${this.props.selectedImage === image ? 'selected' : ''}`} />
                             </Col>
                         )
                     })}
@@ -65,13 +65,13 @@ class SelectBackgroundPopover extends Component<ISelectBackgroundPopoverProps> {
                             <Col span={6} key={color}>
                                 <Icon type="check" data-type="color" data-index={i} style={{
                                     backgroundColor: color,
-                                }} className={`color-icon ${this.props.selectedColor === color ? 'selected' : ''}`} />
+                                }} className={`handler color-icon ${this.props.selectedColor === color ? 'selected' : ''}`} />
                             </Col>
                         )
                     })}
                 </Row>
             </div>}>
-                <Icon type="edit" className="edit-icon" style={{
+                <Icon type="edit" className="handler edit-icon" style={{
                     backgroundColor: this.props.selectedColor,
                     backgroundImage: this.props.selectedImage ? `url(${this.props.selectedImage.urls.thumb})` : undefined,
                 }} />

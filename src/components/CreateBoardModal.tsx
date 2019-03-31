@@ -104,7 +104,7 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
             >
                 <div className="modal-body">
                     <div className="modal-body-top">
-                        <Icon type="close" className="close-icon" onClick={this.props.onCancel} />
+                        <Icon type="close" className="close-icon handler" onClick={this.props.onCancel} />
                     </div>
                     <div className="board-field-wrap board-title-wrap">
                         <Input className="board-title-input" value={this.state.title}
@@ -118,7 +118,7 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
                         <Input className="board-path-input" value={this.state.path} disabled
                             placeholder={this.props.intl.formatMessage({ id: 'selectLocalPath' })}
                         />
-                        <Icon type="folder" className="folder-icon" onClick={this.handleFolderIconClick} />
+                        <Icon type="folder" className="folder-icon handler" onClick={this.handleFolderIconClick} />
                     </div>
                     <div className="modal-body-bottom">
                         <Button type="primary" onClick={this.handleSubmit} loading={this.state.isSubmitting}><FormattedMessage id="createBoard" /></Button>

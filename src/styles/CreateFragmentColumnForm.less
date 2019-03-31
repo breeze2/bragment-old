@@ -1,0 +1,28 @@
+@import './Values.less';
+
+.create-fragment-column-form {
+    .form-action {
+        margin-top: 8px;
+        .anticon {
+            margin-left: 12px;
+            vertical-align: middle; 
+        }
+    }
+    .text-input-changer {
+        border-radius: 4px;
+        width: 266px;
+        .changer-text {
+            cursor: pointer;
+            color: @white-text-color;            
+        }
+    }
+    .text-status {
+        background: linear-gradient(60deg,  rgba(46, 62, 79, 0.7), rgba(46, 62, 79, 0.7));
+        &:hover {
+            background: linear-gradient(60deg,  rgba(46, 62, 79, 0.7), rgba(46, 62, 79, 1));
+        }
+    }
+    .input-status {
+        background-color: #ebecf0;
+    }
+}

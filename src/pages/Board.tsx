@@ -2,6 +2,8 @@ import { List } from 'immutable'
 import React, { Component } from 'react'
 import { DragDropContext, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd'
 import { RouteComponentProps } from 'react-router-dom'
+
+import CreateFragmentColumnForm from '../components/CreateFragmentColumnForm'
 import FragmentColumn from '../components/FragmentColumn'
 import IBoard from '../schemas/IBoard'
 
@@ -41,6 +43,9 @@ class BoardPage extends Component<IBoardPageProps> {
                                     <FragmentColumn key={fragmentColumn.title} fragmetns={fragmentColumn.fragmetns} title={fragmentColumn.title} index={i} />
                                 ))}
                                 { provided.placeholder }
+                                <div className="board-action">
+                                    <CreateFragmentColumnForm />
+                                </div>
                             </div>
                         )}
                     </Droppable>
