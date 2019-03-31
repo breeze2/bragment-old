@@ -1,5 +1,5 @@
 import Immutable, { List } from 'immutable'
-import Api from '../../api'
+import Api, { LowDBSyncWrapper } from '../../api'
 import IBoard from '../../schemas/IBoard'
 import IUnsplashPhoto from '../../schemas/IUnsplashPhoto'
 import { BoardActionTypes, IAction } from '../actions'
@@ -20,15 +20,17 @@ function getLocalRecentlyViewedBoards(): IBoard[] {
     return localRecentlyViewedBoards as IBoard[]
 }
 
-const InitialMenuState = Immutable.fromJS({
-    current: null as (IBoard | null),
-    list: [] as IBoard[],
+const InitialBoardState = Immutable.fromJS({
+    current: null,
+    fragmentColumns: [],
+    list: [],
+    lowdb: null,
     recentlyViewed: getLocalRecentlyViewedBoards(),
-    standbyBgColors: Api.board.colors as string[],
-    standbyBgImages: [] as IUnsplashPhoto[],
+    standbyBgColors: Api.board.colors,
+    standbyBgImages: [],
 })
 
-const app = (state = InitialMenuState, action: IAction) => {
+const app = (state = InitialBoardState, action: IAction) => {
     switch (action.type) {
         case BoardActionTypes.ADD_RECENTLY_VIEWED_BOARD:
             let newRecentlyViewed: IBoard[] = [action.payload.board]
@@ -47,7 +49,18 @@ const app = (state = InitialMenuState, action: IAction) => {
             return state.set('list', List<IBoard>(boards))
 
         case BoardActionTypes.SET_CURRENT_BOARD:
-            return state.set('current', action.payload.board)
+            const newBoard: IBoard | null = action.payload.board
+            const oldBoard: IBoard | null = state.get('lowdb')
+            if (!newBoard && !oldBoard) {
+                return state
+            } else if (newBoard && oldBoard && newBoard._id === oldBoard._id) {
+                return state
+            } else if (newBoard) {
+                const lowdb: LowDBSyncWrapper<any> = Api.lowdb.getBoardLowDB(newBoard.path)
+                return state.set('current', newBoard).set('lowdb', lowdb)
+            } else {
+                return state.set('current', null).set('lowdb', null)
+            }
 
         case BoardActionTypes.SET_STANDBY_BG_IMAGES:
             const images: IUnsplashPhoto[] = action.payload.images

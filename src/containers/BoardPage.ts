@@ -7,6 +7,7 @@ import IBoard from '../schemas/IBoard'
 const mapStateToProps = (store: any, props: any) => {
     return {
         boardList: store.board.get('list'),
+        boardLowdb: store.board.get('lowdb'),
         currentBoard: store.board.get('current'),
     }
 }

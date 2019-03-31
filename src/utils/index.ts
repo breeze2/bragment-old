@@ -35,16 +35,18 @@ export function createDirectory(path: string) {
 }
 
 export async function createSubDirectoryRecursively (root: string, path: string) {
+    const titles = []
     const dirs = path.split('/')
     let prefix = root
     for (const dir of dirs) {
         const title = dir.trim()
         if (title) {
             prefix = joinPath(prefix, title)
+            titles.push(title)
             await createDirectory(prefix)
         }
     }
-    return true
+    return titles.join('/')
 }
 
 export function downloadImage(url: string, dest: string): Promise<string> {

@@ -15,6 +15,7 @@ interface ICreateBoardModalProps extends InjectedIntlProps, RouteComponentProps 
     bgColors: List<string>
     bgImages: List<IUnsplashPhoto>
     visible: boolean
+    asyncFetchBoardList: () => any
     asyncFetchStandbyBgImages: () => any
     onOk: (e: any) => any
     onCancel: (e: any) => any
@@ -86,6 +87,7 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
             title,
         }).then((response) => {
             this.props.onOk(response)
+            this.props.asyncFetchBoardList()
             this.props.asyncFetchStandbyBgImages()
             this.props.history.push(`/board/${response.id}`)
         }).finally(() => {

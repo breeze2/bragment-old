@@ -85,7 +85,7 @@ class TextInputChanger extends Component<ITextInputChangerProps> {
     }
     public resetInputValue = (value?: string) => {
         this.setState({
-            innerStatus: value || this.props.inputValue,
+            innerInputValue: value || this.props.inputValue,
         })
     }
     public getInputValue = () => {

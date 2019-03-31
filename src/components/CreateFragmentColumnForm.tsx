@@ -8,6 +8,7 @@ import '../styles/CreateFragmentColumnForm.less'
 
 interface ICreateFragmentColumnFormProps {
     boardPath: string
+    onSuccess: (title: string) => any
 }
 
 class CreateFragmentColumnForm extends Component<ICreateFragmentColumnFormProps> {
@@ -25,8 +26,9 @@ class CreateFragmentColumnForm extends Component<ICreateFragmentColumnFormProps>
     public handleChangerInputSubmit = (value: string) => {
         const title = value.trim()
         if (this.props.boardPath && title) {
-            Utils.createSubDirectoryRecursively(this.props.boardPath, title).then((res) => {
+            Utils.createSubDirectoryRecursively(this.props.boardPath, title).then((title) => {
                 this.resetChangerInputValue()
+                this.props.onSuccess(title)
             }).catch(error => {
                 console.error(error)
             })

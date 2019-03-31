@@ -35,7 +35,7 @@ class BoardCard extends Component<IBoardCardProps> {
         }
         return (
             <Card className="board-card" hoverable onClick={this.handleClick} style={{
-                backgroundColor: this.props.color,
+                backgroundColor: this.props.image && this.props.path ? undefined : this.props.color,
                 backgroundImage: this.props.image && this.props.path ?
                     `url(${Utils.formatFileUrl(this.props.path, this.props.image)})` : '',
             }}>

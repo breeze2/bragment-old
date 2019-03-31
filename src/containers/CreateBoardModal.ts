@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import CreateBoardModal from '../components/CreateBoardModal'
-import { asyncFetchStandbyBgImages } from '../redux/actions'
+import { asyncFetchBoardList, asyncFetchStandbyBgImages } from '../redux/actions'
 
 const mapStateToProps = (store: any, props: any) => {
     return {
@@ -11,6 +11,7 @@ const mapStateToProps = (store: any, props: any) => {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
+    asyncFetchBoardList: () => dispatch(asyncFetchBoardList()),
     asyncFetchStandbyBgImages: () => dispatch(asyncFetchStandbyBgImages()),
 })
 

@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { DragDropContext, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd'
 import { RouteComponentProps } from 'react-router-dom'
 
+import Api, { LowDBSyncWrapper } from '../api'
 import CreateFragmentColumnForm from '../components/CreateFragmentColumnForm'
 import FragmentColumn from '../components/FragmentColumn'
 import IBoard from '../schemas/IBoard'
@@ -10,14 +11,24 @@ import IBoard from '../schemas/IBoard'
 import '../styles/BoardPage.less'
 
 interface IBoardPageProps extends RouteComponentProps {
+    boardLowdb: LowDBSyncWrapper<any> | null
     boardList: List<IBoard>
     currentBoard: IBoard | null
     setCurrentBoard: (board: IBoard | null) => any
 }
 
+interface IBoardPageState {
+    columns: string[],
+
+}
+
 class BoardPage extends Component<IBoardPageProps> {
+    public state: IBoardPageState
     public constructor(props: IBoardPageProps) {
         super(props)
+        this.state = {
+            columns: [],
+        }
     }
     public componentDidMount() {
         this._initCurrentBoard(this.props)
@@ -27,6 +38,9 @@ class BoardPage extends Component<IBoardPageProps> {
     }
     public handleDragEnd = (result: DropResult) => {
         console.log(result)
+    }
+    public handleCreateColumnSuccess = (title: string) => {
+        // Api.lowdb.pushBoardColumn(this._lowdb, title)
     }
     public render() {
         return (
@@ -40,11 +54,13 @@ class BoardPage extends Component<IBoardPageProps> {
                                     { title: 'sdfsf2', fragmetns: [{ title: 'sdfsdfffff2' }] },
                                     { title: 'sdfsf3', fragmetns: [{ title: 'sdfsdfffff3' }] },
                                 ].map((fragmentColumn, i) => (
-                                    <FragmentColumn key={fragmentColumn.title} fragmetns={fragmentColumn.fragmetns} title={fragmentColumn.title} index={i} />
+                                    <FragmentColumn key={fragmentColumn.title} fragmetns={fragmentColumn.fragmetns}
+                                        title={fragmentColumn.title} index={i} />
                                 ))}
                                 { provided.placeholder }
                                 <div className="board-action">
-                                    <CreateFragmentColumnForm boardPath={this.props.currentBoard ? this.props.currentBoard.path : ''} />
+                                    <CreateFragmentColumnForm boardPath={this.props.currentBoard ? this.props.currentBoard.path : ''}
+                                        onSuccess={this.handleCreateColumnSuccess} />
                                 </div>
                             </div>
                         )}
@@ -54,10 +70,9 @@ class BoardPage extends Component<IBoardPageProps> {
         )
     }
     private _initCurrentBoard(props: IBoardPageProps) {
-        console.log(111)
+        console.log(props, this.props)
         const boardList = props.boardList
         const params: any = props.match.params
-        console.log(params)
         if (params.id) {
             if (!this.props.currentBoard || params.id !== this.props.currentBoard._id) {
                 const board = boardList.find(el => el._id === params.id) || null

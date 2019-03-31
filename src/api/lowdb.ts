@@ -1,28 +1,34 @@
-import lowdb from 'lowdb'
+import lowdb, { AdapterSync, LowdbSync } from 'lowdb'
+import Utils from '../utils'
 
 const FileSync = (window as any).require('lowdb/adapters/FileSync')
-const FileAsync = (window as any).require('lowdb/adapters/FileAsync')
+// const FileAsync = (window as any).require('lowdb/adapters/FileAsync')
 
-class LowDBWrapper {
-    private path: string
+export class LowDBSyncWrapper<Type = any> {
+    private _db: LowdbSync<Type>
     public constructor(path: string) {
-        this.path = path
+        const adapter: AdapterSync<Type> = new FileSync(path)
+        this._db = lowdb(adapter)
     }
-    public useSyncExecuter() {
-        const adapter: lowdb.AdapterSync = new FileSync(this.path)
-        return lowdb(adapter)
+    public set(key: string, value: any) {
+        return this._db.set(key, value)
     }
-    public useAsyncExecuter() {
-        const adapter: lowdb.AdapterAsync = new FileAsync(this.path)
-        return lowdb(adapter)
+    public get(key: string, defaultValue?: any) {
+        return this._db.get(key, defaultValue)
     }
 }
 
+function pushBoardColumn(db: LowDBSyncWrapper<any>, title: string) {
+
+}
+
 function getBoardLowDB(boardPath: string) {
-    const db = new LowDBWrapper(boardPath + '/.brag/lowdb.json')
+    const path = Utils.joinPath(boardPath, '.brag/lowdb.json')
+    const db = new LowDBSyncWrapper<any>(path)
     return db
 }
 
 export default {
     getBoardLowDB,
+    pushBoardColumn,
 }

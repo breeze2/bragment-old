@@ -1,10 +1,10 @@
 import PouchDB from 'pouchdb'
 import PouchDBFind from 'pouchdb-find'
-import IBoard, { IBoardBase } from '../schemas/IBoard'
+import IBoard from '../schemas/IBoard'
 
 PouchDB.plugin(PouchDBFind)
 
-class PouchDBWrapper<Type> {
+export class PouchDBWrapper<Type> {
     private _db: PouchDB.Database<Type>
     private _createIndexRequestMap: {[key: string]: Promise<PouchDB.Find.CreateIndexResponse<Type>>} = {}
     public constructor (name: string) {
@@ -50,7 +50,7 @@ class PouchDBWrapper<Type> {
     }
 }
 
-function getBoardPouchDB() {
+function getBoardsPouchDB() {
     const pouch = new PouchDBWrapper<IBoard>('board')
     pouch.setCreateIndexRequestMap({
         'path': pouch.createIndex({ index: {
@@ -67,5 +67,5 @@ function getBoardPouchDB() {
 }
 
 export default {
-    getBoardPouchDB,
+    getBoardsPouchDB,
 }

@@ -3,7 +3,7 @@ import { HomeActionTypes, IAction } from '../actions'
 
 const MenuKeyDefault = 'BOARDS'
 const InitialMenuState = Immutable.fromJS({
-    selectedMenuKey: MenuKeyDefault as string,
+    selectedMenuKey: MenuKeyDefault,
 })
 
 const home = (state = InitialMenuState, action: IAction) => {

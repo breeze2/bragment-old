@@ -15,7 +15,7 @@ const colors: string[] = [
     'var(--grey)',
 ]
 
-const pouch = pouchdb.getBoardPouchDB()
+const pouch = pouchdb.getBoardsPouchDB()
 Object.defineProperty(window, 'pouch', {value: pouch})
 async function createBoard(board: IBoardBase) {
     // 1. create directory
@@ -25,7 +25,7 @@ async function createBoard(board: IBoardBase) {
     // 2. download image
     if (board.image) {
         const background = '.brag' + '/assets/background.jpg'
-        Utils.downloadImage(board.image, Utils.joinPath(board.path, background))
+        await Utils.downloadImage(board.image, Utils.joinPath(board.path, background))
         board.image = background
     }
 
@@ -50,7 +50,7 @@ async function createBoard(board: IBoardBase) {
     const response = await pouch.put(newBoard)
 
     // 5. save in low db
-    const low = lowdb.getBoardLowDB(newBoard.path).useSyncExecuter()
+    const low = lowdb.getBoardLowDB(newBoard.path)
     low.set('board', newBoard).write()
 
     return response
