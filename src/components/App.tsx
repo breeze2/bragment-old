@@ -39,23 +39,19 @@ class App extends Component<IAppProps> {
     public render() {
         return (
             <IntlProvider locale={this.props.language} messages={messages[this.props.language]}>
-                <Layout className="app" style={{
-                    backgroundColor: this.props.currentBoard ? this.props.currentBoard.color : undefined,
-                    backgroundImage: this.props.currentBoard ? `url(${Utils.formatFileUrl(this.props.currentBoard.path,
-                        this.props.currentBoard.image)})` : undefined,
-                }}>
+                <div className="app">
                     <Router>
                         <AppHeader />
-                        <Layout.Content className="app-content">
+                        <div className="app-content">
                             <Route exact path={['/', '/home', '/home/boards', '/home/logs']} component={HomePage} />
                             <Route exact path="/board/:id" component={BoardPage} />
                             <Route path="/" render={props => <CreateBoardModal visible={this.props.createBoardModalVisible}
                                 onCancel={this.handleCreateBoardModalCancel}
                                 onOk={this.handleCreateBoardModalOk} {...props}
                             />} />
-                        </Layout.Content>
+                        </div>
                     </Router>
-                </Layout>
+                </div>
             </IntlProvider>
         )
     }

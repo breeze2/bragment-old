@@ -14,7 +14,7 @@ class FragmentColumnContent extends Component<IFragmentColumnContentProps> {
                 {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
                     <div className="fragment-column-content" ref={provided.innerRef} {...provided.droppableProps}>
                         {this.props.fragments.map((fragment, i) => (
-                            <FragmentCard key={fragment.title} title={fragment.title} index={i} />
+                            <FragmentCard key={this.props.title + '///' + fragment.title} title={this.props.title + '///' + fragment.title} index={i} />
                         ))}
                         {provided.placeholder}
                     </div>

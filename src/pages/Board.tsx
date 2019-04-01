@@ -8,6 +8,7 @@ import CreateFragmentColumnForm from '../components/CreateFragmentColumnForm'
 import FragmentColumn from '../components/FragmentColumn'
 import IBoard from '../schemas/IBoard'
 import IFragmentColumn from '../schemas/IFragmentColumn'
+import Utils from '../utils'
 
 import '../styles/BoardPage.less'
 
@@ -47,7 +48,7 @@ class BoardPage extends Component<IBoardPageProps> {
             this.props.asyncMoveInFragmentColumns(result.source.index, result.destination.index)
         }
     }
-    public handleCreateColumnSuccess = (title: string) => {
+    public handleCreateFragmentColumnSuccess = (title: string) => {
         const fragmentColumn: IFragmentColumn = {
             fragments: [],
             title,
@@ -57,22 +58,29 @@ class BoardPage extends Component<IBoardPageProps> {
     public render() {
         return (
             <div className="board-page">
-                <DragDropContext onDragEnd={this.handleDragEnd}>
-                    <Droppable droppableId="board" type="COLUMN" direction="horizontal">
-                        {(provided: DroppableProvided) => (
-                            <div className="board-container" ref={provided.innerRef} {...provided.droppableProps} >
-                                {this.props.fragmentColumns.map((fragmentColumn, i) => (
-                                    <FragmentColumn key={fragmentColumn.title} fragments={fragmentColumn.fragments}
-                                        title={fragmentColumn.title} index={i} />
-                                ))}
-                                { provided.placeholder }
-                                <div className="board-action">
-                                    <CreateFragmentColumnForm onSuccess={this.handleCreateColumnSuccess} />
+                <div className="board-background" style={{
+                    backgroundColor: this.props.currentBoard ? this.props.currentBoard.color : undefined,
+                    backgroundImage: this.props.currentBoard ? `url(${Utils.formatFileUrl(this.props.currentBoard.path,
+                        this.props.currentBoard.image)})` : undefined,
+                }} />
+                <div className="board-foreground">
+                    <DragDropContext onDragEnd={this.handleDragEnd}>
+                        <Droppable droppableId="board" type="COLUMN" direction="horizontal">
+                            {(provided: DroppableProvided) => (
+                                <div className="board-container" ref={provided.innerRef} {...provided.droppableProps} >
+                                    {this.props.fragmentColumns.map((fragmentColumn, i) => (
+                                        <FragmentColumn key={fragmentColumn.title} fragments={fragmentColumn.fragments}
+                                            title={fragmentColumn.title} index={i} />
+                                    ))}
+                                    { provided.placeholder }
+                                    <div className="board-action">
+                                        <CreateFragmentColumnForm onSuccess={this.handleCreateFragmentColumnSuccess} />
+                                    </div>
                                 </div>
-                            </div>
-                        )}
-                    </Droppable>
-                </DragDropContext>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                </div>
             </div>
         )
     }
