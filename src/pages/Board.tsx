@@ -69,8 +69,9 @@ class BoardPage extends Component<IBoardPageProps> {
                             {(provided: DroppableProvided) => (
                                 <div className="board-container" ref={provided.innerRef} {...provided.droppableProps} >
                                     {this.props.fragmentColumns.map((fragmentColumn, i) => (
-                                        <FragmentColumn key={fragmentColumn.title} fragments={fragmentColumn.fragments}
-                                            title={fragmentColumn.title} index={i} />
+                                        <FragmentColumn key={fragmentColumn.title}
+                                            draggableId={fragmentColumn.title}
+                                            fragments={fragmentColumn.fragments} title={fragmentColumn.title} index={i} />
                                     ))}
                                     { provided.placeholder }
                                     <div className="board-action">

@@ -8,6 +8,7 @@ import '../styles/FragmentColumn.less'
 
 interface IFragmentColumnProps {
     index: number
+    draggableId: string
     title: string
     fragments: any[]
 }
@@ -15,14 +16,14 @@ interface IFragmentColumnProps {
 class FragmentColumn extends Component<IFragmentColumnProps> {
     public render() {
         return (
-            <Draggable draggableId={this.props.title} index={this.props.index}>
+            <Draggable draggableId={this.props.draggableId} index={this.props.index}>
                 {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
                     <div className="fragment-column" ref={provided.innerRef} {...provided.draggableProps}>
                         <FragmentColumnHeader
                             title={this.props.title}
                             isDragging={snapshot.isDragging}
                             dragHandleProps={provided.dragHandleProps} />
-                        <FragmentColumnContent title={this.props.title} fragments={this.props.fragments} />
+                        <FragmentColumnContent droppableId={this.props.draggableId} title={this.props.title} fragments={this.props.fragments} />
                         <FragmentColumnFooter />
                     </div>
                 )}

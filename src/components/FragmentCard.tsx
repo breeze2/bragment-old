@@ -3,6 +3,7 @@ import React, { Component } from 'react'
 import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 
 interface IFragmentCardProps {
+    draggableId: string
     title: string
     index: number
 }
@@ -10,7 +11,7 @@ interface IFragmentCardProps {
 class FragmentCard extends Component<IFragmentCardProps> {
     public render() {
         return (
-            <Draggable draggableId={this.props.title} index={this.props.index}>
+            <Draggable draggableId={this.props.draggableId} index={this.props.index}>
                 {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
                     <div className="fragment-card" ref={provided.innerRef}
                         style={{ backgroundColor: snapshot.draggingOver ? 'blue' : 'grey' }}
