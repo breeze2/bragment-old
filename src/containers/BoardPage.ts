@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import BoardPage from '../pages/Board'
-import { setCurrentBoard } from '../redux/actions'
+import { asyncInitCurretnBoard, setCurrentBoard } from '../redux/actions'
 import IBoard from '../schemas/IBoard'
 
 const mapStateToProps = (store: any, props: any) => {
@@ -13,7 +13,7 @@ const mapStateToProps = (store: any, props: any) => {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
-    setCurrentBoard: (board: IBoard | null) => dispatch(setCurrentBoard(board)),
+    asyncInitCurretnBoard: (board: IBoard | null) => dispatch(asyncInitCurretnBoard(board)),
 })
 
 export default connect(

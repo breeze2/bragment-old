@@ -7,8 +7,6 @@ const mapStateToProps = (store: any, props: any) => {
     return {
         boardList: store.board.get('list'),
         currentBoard: store.board.get('current'),
-        // createBoardModalVisible: store.app.get('createBoardModalVisible'),
-        // language: store.app.get('language'),
     }
 }
 

@@ -14,7 +14,7 @@ interface IBoardPageProps extends RouteComponentProps {
     boardLowdb: LowDBSyncWrapper<any> | null
     boardList: List<IBoard>
     currentBoard: IBoard | null
-    setCurrentBoard: (board: IBoard | null) => any
+    asyncInitCurretnBoard: (board: IBoard | null) => any
 }
 
 interface IBoardPageState {
@@ -31,9 +31,11 @@ class BoardPage extends Component<IBoardPageProps> {
         }
     }
     public componentDidMount() {
+        console.log(1)
         this._initCurrentBoard(this.props)
     }
     public componentWillReceiveProps(props: IBoardPageProps) {
+        console.log(2)
         this._initCurrentBoard(props)
     }
     public handleDragEnd = (result: DropResult) => {
@@ -73,9 +75,9 @@ class BoardPage extends Component<IBoardPageProps> {
         const boardList = props.boardList
         const params: any = props.match.params
         if (params.id) {
-            if (!this.props.currentBoard || params.id !== this.props.currentBoard._id) {
+            if (!props.currentBoard || props.currentBoard._id !== params.id) {
                 const board = boardList.find(el => el._id === params.id) || null
-                this.props.setCurrentBoard(board)
+                this.props.asyncInitCurretnBoard(board)
             }
         }
     }

@@ -1,5 +1,5 @@
 import { all, fork } from 'redux-saga/effects'
-import { watchFetchBoardList, watchFetchUnsplashStandbyImages } from './board'
+import { watchFetchBoardList, watchFetchUnsplashStandbyImages, watchInitCurrentBoard } from './board'
 import { watchSelectMenuKey } from './home'
 
 export default function* () {
@@ -7,5 +7,6 @@ export default function* () {
         fork(watchFetchBoardList),
         fork(watchFetchUnsplashStandbyImages),
         fork(watchSelectMenuKey),
+        fork(watchInitCurrentBoard),
     ])
 }
