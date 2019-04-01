@@ -2,8 +2,6 @@ import { Button, Icon, Input } from 'antd'
 import React, { Component } from 'react'
 import TextInputChanger from '../components/TextInputChanger'
 
-import Utils from '../utils'
-
 import '../styles/CreateFragmentColumnForm.less'
 
 interface ICreateFragmentColumnFormProps {

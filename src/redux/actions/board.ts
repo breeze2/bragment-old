@@ -9,10 +9,10 @@ export const BoardActionTypes = {
     ASYNC_FETCH_FRAGMENT_COLUMNS: 'ASYNC_FETCH_FRAGMENT_COLUMNS',
     ASYNC_FETCH_STANDBY_BG_IMAGES: 'ASYNC_FETCH_STANDBY_BG_IMAGES',
     ASYNC_INIT_CURRENT_BOARD: 'ASYNC_INIT_CURRENT_BOARD',
+    ASYNC_MOVE_IN_FRAGMENT_COLUMNS: 'ASYNC_MOVE_IN_FRAGMENT_COLUMNS',
     ASYNC_PUSH_IN_FRAGMENT_COLUMNS: 'ASYNC_PUSH_IN_FRAGMENT_COLUMNS',
 
     ADD_RECENTLY_VIEWED_BOARD: 'ADD_RECENTLY_VIEWED_BOARD',
-    MOVE_IN_FRAGMENT_COLUMNS: 'MOVE_IN_FRAGMENT_COLUMNS',
     SET_BOARD_LIST: 'SET_BOARD_LIST',
     SET_BOARD_LOWDB: 'SET_BOARD_LOWDB',
     SET_CURRENT_BOARD: 'SET_CURRENT_BOARD',
@@ -25,25 +25,20 @@ export const addRecentlyViewedBoard = (board: IBoard): IAction => ({
     type: BoardActionTypes.ADD_RECENTLY_VIEWED_BOARD,
 })
 
-export const moveInFragmentColumns = (from: number, to: number): IAction => ({
-    payload: { from, to },
-    type: BoardActionTypes.MOVE_IN_FRAGMENT_COLUMNS,
-})
-
 export const setBoardList = (boards: IBoard[]): IAction => ({
     payload: { boards },
     type: BoardActionTypes.SET_BOARD_LIST,
 })
 
-// export const setBoardLowDB = (lowdb: LowDBSyncWrapper<any>): IAction => ({
-//     payload: { lowdb },
-//     type: BoardActionTypes.SET_BOARD_LIST,
-// })
+export const setBoardLowDB = (lowdb: LowDBSyncWrapper<any>): IAction => ({
+    payload: { lowdb },
+    type: BoardActionTypes.SET_BOARD_LIST,
+})
 
-// export const setCurrentBoard = (board: IBoard | null): IAction => ({
-//     payload: { board },
-//     type: BoardActionTypes.SET_CURRENT_BOARD,
-// })
+export const setCurrentBoard = (board: IBoard | null): IAction => ({
+    payload: { board },
+    type: BoardActionTypes.SET_CURRENT_BOARD,
+})
 
 export const setStandbyBgImages = (images: IUnsplashPhoto[]): IAction => ({
     payload: { images },
@@ -68,6 +63,11 @@ export const asyncFetchStandbyBgImages = (): IAction => ({
 export const asyncInitCurretnBoard = (board: IBoard | null): IAction => ({
     payload: { board },
     type: BoardActionTypes.ASYNC_INIT_CURRENT_BOARD,
+})
+
+export const asyncMoveInFragmentColumns = (from: number, to: number): IAction => ({
+    payload: { from, to },
+    type: BoardActionTypes.ASYNC_MOVE_IN_FRAGMENT_COLUMNS,
 })
 
 export const asyncPushInFragmentColumns = (fragmentColumn: IFragmentColumn): IAction => ({

@@ -18,6 +18,7 @@ interface IBoardPageProps extends RouteComponentProps {
     fragmentColumns: List<IFragmentColumn>
     asyncInitCurretnBoard: (board: IBoard | null) => any
     asyncFetchFragmentColumns: () => any
+    asyncMoveInFragmentColumns: (from: number, to: number) => any
     asyncPushInFragmentColumns: (fragmentColumn: IFragmentColumn) => any
 }
 
@@ -42,6 +43,9 @@ class BoardPage extends Component<IBoardPageProps> {
     }
     public handleDragEnd = (result: DropResult) => {
         console.log(result)
+        if (result.type === 'COLUMN' && result.destination) {
+            this.props.asyncMoveInFragmentColumns(result.source.index, result.destination.index)
+        }
     }
     public handleCreateColumnSuccess = (title: string) => {
         const fragmentColumn: IFragmentColumn = {

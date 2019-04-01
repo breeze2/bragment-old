@@ -34,6 +34,33 @@ export function* fetchBoardList(action: IAction) {
     }
 }
 
+export function* moveInFragmentColumns (action: IAction) {
+    try {
+        const from: number = action.payload.from
+        const to: number = action.payload.to
+        const boardStore = yield select(getBoard)
+        const lowdb: LowDBSyncWrapper<any> | null = boardStore.get('lowdb')
+        if (lowdb) {
+            const iFragmentColumns: List<IFragmentColumn> = boardStore.get('fragmentColumns')
+            const fragmentColumns = iFragmentColumns.toArray()
+
+            // push to redux store
+            if (from < fragmentColumns.length && to < fragmentColumns.length) {
+                fragmentColumns.splice(to, 0, fragmentColumns.splice(from, 1)[0])
+                yield put<IAction>({ type: BoardActionTypes.SET_FRAGMENT_COLUMNS, payload: {fragmentColumns}})
+            }
+            // save in lowdb
+            const columns = lowdb.get('fragment_columns', []).value()
+            if (from < columns.length && to < columns.length) {
+                columns.splice(to, 0, columns.splice(from, 1)[0])
+                lowdb.set('fragment_columns', columns).write()
+            }
+        }
+    } catch (e) {
+        console.error(e)
+    }
+}
+
 export function* pushInFragmentColumns (action: IAction) {
     try {
         const boardStore = yield select(getBoard)
@@ -121,6 +148,10 @@ export function* watchFetchFragmentColumns() {
 
 export function* watchInitCurrentBoard() {
     yield takeLatest(BoardActionTypes.ASYNC_INIT_CURRENT_BOARD, initCurrentBoard)
+}
+
+export function* watchMoveInFragmentColumns() {
+    yield takeLatest(BoardActionTypes.ASYNC_MOVE_IN_FRAGMENT_COLUMNS, moveInFragmentColumns)
 }
 
 export function* watchPushInFragmentColumns() {
