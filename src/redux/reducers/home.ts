@@ -1,5 +1,6 @@
 import Immutable from 'immutable'
-import { HomeActionTypes, IAction } from '../actions'
+import IAction from '../../schemas/IAction'
+import { HomeActionTypes } from '../actions'
 
 const MenuKeyDefault = 'BOARDS'
 const InitialMenuState = Immutable.fromJS({

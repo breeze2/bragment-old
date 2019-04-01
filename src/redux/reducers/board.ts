@@ -1,8 +1,9 @@
 import Immutable, { List } from 'immutable'
 import Api, { LowDBSyncWrapper } from '../../api'
+import IAction from '../../schemas/IAction'
 import IBoard from '../../schemas/IBoard'
 import IUnsplashPhoto from '../../schemas/IUnsplashPhoto'
-import { BoardActionTypes, IAction } from '../actions'
+import { BoardActionTypes } from '../actions'
 
 function getLocalRecentlyViewedBoards(): IBoard[] {
     let localRecentlyViewedBoards = []

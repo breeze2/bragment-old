@@ -1,5 +1,6 @@
 import Immutable, { List } from 'immutable'
-import { AppActionTypes, IAction } from '../actions'
+import IAction from '../../schemas/IAction'
+import { AppActionTypes } from '../actions'
 
 const LanguageDefault = 'en-US' || localStorage.getItem('LANGUAGE') || navigator.language
 const InitialMenuState = Immutable.fromJS({

@@ -70,7 +70,6 @@ class BoardPage extends Component<IBoardPageProps> {
         )
     }
     private _initCurrentBoard(props: IBoardPageProps) {
-        console.log(props, this.props)
         const boardList = props.boardList
         const params: any = props.match.params
         if (params.id) {

@@ -1,5 +1,6 @@
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
-import { BoardActionTypes, IAction } from '../actions'
+import IAction, { IAsyncAction } from '../../schemas/IAction'
+import { BoardActionTypes } from '../actions'
 
 import Api from '../../api'
 
@@ -16,7 +17,13 @@ export function* fetchBoardList(action: IAction) {
     try {
         const boards = yield call(Api.board.getAllBoards)
         yield put({ type: BoardActionTypes.SET_BOARD_LIST, payload: { boards } })
+        if ((action as IAsyncAction).resolve) {
+            (action as IAsyncAction).resolve(true)
+        }
     } catch (e) {
+        if ((action as IAsyncAction).reject) {
+            (action as IAsyncAction).reject(e)
+        }
         console.error(e)
     }
 }

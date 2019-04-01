@@ -14,7 +14,6 @@ export function formatFileUrl(...paths: string[]) {
         protocol: 'file',
         slashes: true,
     })
-    console.log(url)
     return url
 }
 

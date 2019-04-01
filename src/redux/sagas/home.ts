@@ -1,5 +1,6 @@
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects'
-import { HomeActionTypes, IAction } from '../actions'
+import IAction from '../../schemas/IAction'
+import { HomeActionTypes } from '../actions'
 
 export function* selectMenuKeySaga(action: IAction) {
     try {

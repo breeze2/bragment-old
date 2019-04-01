@@ -19,6 +19,7 @@ interface IAppProps {
     currentBoard: IBoard | null
     createBoardModalVisible: boolean
     language: string
+    asyncFetchBoardList: () => any
     setCreateBoardModalVisible: (visible: boolean) => any
 }
 
@@ -31,6 +32,9 @@ class App extends Component<IAppProps> {
     }
     public handleCreateBoardModalOk = () => {
         return this.props.setCreateBoardModalVisible(false)
+    }
+    public componentDidMount() {
+        this.props.asyncFetchBoardList()
     }
     public render() {
         return (
