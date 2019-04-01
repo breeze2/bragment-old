@@ -2,6 +2,7 @@ import Immutable, { List } from 'immutable'
 import Api, { LowDBSyncWrapper } from '../../api'
 import IAction from '../../schemas/IAction'
 import IBoard from '../../schemas/IBoard'
+import IFragmentColumn from '../../schemas/IFragmentColumn'
 import IUnsplashPhoto from '../../schemas/IUnsplashPhoto'
 import { BoardActionTypes } from '../actions'
 
@@ -31,14 +32,14 @@ const InitialBoardState = Immutable.fromJS({
     standbyBgImages: [],
 })
 
-const app = (state = InitialBoardState, action: IAction) => {
+const board = (state = InitialBoardState, action: IAction) => {
     switch (action.type) {
         case BoardActionTypes.ADD_RECENTLY_VIEWED_BOARD:
             let newRecentlyViewed: IBoard[] = [action.payload.board]
             const oldRecentlyViewed: List<IBoard> = state.get('recentlyViewed')
-            oldRecentlyViewed.forEach(board => {
-                if (board._id !== newRecentlyViewed[0]._id) {
-                    newRecentlyViewed.push(board)
+            oldRecentlyViewed.forEach(el => {
+                if (el._id !== newRecentlyViewed[0]._id) {
+                    newRecentlyViewed.push(el)
                 }
             })
             newRecentlyViewed = newRecentlyViewed.slice(0, 4)
@@ -49,19 +50,15 @@ const app = (state = InitialBoardState, action: IAction) => {
             const boards: IBoard[] = action.payload.boards
             return state.set('list', List<IBoard>(boards))
 
+        case BoardActionTypes.SET_BOARD_LOWDB:
+            return state.set('lowdb', action.payload.lowdb)
+
         case BoardActionTypes.SET_CURRENT_BOARD:
-            const newBoard: IBoard | null = action.payload.board
-            const oldBoard: IBoard | null = state.get('lowdb')
-            if (!newBoard && !oldBoard) {
-                return state
-            } else if (newBoard && oldBoard && newBoard._id === oldBoard._id) {
-                return state
-            } else if (newBoard) {
-                const lowdb: LowDBSyncWrapper<any> = Api.lowdb.getBoardLowDB(newBoard.path)
-                return state.set('current', newBoard).set('lowdb', lowdb)
-            } else {
-                return state.set('current', null).set('lowdb', null)
-            }
+            return state.set('current', action.payload.board)
+
+        case BoardActionTypes.SET_FRAGMENT_COLUMNS:
+            const fragmentColumns: IFragmentColumn[] = action.payload.fragmentColumns
+            return state.set('fragmentColumns', List<IFragmentColumn>(fragmentColumns))
 
         case BoardActionTypes.SET_STANDBY_BG_IMAGES:
             const images: IUnsplashPhoto[] = action.payload.images
@@ -72,4 +69,4 @@ const app = (state = InitialBoardState, action: IAction) => {
     }
 }
 
-export default app
+export default board

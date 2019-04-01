@@ -3,6 +3,11 @@ const NodeJSFS = (window as any).require('fs')
 const NodeJSUrl = (window as any).require('url')
 const downloader = (window as any).require('image-downloader')
 
+interface IDirent {
+    name: string
+    isFile: () => boolean
+}
+
 export function joinPath(...paths: string[]) {
     return NodeJSPath.join(...paths)
 }
@@ -21,19 +26,38 @@ export function getPathBasename (path: string) {
     return NodeJSPath.basename(path)
 }
 
-export function createDirectory(path: string) {
-    return new Promise((resolve, reject) => {
-        NodeJSFS.mkdir(path, { recursive: true }, (error: any) => {
-            if (error && error.code !== 'EEXIST') {
-                reject(error)
-            } else {
-                resolve(true)
+export function asyncListDirectoryFile(path: string, suffix: string = '') {
+    return new Promise<string[]>((resolve, reject) => {
+        NodeJSFS.readdir(path, { withFileTypes: true }, (error: any, files: IDirent[]) => {
+            if (error) {
+                return reject(error)
             }
+            const results: string[] = []
+            const slen = suffix.length
+            files.forEach(file => {
+                const fileName = file.name
+                const flen = file.name.length
+                if (file.isFile() && slen < flen && fileName.substr(flen - slen, slen) === suffix) {
+                    results.push(fileName)
+                }
+            })
+            return resolve(results)
         })
     })
 }
 
-export async function createSubDirectoryRecursively (root: string, path: string) {
+export function asyncCreateDirectory(path: string) {
+    return new Promise<boolean>((resolve, reject) => {
+        NodeJSFS.mkdir(path, { recursive: true }, (error: any) => {
+            if (error && error.code !== 'EEXIST') {
+                return reject(error)
+            }
+            return resolve(true)
+        })
+    })
+}
+
+export async function asyncCreateSubDirectoryRecursively (root: string, path: string) {
     const titles = []
     const dirs = path.split('/')
     let prefix = root
@@ -42,7 +66,7 @@ export async function createSubDirectoryRecursively (root: string, path: string)
         if (title) {
             prefix = joinPath(prefix, title)
             titles.push(title)
-            await createDirectory(prefix)
+            await asyncCreateDirectory(prefix)
         }
     }
     return titles.join('/')
@@ -91,8 +115,9 @@ const Utils = {
     debounce,
     throttle,
 
-    createDirectory,
-    createSubDirectoryRecursively,
+    asyncCreateDirectory,
+    asyncCreateSubDirectoryRecursively,
+    asyncListDirectoryFile,
     downloadImage,
     formatFileUrl,
     getPathBasename,

@@ -1,12 +1,16 @@
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects'
+import { List } from 'immutable'
+import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects'
 import IAction, { IAsyncAction } from '../../schemas/IAction'
 import IBoard from '../../schemas/IBoard'
 import { BoardActionTypes } from '../actions'
 import { getBoard } from './selectors'
 
 import Api, { LowDBSyncWrapper } from '../../api'
+import IFragment from '../../schemas/IFragment'
+import IFragmentColumn from '../../schemas/IFragmentColumn'
+import Utils from '../../utils'
 
-export function* fetchUnsplashStandbyImages(action: IAction) {
+export function* fetchUnsplashStandbyImages() {
     try {
         const images = yield call(Api.unsplash.getRandomPhoto, 4)
         yield put<IAction>({ type: BoardActionTypes.SET_STANDBY_BG_IMAGES, payload: { images } })
@@ -30,6 +34,55 @@ export function* fetchBoardList(action: IAction) {
     }
 }
 
+export function* pushInFragmentColumns (action: IAction) {
+    try {
+        const boardStore = yield select(getBoard)
+        const lowdb: LowDBSyncWrapper<any> | null = boardStore.get('lowdb')
+        const board: IBoard | null = boardStore.get('current')
+        const fragmentColumn: IFragmentColumn = action.payload.fragmentColumn
+        if (lowdb && board) {
+            const title: string = yield call(Utils.asyncCreateSubDirectoryRecursively, board.path, fragmentColumn.title)
+            const path = Utils.joinPath(board.path, title)
+            const fragments: IFragment[] = yield call(Api.board.parseFragments, path, fragmentColumn.fragments || [])
+            fragmentColumn.title = title
+            fragmentColumn.fragments = fragments
+
+            // push to redux store
+            const fragmentColumns: List<IFragmentColumn> = boardStore.get('fragmentColumns')
+            yield put<IAction>({ payload: {
+                fragmentColumns: fragmentColumns.toArray().concat([fragmentColumn]),
+            }, type: BoardActionTypes.SET_FRAGMENT_COLUMNS })
+
+            // save in lowdb
+            const columns = lowdb.get('fragment_columns', []).value()
+            if (!columns.find((el: any) => {
+                return el.title === title
+            })) {
+                columns.push(fragmentColumn)
+                lowdb.set('fragment_columns', columns).write()
+            }
+        }
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+export function* fetchFragmentColumns() {
+    try {
+        const boardStore = yield select(getBoard)
+        const lowdb: LowDBSyncWrapper<any> | null = boardStore.get('lowdb')
+        const board: IBoard | null = boardStore.get('current')
+        if (board && lowdb) {
+            const localFragmentColumns: IFragmentColumn[] = lowdb.get('fragment_columns', []).value()
+            const fragmentColumns: IFragmentColumn[] = yield call(Api.board.parseFragmentColumns, board, localFragmentColumns)
+            yield put<IAction>({ type: BoardActionTypes.SET_FRAGMENT_COLUMNS, payload: { fragmentColumns } })
+            lowdb.set('fragment_columns', fragmentColumns).write()
+        }
+    } catch (e) {
+        console.error(e)
+    }
+}
+
 export function* initCurrentBoard(action: IAction) {
     try {
         const boardStore = yield select(getBoard)
@@ -41,11 +94,12 @@ export function* initCurrentBoard(action: IAction) {
             // do nothing
         } else if (newBoard) {
             const lowdb: LowDBSyncWrapper<any> = Api.lowdb.getBoardLowDB(newBoard.path)
-            yield put<IAction>({ type: BoardActionTypes.SET_CURRENT_BOARD, payload: { board: newBoard } })
-            yield put<IAction>({ type: BoardActionTypes.SET_BOARD_LOWDB, payload: { lowdb } })
+            yield all([ put<IAction>({ type: BoardActionTypes.SET_CURRENT_BOARD, payload: { board: newBoard } }),
+                put<IAction>({ type: BoardActionTypes.SET_BOARD_LOWDB, payload: { lowdb } }) ])
+            yield put<IAction>({ type: BoardActionTypes.ASYNC_FETCH_FRAGMENT_COLUMNS, payload: null })
         } else {
-            yield put<IAction>({ type: BoardActionTypes.SET_CURRENT_BOARD, payload: { board: null } })
-            yield put<IAction>({ type: BoardActionTypes.SET_BOARD_LOWDB, payload: { lowdb: null } })
+            yield all([ put<IAction>({ type: BoardActionTypes.SET_CURRENT_BOARD, payload: { board: null } }),
+                put<IAction>({ type: BoardActionTypes.SET_BOARD_LOWDB, payload: { lowdb: null } }) ])
         }
 
     } catch (e) {
@@ -61,6 +115,14 @@ export function* watchFetchBoardList() {
     yield takeLatest(BoardActionTypes.ASYNC_FETCH_BOARD_LIST, fetchBoardList)
 }
 
+export function* watchFetchFragmentColumns() {
+    yield takeLatest(BoardActionTypes.ASYNC_FETCH_FRAGMENT_COLUMNS, fetchFragmentColumns)
+}
+
 export function* watchInitCurrentBoard() {
     yield takeLatest(BoardActionTypes.ASYNC_INIT_CURRENT_BOARD, initCurrentBoard)
+}
+
+export function* watchPushInFragmentColumns() {
+    yield takeLatest(BoardActionTypes.ASYNC_PUSH_IN_FRAGMENT_COLUMNS, pushInFragmentColumns)
 }

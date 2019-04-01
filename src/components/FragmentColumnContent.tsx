@@ -4,7 +4,7 @@ import FragmentCard from './FragmentCard'
 
 interface IFragmentColumnContentProps {
     title: string,
-    fragmetns: any[],
+    fragments: any[],
 }
 
 class FragmentColumnContent extends Component<IFragmentColumnContentProps> {
@@ -13,7 +13,7 @@ class FragmentColumnContent extends Component<IFragmentColumnContentProps> {
             <Droppable droppableId={this.props.title} type="QUOTE" >
                 {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
                     <div className="fragment-column-content" ref={provided.innerRef} {...provided.droppableProps}>
-                        {this.props.fragmetns.map((fragment, i) => (
+                        {this.props.fragments.map((fragment, i) => (
                             <FragmentCard key={fragment.title} title={fragment.title} index={i} />
                         ))}
                         {provided.placeholder}

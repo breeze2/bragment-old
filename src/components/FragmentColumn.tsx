@@ -9,7 +9,7 @@ import '../styles/FragmentColumn.less'
 interface IFragmentColumnProps {
     index: number
     title: string
-    fragmetns: any[]
+    fragments: any[]
 }
 
 class FragmentColumn extends Component<IFragmentColumnProps> {
@@ -22,7 +22,7 @@ class FragmentColumn extends Component<IFragmentColumnProps> {
                             title={this.props.title}
                             isDragging={snapshot.isDragging}
                             dragHandleProps={provided.dragHandleProps} />
-                        <FragmentColumnContent title={this.props.title} fragmetns={this.props.fragmetns} />
+                        <FragmentColumnContent title={this.props.title} fragments={this.props.fragments} />
                         <FragmentColumnFooter />
                     </div>
                 )}

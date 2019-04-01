@@ -1,5 +1,7 @@
 import shortid from 'shortid'
 import IBoard, { IBoardBase } from '../schemas/IBoard'
+import IFragment from '../schemas/IFragment'
+import IFragmentColumn from '../schemas/IFragmentColumn'
 import Utils from '../utils'
 import lowdb from './lowdb'
 import pouchdb from './pouchdb'
@@ -16,11 +18,11 @@ const colors: string[] = [
 ]
 
 const pouch = pouchdb.getBoardsPouchDB()
-Object.defineProperty(window, 'pouch', {value: pouch})
+
 async function createBoard(board: IBoardBase) {
     // 1. create directory
-    await Utils.createDirectory(Utils.joinPath(board.path, '.brag'))
-    await Utils.createDirectory(Utils.joinPath(board.path, '.brag', 'assets'))
+    await Utils.asyncCreateDirectory(Utils.joinPath(board.path, '.brag'))
+    await Utils.asyncCreateDirectory(Utils.joinPath(board.path, '.brag', 'assets'))
 
     // 2. download image
     if (board.image) {
@@ -56,6 +58,56 @@ async function createBoard(board: IBoardBase) {
     return response
 }
 
+async function parseFragmentColumns(board: IBoard, fragmentColumns: IFragmentColumn[]) {
+    const newFragmentColumns: IFragmentColumn[] = []
+    for (const column of fragmentColumns) {
+        const title = column.title
+        if (!title) {
+            continue
+        }
+        const path = Utils.joinPath(board.path, title)
+        const fragments = await parseFragments(path, column.fragments || [])
+        if (fragments) {
+            newFragmentColumns.push({
+                fragments,
+                title,
+            })
+        }
+    }
+
+    return newFragmentColumns
+}
+
+async function parseFragments(path: string, fragments: IFragment[]) {
+    try {
+        const titles: string[] = await Utils.asyncListDirectoryFile(path, '.md')
+        const titlesMap: { [key: string]: boolean } = {}
+        const newFragments: IFragment[] = []
+        const fragmentsMap: { [key: string]: boolean } = {}
+
+        titles.forEach(title => {
+            titlesMap[title] = true
+        })
+        fragments.forEach(fragment => {
+            fragmentsMap[fragment.title] = true
+            if (titlesMap[fragment.title]) {
+                newFragments.push(fragment)
+            }
+        })
+        titles.forEach(title => {
+            if (!fragmentsMap[title]) {
+                newFragments.push({
+                    title,
+                })
+            }
+        })
+
+        return newFragments
+    } catch (e) {
+        console.error(e)
+    }
+}
+
 async function getAllBoards() {
     const boards = await pouch.findAll(
         { path: { $gt: null }, updated_at: { $gt: null } },
@@ -70,4 +122,6 @@ export default {
 
     createBoard,
     getAllBoards,
+    parseFragmentColumns,
+    parseFragments,
 }

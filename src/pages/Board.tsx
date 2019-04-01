@@ -7,6 +7,7 @@ import Api, { LowDBSyncWrapper } from '../api'
 import CreateFragmentColumnForm from '../components/CreateFragmentColumnForm'
 import FragmentColumn from '../components/FragmentColumn'
 import IBoard from '../schemas/IBoard'
+import IFragmentColumn from '../schemas/IFragmentColumn'
 
 import '../styles/BoardPage.less'
 
@@ -14,7 +15,10 @@ interface IBoardPageProps extends RouteComponentProps {
     boardLowdb: LowDBSyncWrapper<any> | null
     boardList: List<IBoard>
     currentBoard: IBoard | null
+    fragmentColumns: List<IFragmentColumn>
     asyncInitCurretnBoard: (board: IBoard | null) => any
+    asyncFetchFragmentColumns: () => any
+    asyncPushInFragmentColumns: (fragmentColumn: IFragmentColumn) => any
 }
 
 interface IBoardPageState {
@@ -31,18 +35,20 @@ class BoardPage extends Component<IBoardPageProps> {
         }
     }
     public componentDidMount() {
-        console.log(1)
         this._initCurrentBoard(this.props)
     }
     public componentWillReceiveProps(props: IBoardPageProps) {
-        console.log(2)
         this._initCurrentBoard(props)
     }
     public handleDragEnd = (result: DropResult) => {
         console.log(result)
     }
     public handleCreateColumnSuccess = (title: string) => {
-        // Api.lowdb.pushBoardColumn(this._lowdb, title)
+        const fragmentColumn: IFragmentColumn = {
+            fragments: [],
+            title,
+        }
+        this.props.asyncPushInFragmentColumns(fragmentColumn)
     }
     public render() {
         return (
@@ -51,18 +57,13 @@ class BoardPage extends Component<IBoardPageProps> {
                     <Droppable droppableId="board" type="COLUMN" direction="horizontal">
                         {(provided: DroppableProvided) => (
                             <div className="board-container" ref={provided.innerRef} {...provided.droppableProps} >
-                                {[
-                                    { title: 'sdfsf', fragmetns: [{ title: 'sdfsdfffff' }] },
-                                    { title: 'sdfsf2', fragmetns: [{ title: 'sdfsdfffff2' }] },
-                                    { title: 'sdfsf3', fragmetns: [{ title: 'sdfsdfffff3' }] },
-                                ].map((fragmentColumn, i) => (
-                                    <FragmentColumn key={fragmentColumn.title} fragmetns={fragmentColumn.fragmetns}
+                                {this.props.fragmentColumns.map((fragmentColumn, i) => (
+                                    <FragmentColumn key={fragmentColumn.title} fragments={fragmentColumn.fragments}
                                         title={fragmentColumn.title} index={i} />
                                 ))}
                                 { provided.placeholder }
                                 <div className="board-action">
-                                    <CreateFragmentColumnForm boardPath={this.props.currentBoard ? this.props.currentBoard.path : ''}
-                                        onSuccess={this.handleCreateColumnSuccess} />
+                                    <CreateFragmentColumnForm onSuccess={this.handleCreateColumnSuccess} />
                                 </div>
                             </div>
                         )}
