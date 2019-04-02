@@ -1,10 +1,11 @@
 import { all, fork } from 'redux-saga/effects'
-import { watchFetchBoardList, watchFetchFragmentColumns, watchFetchUnsplashStandbyImages,
+import { watchCreateBoard, watchFetchBoardList, watchFetchFragmentColumns, watchFetchUnsplashStandbyImages,
     watchInitCurrentBoard, watchMoveInFragmentColumns, watchPushInFragmentColumns } from './board'
 import { watchSelectMenuKey } from './home'
 
 export default function* () {
     yield all([
+        fork(watchCreateBoard),
         fork(watchFetchBoardList),
         fork(watchFetchFragmentColumns),
         fork(watchFetchUnsplashStandbyImages),

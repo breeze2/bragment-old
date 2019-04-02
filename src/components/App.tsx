@@ -1,5 +1,4 @@
-import { Layout } from 'antd'
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { IntlProvider } from 'react-intl'
 import { HashRouter as Router, Route } from 'react-router-dom'
 
@@ -11,7 +10,6 @@ import AppHeader from '../containers/AppHeader'
 import CreateBoardModal from '../containers/CreateBoardModal'
 
 import IBoard from '../schemas/IBoard'
-import Utils from '../utils'
 
 import '../styles/App.less'
 
@@ -23,7 +21,7 @@ interface IAppProps {
     setCreateBoardModalVisible: (visible: boolean) => any
 }
 
-class App extends Component<IAppProps> {
+class App extends PureComponent<IAppProps> {
     public constructor(props: any) {
         super(props)
     }

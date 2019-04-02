@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { Draggable, DraggableProvided, DraggableStateSnapshot, Droppable } from 'react-beautiful-dnd'
+import React, { PureComponent } from 'react'
+import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
 import FragmentColumnContent from './FragmentColumnContent'
 import FragmentColumnFooter from './FragmentColumnFooter'
 import FragmentColumnHeader from './FragmentColumnHeader'
@@ -13,12 +13,16 @@ interface IFragmentColumnProps {
     fragments: any[]
 }
 
-class FragmentColumn extends Component<IFragmentColumnProps> {
+class FragmentColumn extends PureComponent<IFragmentColumnProps> {
+    public componentDidUpdate() {
+        console.log(11)
+    }
     public render() {
         return (
             <Draggable draggableId={this.props.draggableId} index={this.props.index}>
                 {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-                    <div className="fragment-column" ref={provided.innerRef} {...provided.draggableProps}>
+                    <div className={`fragment-column ${this.props.fragments.length ? '' : 'empty-content'}`}
+                        ref={provided.innerRef} {...provided.draggableProps}>
                         <FragmentColumnHeader
                             title={this.props.title}
                             isDragging={snapshot.isDragging}

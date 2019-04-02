@@ -1,6 +1,6 @@
 import { Icon, Layout } from 'antd'
 import { List } from 'immutable'
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import IBoard from '../schemas/IBoard'
 import '../styles/AppHeader.less'
 
@@ -10,7 +10,7 @@ interface IAppHeaderProps {
     setCreateBoardModalVisible: (visible: boolean) => any
 }
 
-class AppHeader extends Component<IAppHeaderProps> {
+class AppHeader extends PureComponent<IAppHeaderProps> {
     public constructor(props: IAppHeaderProps) {
         super(props)
     }

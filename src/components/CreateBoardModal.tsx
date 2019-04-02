@@ -1,11 +1,12 @@
 import { Button, Icon, Input, message as Message, Modal } from 'antd'
 import { List } from 'immutable'
-import React, { ChangeEvent, Component } from 'react'
+import React, { ChangeEvent, PureComponent } from 'react'
 import { FormattedMessage, InjectedIntlProps, injectIntl, intlShape } from 'react-intl'
 import { RouteComponentProps } from 'react-router-dom'
 import SelectBackgroundPopover, { IBackground } from './SelectBackgroundPopover'
 
 import Api from '../api'
+import { IBoardBase } from '../schemas/IBoard'
 import IUnsplashPhoto from '../schemas/IUnsplashPhoto'
 import Utils from '../utils'
 
@@ -15,7 +16,7 @@ interface ICreateBoardModalProps extends InjectedIntlProps, RouteComponentProps 
     bgColors: List<string>
     bgImages: List<IUnsplashPhoto>
     visible: boolean
-    asyncFetchBoardList: () => Promise<boolean>
+    asyncCreateBoard: (board: IBoardBase) => Promise<string>
     asyncFetchStandbyBgImages: () => any
     onOk: (e: any) => any
     onCancel: (e: any) => any
@@ -29,7 +30,7 @@ interface InterfaceCreateBoardModalState {
     isSubmitting: boolean
 }
 
-class CreateBoardModal extends Component<ICreateBoardModalProps> {
+class CreateBoardModal extends PureComponent<ICreateBoardModalProps> {
     public static propTypes: React.ValidationMap<any> = {
         intl: intlShape.isRequired,
     }
@@ -50,7 +51,6 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
                 this.setState({ selectedBgColor: image.color, selectedBgImage: image })
             }
         }
-        // if (props.visible && !this.props.visible) {}
     }
     public hanleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
         this.setState({ title: e.target.value })
@@ -80,17 +80,19 @@ class CreateBoardModal extends Component<ICreateBoardModalProps> {
             return
         }
         this.setState({ isSubmitting: true })
-        Api.board.createBoard({
+        this.props.asyncCreateBoard({
             color: this.state.selectedBgColor,
             image: this.state.selectedBgImage ? this.state.selectedBgImage.urls.regular : '',
             path,
             title,
-        }).then((response) => {
-            this.props.onOk(response)
+        }).then((id) => {
+            this.props.onOk(id)
             this.props.asyncFetchStandbyBgImages()
-            this.props.asyncFetchBoardList().then(() => {
-                this.props.history.push(`/board/${response.id}`)
+            this.setState({
+                path: '',
+                title: '',
             })
+            this.props.history.push(`/board/${id}`)
         }).finally(() => {
             this.setState({ isSubmitting: false })
         })

@@ -1,7 +1,7 @@
 import { List } from 'immutable'
 import { all, call, put, select, takeEvery, takeLatest } from 'redux-saga/effects'
 import IAction, { IAsyncAction } from '../../schemas/IAction'
-import IBoard from '../../schemas/IBoard'
+import IBoard, { IBoardBase } from '../../schemas/IBoard'
 import { BoardActionTypes } from '../actions'
 import { getBoard } from './selectors'
 
@@ -15,6 +15,22 @@ export function* fetchUnsplashStandbyImages() {
         const images = yield call(Api.unsplash.getRandomPhoto, 4)
         yield put<IAction>({ type: BoardActionTypes.SET_STANDBY_BG_IMAGES, payload: { images } })
     } catch (e) {
+        console.error(e)
+    }
+}
+
+export function* createBoard(action: IAction) {
+    try {
+        const board: IBoardBase = action.payload.board
+        const id: string = yield call(Api.board.createBoard, board)
+        yield put<IAction>({ type: BoardActionTypes.ASYNC_FETCH_BOARD_LIST, payload: null })
+        if ((action as IAsyncAction).resolve) {
+            (action as IAsyncAction).resolve(id)
+        }
+    } catch (e) {
+        if ((action as IAsyncAction).reject) {
+            (action as IAsyncAction).reject(e)
+        }
         console.error(e)
     }
 }
@@ -132,6 +148,10 @@ export function* initCurrentBoard(action: IAction) {
     } catch (e) {
         console.error(e)
     }
+}
+
+export function* watchCreateBoard() {
+    yield takeLatest(BoardActionTypes.ASYNC_CREATE_BOARD, createBoard)
 }
 
 export function* watchFetchUnsplashStandbyImages() {

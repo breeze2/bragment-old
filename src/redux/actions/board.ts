@@ -1,10 +1,11 @@
 import { LowDBSyncWrapper } from '../../api'
 import IAction from '../../schemas/IAction'
-import IBoard from '../../schemas/IBoard'
+import IBoard, { IBoardBase } from '../../schemas/IBoard'
 import IFragmentColumn from '../../schemas/IFragmentColumn'
 import IUnsplashPhoto from '../../schemas/IUnsplashPhoto'
 
 export const BoardActionTypes = {
+    ASYNC_CREATE_BOARD: 'ASYNC_CREATE_BOARD',
     ASYNC_FETCH_BOARD_LIST: 'ASYNC_FETCH_BOARD_LIST',
     ASYNC_FETCH_FRAGMENT_COLUMNS: 'ASYNC_FETCH_FRAGMENT_COLUMNS',
     ASYNC_FETCH_STANDBY_BG_IMAGES: 'ASYNC_FETCH_STANDBY_BG_IMAGES',
@@ -43,6 +44,11 @@ export const setCurrentBoard = (board: IBoard | null): IAction => ({
 export const setStandbyBgImages = (images: IUnsplashPhoto[]): IAction => ({
     payload: { images },
     type: BoardActionTypes.SET_STANDBY_BG_IMAGES,
+})
+
+export const asyncCreateBoard = (board: IBoardBase): IAction => ({
+    payload: { board },
+    type: BoardActionTypes.ASYNC_CREATE_BOARD,
 })
 
 export const asyncFetchBoardList = (): IAction => ({

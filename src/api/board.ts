@@ -55,7 +55,7 @@ async function createBoard(board: IBoardBase) {
     const low = lowdb.getBoardLowDB(newBoard.path)
     low.set('board', newBoard).write()
 
-    return response
+    return response.id
 }
 
 async function parseFragmentColumns(board: IBoard, fragmentColumns: IFragmentColumn[]) {

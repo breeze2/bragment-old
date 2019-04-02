@@ -1,5 +1,6 @@
 import { Button, Icon, Input } from 'antd'
 import React, { Component } from 'react'
+import { FormattedMessage } from 'react-intl'
 import TextInputChanger from '../components/TextInputChanger'
 
 import '../styles/CreateFragmentForm.less'
@@ -37,10 +38,10 @@ class CreateFragmentForm extends Component<ICreateFragmentFormProps> {
                     onInputSubmit={this.handleChangerInputSubmit}
                     inputValue="" status="text"
                     textValue={
-                        <span><Icon type="plus" /> Add another list</span>
+                        <span><Icon type="plus" /> <FormattedMessage id="addAnotherCard" /></span>
                     } inputStatusAddon={
                         <div className="form-action">
-                            <Button type="primary" onClick={this.handleChangerSubmitClick}>sdfsfs</Button>
+                            <Button type="primary" onClick={this.handleChangerSubmitClick}><FormattedMessage id="addCard" /></Button>
                             <Icon type="close" className="handler" />
                         </div>
                     } />
