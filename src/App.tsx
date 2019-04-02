@@ -5,8 +5,8 @@ import { HashRouter as Router, Route } from 'react-router-dom'
 import messages from './locales'
 import store from './redux'
 
-import BoardPage from './pages/Board'
-import HomePage from './pages/Home'
+import BoardPage from './components/BoardPage'
+import HomePage from './components/HomePage'
 
 interface InterfaceAppState {
   language: string

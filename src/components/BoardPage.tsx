@@ -4,11 +4,11 @@ import { DragDropContext, Droppable, DroppableProvided, DropResult } from 'react
 import { RouteComponentProps } from 'react-router-dom'
 
 import Api, { LowDBSyncWrapper } from '../api'
-import CreateFragmentColumnForm from '../components/CreateFragmentColumnForm'
-import FragmentColumn from '../components/FragmentColumn'
 import IBoard from '../schemas/IBoard'
 import IFragmentColumn from '../schemas/IFragmentColumn'
 import Utils from '../utils'
+import CreateFragmentColumnForm from './CreateFragmentColumnForm'
+import FragmentColumn from './FragmentColumn'
 
 import '../styles/BoardPage.less'
 

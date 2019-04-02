@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import HomePage from '../pages/Home'
+import HomePage from '../components/HomePage'
 
 const mapStateToProps = (store: any, props: any) => {
     return {

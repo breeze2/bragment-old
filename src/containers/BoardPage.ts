@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import BoardPage from '../pages/Board'
+import BoardPage from '../components/BoardPage'
 import { asyncFetchFragmentColumns, asyncInitCurretnBoard, asyncMoveInFragmentColumns, asyncPushInFragmentColumns } from '../redux/actions'
 import IBoard from '../schemas/IBoard'
 import IFragmentColumn from '../schemas/IFragmentColumn'
