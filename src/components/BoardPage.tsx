@@ -61,7 +61,8 @@ class BoardPage extends Component<IBoardPageProps> {
                 <div className="board-background" style={{
                     backgroundColor: this.props.currentBoard ? this.props.currentBoard.color : undefined,
                     backgroundImage: this.props.currentBoard ? `url(${Utils.formatFileUrl(this.props.currentBoard.path,
-                        this.props.currentBoard.image)})` : undefined,
+                        this.props.currentBoard.image)}${this.props.location.search.indexOf('reload_bg_image=true') > -1 ?
+                        '?t=' + Date.now() : ''})` : undefined,
                 }} />
                 <div className="board-foreground">
                     <DragDropContext onDragEnd={this.handleDragEnd}>

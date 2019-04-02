@@ -92,7 +92,10 @@ class CreateBoardModal extends PureComponent<ICreateBoardModalProps> {
                 path: '',
                 title: '',
             })
-            this.props.history.push(`/board/${id}`)
+            this.props.history.push({
+                pathname: `/board/${id}`,
+                search: '?reload_bg_image=true',
+            })
         }).finally(() => {
             this.setState({ isSubmitting: false })
         })
