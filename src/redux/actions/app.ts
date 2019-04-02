@@ -1,10 +1,16 @@
 import IAction from '../../schemas/IAction'
 
 export const AppActionTypes = {
+    SET_BG_IMAGE_TIMESTAMP: 'SET_BG_IMAGE_TIMESTAMP',
     SET_CREATE_BOARD_MODAL_VISIBLE: 'SET_CREATE_BOARD_MODAL_VISIBLE',
     SET_LANGUAGE: 'SET_LANGUAGE',
     SET_ONLINE_STATUS: 'SET_ONLINE_STATUS',
 }
+
+export const setBgImageTimestamp = (bgImageTimestamp: number): IAction => ({
+    payload: { bgImageTimestamp },
+    type: AppActionTypes.SET_BG_IMAGE_TIMESTAMP,
+})
 
 export const setCreateBoardModalVisible = (visible: boolean): IAction => ({
     payload: { visible },

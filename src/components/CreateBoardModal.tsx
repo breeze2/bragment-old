@@ -18,6 +18,7 @@ interface ICreateBoardModalProps extends InjectedIntlProps, RouteComponentProps 
     visible: boolean
     asyncCreateBoard: (board: IBoardBase) => Promise<string>
     asyncFetchStandbyBgImages: () => any
+    setBgImageTimestamp: (time: number) => any
     onOk: (e: any) => any
     onCancel: (e: any) => any
 }
@@ -92,10 +93,8 @@ class CreateBoardModal extends PureComponent<ICreateBoardModalProps> {
                 path: '',
                 title: '',
             })
-            this.props.history.push({
-                pathname: `/board/${id}`,
-                search: '?reload_bg_image=true',
-            })
+            this.props.setBgImageTimestamp(Date.now())
+            this.props.history.push(`/board/${id}`)
         }).finally(() => {
             this.setState({ isSubmitting: false })
         })

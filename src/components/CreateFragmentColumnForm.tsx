@@ -24,6 +24,7 @@ class CreateFragmentColumnForm extends PureComponent<ICreateFragmentColumnFormPr
     public handleChangerInputSubmit = (value: string) => {
         const title = value.trim()
         this.props.onSuccess(title)
+        this.resetChangerInputValue()
     }
     public resetChangerInputValue () {
         const changer = this._refChanger.current

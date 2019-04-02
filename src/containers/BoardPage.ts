@@ -7,6 +7,7 @@ import IFragmentColumn from '../schemas/IFragmentColumn'
 
 const mapStateToProps = (store: any, props: any) => {
     return {
+        bgImageTimestamp: store.app.get('bgImageTimestamp'),
         boardList: store.board.get('list'),
         boardLowdb: store.board.get('lowdb'),
         currentBoard: store.board.get('current'),

@@ -4,6 +4,7 @@ import { AppActionTypes } from '../actions'
 
 const LanguageDefault = 'en-US' || localStorage.getItem('LANGUAGE') || navigator.language
 const InitialMenuState = Immutable.fromJS({
+    bgImageTimestamp: 0,
     createBoardModalVisible: false,
     language: LanguageDefault,
     onlineStatus: true,
@@ -11,6 +12,8 @@ const InitialMenuState = Immutable.fromJS({
 
 const app = (state = InitialMenuState, action: IAction) => {
     switch (action.type) {
+        case AppActionTypes.SET_BG_IMAGE_TIMESTAMP:
+            return state.set('bgImageTimestamp', action.payload.bgImageTimestamp)
         case AppActionTypes.SET_CREATE_BOARD_MODAL_VISIBLE:
             return state.set('createBoardModalVisible', action.payload.visible)
         case AppActionTypes.SET_LANGUAGE:

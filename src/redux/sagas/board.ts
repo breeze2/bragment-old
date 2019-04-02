@@ -60,24 +60,26 @@ function* pushInFragmentColumnsSaga(action: IAction) {
     const fragmentColumn: IFragmentColumn = action.payload.fragmentColumn
     if (lowdb && board) {
         const title: string = yield call(Utils.asyncCreateSubDirectoryRecursively, board.path, fragmentColumn.title)
+
+        // push to redux store
+        const fragmentColumns: List<IFragmentColumn> = boardStore.get('fragmentColumns')
+        if (fragmentColumns.find(el => el.title === title)) {
+            return false
+        }
         const path = Utils.joinPath(board.path, title)
         const fragments: IFragment[] = yield call(Api.board.parseFragments, path, fragmentColumn.fragments || [])
         fragmentColumn.title = title
         fragmentColumn.fragments = fragments
-
-        // push to redux store
-        const fragmentColumns: List<IFragmentColumn> = boardStore.get('fragmentColumns')
         yield put<IAction>({
             payload: {
                 fragmentColumns: fragmentColumns.toArray().concat([fragmentColumn]),
-            }, type: BoardActionTypes.SET_FRAGMENT_COLUMNS
+            },
+            type: BoardActionTypes.SET_FRAGMENT_COLUMNS,
         })
 
         // save in lowdb
         const columns = lowdb.get('fragment_columns', []).value()
-        if (!columns.find((el: any) => {
-            return el.title === title
-        })) {
+        if (!columns.find((el: any) => el.title === title)) {
             columns.push(fragmentColumn)
             lowdb.set('fragment_columns', columns).write()
         }
