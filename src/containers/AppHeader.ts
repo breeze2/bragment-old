@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import AppHeader from '../components/AppHeader'
-import { setCreateBoardModalVisible } from '../redux/actions'
+import { setCreateBoardModalVisibleAction } from '../redux/actions'
 
 const mapStateToProps = (store: any, props: any) => {
     return {
@@ -11,7 +11,7 @@ const mapStateToProps = (store: any, props: any) => {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
-    setCreateBoardModalVisible: (visible: boolean) => dispatch(setCreateBoardModalVisible(visible)),
+    setCreateBoardModalVisible: (visible: boolean) => dispatch(setCreateBoardModalVisibleAction(visible)),
 })
 
 export default connect(

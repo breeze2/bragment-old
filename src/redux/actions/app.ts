@@ -7,12 +7,12 @@ export const AppActionTypes = {
     SET_ONLINE_STATUS: 'SET_ONLINE_STATUS',
 }
 
-export const setBgImageTimestamp = (bgImageTimestamp: number): IAction => ({
+export const setBgImageTimestampAction = (bgImageTimestamp: number): IAction => ({
     payload: { bgImageTimestamp },
     type: AppActionTypes.SET_BG_IMAGE_TIMESTAMP,
 })
 
-export const setCreateBoardModalVisible = (visible: boolean): IAction => ({
+export const setCreateBoardModalVisibleAction = (visible: boolean): IAction => ({
     payload: { visible },
     type: AppActionTypes.SET_CREATE_BOARD_MODAL_VISIBLE,
 })

@@ -21,62 +21,62 @@ export const BoardActionTypes = {
     SET_STANDBY_BG_IMAGES: 'SET_STANDBY_BG_IMAGES',
 }
 
-export const addRecentlyViewedBoard = (board: IBoard): IAction => ({
+export const addRecentlyViewedBoardAction = (board: IBoard): IAction => ({
     payload: { board },
     type: BoardActionTypes.ADD_RECENTLY_VIEWED_BOARD,
 })
 
-export const setBoardList = (boards: IBoard[]): IAction => ({
+export const setBoardListAction = (boards: IBoard[]): IAction => ({
     payload: { boards },
     type: BoardActionTypes.SET_BOARD_LIST,
 })
 
-export const setBoardLowDB = (lowdb: LowDBSyncWrapper<any>): IAction => ({
+export const setBoardLowDBAction = (lowdb: LowDBSyncWrapper<any>): IAction => ({
     payload: { lowdb },
     type: BoardActionTypes.SET_BOARD_LIST,
 })
 
-export const setCurrentBoard = (board: IBoard | null): IAction => ({
+export const setCurrentBoardAction = (board: IBoard | null): IAction => ({
     payload: { board },
     type: BoardActionTypes.SET_CURRENT_BOARD,
 })
 
-export const setStandbyBgImages = (images: IUnsplashPhoto[]): IAction => ({
+export const setStandbyBgImagesAction = (images: IUnsplashPhoto[]): IAction => ({
     payload: { images },
     type: BoardActionTypes.SET_STANDBY_BG_IMAGES,
 })
 
-export const asyncCreateBoard = (board: IBoardBase): IAction => ({
+export const asyncCreateBoardAction = (board: IBoardBase): IAction => ({
     payload: { board },
     type: BoardActionTypes.ASYNC_CREATE_BOARD,
 })
 
-export const asyncFetchBoardList = (): IAction => ({
+export const asyncFetchBoardListAction = (): IAction => ({
     payload: null,
     type: BoardActionTypes.ASYNC_FETCH_BOARD_LIST,
 })
 
-export const asyncFetchFragmentColumns = (): IAction => ({
+export const asyncFetchFragmentColumnsAction = (): IAction => ({
     payload: null,
     type: BoardActionTypes.ASYNC_FETCH_FRAGMENT_COLUMNS,
 })
 
-export const asyncFetchStandbyBgImages = (): IAction => ({
+export const asyncFetchStandbyBgImagesAction = (): IAction => ({
     payload: null,
     type: BoardActionTypes.ASYNC_FETCH_STANDBY_BG_IMAGES,
 })
 
-export const asyncInitCurretnBoard = (board: IBoard | null): IAction => ({
+export const asyncInitCurretnBoardAction = (board: IBoard | null): IAction => ({
     payload: { board },
     type: BoardActionTypes.ASYNC_INIT_CURRENT_BOARD,
 })
 
-export const asyncMoveInFragmentColumns = (from: number, to: number): IAction => ({
+export const asyncMoveInFragmentColumnsAction = (from: number, to: number): IAction => ({
     payload: { from, to },
     type: BoardActionTypes.ASYNC_MOVE_IN_FRAGMENT_COLUMNS,
 })
 
-export const asyncPushInFragmentColumns = (fragmentColumn: IFragmentColumn): IAction => ({
+export const asyncPushInFragmentColumnsAction = (fragmentColumn: IFragmentColumn): IAction => ({
     payload: { fragmentColumn },
     type: BoardActionTypes.ASYNC_PUSH_IN_FRAGMENT_COLUMNS,
 })

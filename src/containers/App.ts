@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import App from '../components/App'
-import { asyncFetchBoardList, setCreateBoardModalVisible } from '../redux/actions'
+import { asyncFetchBoardListAction, setCreateBoardModalVisibleAction } from '../redux/actions'
 
 const mapStateToProps = (store: any, props: any) => {
     return {
@@ -12,8 +12,8 @@ const mapStateToProps = (store: any, props: any) => {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
-    asyncFetchBoardList: () => dispatch(asyncFetchBoardList()),
-    setCreateBoardModalVisible: (visible: boolean) => dispatch(setCreateBoardModalVisible(visible)),
+    asyncFetchBoardList: () => dispatch(asyncFetchBoardListAction()),
+    setCreateBoardModalVisible: (visible: boolean) => dispatch(setCreateBoardModalVisibleAction(visible)),
 })
 
 export default connect(
