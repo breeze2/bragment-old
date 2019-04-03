@@ -72,7 +72,22 @@ export async function asyncCreateSubDirectoryRecursively (root: string, path: st
     return titles.join('/')
 }
 
-export function downloadImage(url: string, dest: string): Promise<string> {
+export function asyncCreateFile(path: string, content: string = '') {
+    return new Promise<boolean>((resolve, reject) => {
+        if (NodeJSFS.existsSync(path)) {
+            return resolve(false)
+        } else {
+            NodeJSFS.writeFile(path, content, (err: any) => {
+                if (err) {
+                    return reject(err)
+                }
+                return resolve(true)
+            })
+        }
+    })
+}
+
+export function asyncDownloadImage(url: string, dest: string): Promise<string> {
     return downloader.image({ url, dest }) as Promise<string>
 }
 
@@ -116,9 +131,10 @@ const Utils = {
     throttle,
 
     asyncCreateDirectory,
+    asyncCreateFile,
     asyncCreateSubDirectoryRecursively,
+    asyncDownloadImage,
     asyncListDirectoryFile,
-    downloadImage,
     formatFileUrl,
     getPathBasename,
     joinPath,

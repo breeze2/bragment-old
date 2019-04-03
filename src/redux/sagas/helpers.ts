@@ -11,9 +11,9 @@ export function* nerverThrowWrapper(action: IAction, method: (a: IAction) => Ite
 export function* handlePromiseWrapper(action: IAsyncAction, method: (a: IAction) => IterableIterator<any>) {
     try {
         const result = yield method(action)
-        action.resolve(result)
+        return action.resolve(result)
     } catch (e) {
-        action.reject(e)
         console.error(e)
+        return action.reject(e)
     }
 }

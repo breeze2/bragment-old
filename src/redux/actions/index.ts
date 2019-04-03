@@ -14,4 +14,5 @@ export function asyncActionDispatcher<Type = {}>(dispatch: Dispatch<any>, action
 
 export * from './app'
 export * from './board'
+export * from './fragment'
 export * from './home'

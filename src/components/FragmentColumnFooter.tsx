@@ -8,17 +8,11 @@ interface IFragmentColumnFooterProps {
 
 class FragmentColumnFooter extends Component<IFragmentColumnFooterProps> {
     public handleCreateFragmentSuccess = () => {
-
+        
     }
     public render() {
         return (
-            <div className="fragment-column-footer" >
-                {/* <div className="footer-left">
-                    <Icon type="plus" />
-                </div>
-                <p className="footer-action">{'dsfsfsdfsd'}</p> */}
-                <CreateFragmentFrom onSuccess={this.handleCreateFragmentSuccess} />
-            </div>
+            <div />
         )
     }
 }

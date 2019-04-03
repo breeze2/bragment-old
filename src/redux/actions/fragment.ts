@@ -4,7 +4,7 @@ export const FragmentActionTypes = {
     ASYNC_CREATE_FRAGMENT: 'ASYNC_CREATE_FRAGMENT',
 }
 
-export const asyncCreateFragmentAction = (key: string): IAction => ({
-    payload: { key },
+export const asyncCreateFragmentAction = (columnTitle: string, fragmentTitle: string): IAction => ({
+    payload: { columnTitle, fragmentTitle },
     type: FragmentActionTypes.ASYNC_CREATE_FRAGMENT,
 })

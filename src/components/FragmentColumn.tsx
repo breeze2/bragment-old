@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
+import CreateFragmentFrom from './CreateFragmentFrom'
 import FragmentColumnContent from './FragmentColumnContent'
-import FragmentColumnFooter from './FragmentColumnFooter'
 import FragmentColumnHeader from './FragmentColumnHeader'
 
 import '../styles/FragmentColumn.less'
@@ -11,11 +11,15 @@ interface IFragmentColumnProps {
     draggableId: string
     title: string
     fragments: any[]
+    asyncCreateFragment: (columnTitle: string, fragmentTitle: string) => Promise<boolean>
 }
 
 class FragmentColumn extends PureComponent<IFragmentColumnProps> {
     public componentDidUpdate() {
         console.log(11)
+    }
+    public handleCreateFragmentSuccess = (fragmentTitle: string) => {
+        this.props.asyncCreateFragment(this.props.title, fragmentTitle + '.md')
     }
     public render() {
         return (
@@ -28,7 +32,9 @@ class FragmentColumn extends PureComponent<IFragmentColumnProps> {
                             isDragging={snapshot.isDragging}
                             dragHandleProps={provided.dragHandleProps} />
                         <FragmentColumnContent droppableId={this.props.draggableId} title={this.props.title} fragments={this.props.fragments} />
-                        <FragmentColumnFooter />
+                        <div className="fragment-column-footer" >
+                            <CreateFragmentFrom onSuccess={this.handleCreateFragmentSuccess} />
+                        </div>
                     </div>
                 )}
             </Draggable>

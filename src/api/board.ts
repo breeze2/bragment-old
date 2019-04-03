@@ -27,7 +27,7 @@ async function createBoard(board: IBoardBase) {
     // 2. download image
     if (board.image) {
         const background = '.brag' + '/assets/background.jpg'
-        await Utils.downloadImage(board.image, Utils.joinPath(board.path, background))
+        await Utils.asyncDownloadImage(board.image, Utils.joinPath(board.path, background))
         board.image = background
     }
 
