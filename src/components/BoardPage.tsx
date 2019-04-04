@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import React, { PureComponent } from 'react'
-import { DragDropContext, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd'
+import { DragDropContext, DragUpdate, Droppable, DroppableProvided, DropResult, ResponderProvided } from 'react-beautiful-dnd'
 import { RouteComponentProps } from 'react-router-dom'
 
 import { LowDBSyncWrapper } from '../api'
@@ -35,6 +35,9 @@ class BoardPage extends PureComponent<IBoardPageProps> {
     public componentWillReceiveProps(props: IBoardPageProps) {
         this._initCurrentBoard(props)
     }
+    public handleDragUpdate = (initial: DragUpdate, provided: ResponderProvided) => {
+        console.log(initial, provided)
+    }
     public handleDragEnd = (result: DropResult) => {
         console.log(result)
         if (result.type === 'COLUMN' && result.destination) {
@@ -68,14 +71,14 @@ class BoardPage extends PureComponent<IBoardPageProps> {
                         this.props.currentBoard.image)}?t=${this.props.bgImageTimestamp})` : undefined,
                 }} />
                 <div className="board-foreground">
-                    <DragDropContext onDragEnd={this.handleDragEnd}>
+                    <DragDropContext onDragEnd={this.handleDragEnd} onDragUpdate={this.handleDragUpdate}>
                         <Droppable droppableId="board" type="COLUMN" direction="horizontal">
                             {(provided: DroppableProvided) => (
                                 <div className="board-container" ref={provided.innerRef} {...provided.droppableProps} >
                                     {this.props.fragmentColumns.map((fragmentColumn, i) => (
-                                        <FragmentColumn key={fragmentColumn.title}
-                                            draggableId={fragmentColumn.title}
-                                            fragments={fragmentColumn.fragments} title={fragmentColumn.title} index={i} />
+                                        <FragmentColumn key={fragmentColumn.title} index={i}
+                                            fragments={fragmentColumn.fragments} title={fragmentColumn.title}
+                                            draggableId={fragmentColumn.title} />
                                     ))}
                                     { provided.placeholder }
                                     <div className="board-action">

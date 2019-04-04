@@ -1,10 +1,11 @@
 import { Card } from 'antd'
 import React, { Component } from 'react'
 import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
+import IFragment from '../schemas/IFragment'
 
 interface IFragmentCardProps {
     draggableId: string
-    title: string
+    fragment: IFragment
     index: number
 }
 
@@ -16,7 +17,7 @@ class FragmentCard extends Component<IFragmentCardProps> {
                     <div className={`fragment-card ${snapshot.isDragging ? 'is-dragging' : ''}`} ref={provided.innerRef}
                         {...provided.draggableProps} {...provided.dragHandleProps}>
                         <Card hoverable>
-                            <p className="card-title">{this.props.title}</p>
+                            <p className="card-title">{this.props.fragment.title}</p>
                         </Card>
                     </div>
                 )}

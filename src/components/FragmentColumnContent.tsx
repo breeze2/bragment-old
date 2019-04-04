@@ -16,7 +16,7 @@ class FragmentColumnContent extends PureComponent<IFragmentColumnContentProps> {
                 {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
                     <div className="fragment-column-content" ref={provided.innerRef} {...provided.droppableProps}>
                         {this.props.fragments.map((fragment, i) => (
-                            <FragmentCard key={fragment.title} title={fragment.title} index={i}
+                            <FragmentCard key={fragment.title} fragment={fragment} index={i}
                                 draggableId={this.props.droppableId + FragmentColumnContent.separator + fragment.title} />
                         ))}
                         {provided.placeholder}
