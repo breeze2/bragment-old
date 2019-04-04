@@ -35,8 +35,8 @@ function* moveInFragmentColumnsSaga(action: IAction) {
     const boardStore = yield select(getBoard)
     const lowdb: LowDBSyncWrapper<any> | null = boardStore.get('lowdb')
     if (lowdb) {
-        const iFragmentColumns: List<IFragmentColumn> = boardStore.get('fragmentColumns')
-        const fragmentColumns = iFragmentColumns.toArray()
+        const fragmentColumnList: List<IFragmentColumn> = boardStore.get('fragmentColumns')
+        const fragmentColumns = fragmentColumnList.toArray()
 
         // push to redux store
         if (from < fragmentColumns.length && to < fragmentColumns.length) {
@@ -44,11 +44,7 @@ function* moveInFragmentColumnsSaga(action: IAction) {
             yield put<IAction>({ type: BoardActionTypes.SET_FRAGMENT_COLUMNS, payload: { fragmentColumns } })
         }
         // save in lowdb
-        const columns = lowdb.get('fragment_columns', []).value()
-        if (from < columns.length && to < columns.length) {
-            columns.splice(to, 0, columns.splice(from, 1)[0])
-            lowdb.set('fragment_columns', columns).write()
-        }
+        lowdb.set('fragment_columns', fragmentColumns.concat([])).write()
     }
     return true
 }
@@ -62,7 +58,8 @@ function* pushInFragmentColumnsSaga(action: IAction) {
         const title: string = yield call(Utils.asyncCreateSubDirectoryRecursively, board.path, fragmentColumn.title)
 
         // push to redux store
-        const fragmentColumns: List<IFragmentColumn> = boardStore.get('fragmentColumns')
+        const fragmentColumnList: List<IFragmentColumn> = boardStore.get('fragmentColumns')
+        const fragmentColumns = fragmentColumnList.toArray()
         if (fragmentColumns.find(el => el.title === title)) {
             return false
         }
@@ -70,19 +67,11 @@ function* pushInFragmentColumnsSaga(action: IAction) {
         const fragments: IFragment[] = yield call(Api.board.parseFragments, path, fragmentColumn.fragments || [])
         fragmentColumn.title = title
         fragmentColumn.fragments = fragments
-        yield put<IAction>({
-            payload: {
-                fragmentColumns: fragmentColumns.toArray().concat([fragmentColumn]),
-            },
-            type: BoardActionTypes.SET_FRAGMENT_COLUMNS,
-        })
+        fragmentColumns.push(fragmentColumn)
+        yield put<IAction>({ type: BoardActionTypes.SET_FRAGMENT_COLUMNS, payload: { fragmentColumns } })
 
         // save in lowdb
-        const columns = lowdb.get('fragment_columns', []).value()
-        if (!columns.find((el: any) => el.title === title)) {
-            columns.push(fragmentColumn)
-            lowdb.set('fragment_columns', columns).write()
-        }
+        lowdb.set('fragment_columns', fragmentColumns.concat([])).write()
     }
     return true
 }

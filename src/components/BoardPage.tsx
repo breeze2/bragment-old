@@ -1,9 +1,9 @@
 import { List } from 'immutable'
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { DragDropContext, Droppable, DroppableProvided, DropResult } from 'react-beautiful-dnd'
 import { RouteComponentProps } from 'react-router-dom'
 
-import Api, { LowDBSyncWrapper } from '../api'
+import { LowDBSyncWrapper } from '../api'
 import FragmentColumn from '../containers/FragmentColumn'
 import IBoard from '../schemas/IBoard'
 import IFragmentColumn from '../schemas/IFragmentColumn'
@@ -20,22 +20,14 @@ interface IBoardPageProps extends RouteComponentProps {
     fragmentColumns: List<IFragmentColumn>
     asyncInitCurretnBoard: (board: IBoard | null) => any
     asyncFetchFragmentColumns: () => any
+    asyncMoveFragment: (fromColumnTitle: string, fromColumnIndex: number, toColumnTitle: string, toColumnIndex: number) => Promise<boolean>
     asyncMoveInFragmentColumns: (from: number, to: number) => any
     asyncPushInFragmentColumns: (fragmentColumn: IFragmentColumn) => any
 }
 
-interface IBoardPageState {
-    columns: string[],
-
-}
-
-class BoardPage extends Component<IBoardPageProps> {
-    public state: IBoardPageState
+class BoardPage extends PureComponent<IBoardPageProps> {
     public constructor(props: IBoardPageProps) {
         super(props)
-        this.state = {
-            columns: [],
-        }
     }
     public componentDidMount() {
         this._initCurrentBoard(this.props)
@@ -47,6 +39,15 @@ class BoardPage extends Component<IBoardPageProps> {
         console.log(result)
         if (result.type === 'COLUMN' && result.destination) {
             this.props.asyncMoveInFragmentColumns(result.source.index, result.destination.index)
+        } else if (result.type === 'QUOTE' && result.destination) {
+            const fromColumnTitle = result.source.droppableId
+            const fromColumnIndex = result.source.index
+            const toColumnTitle = result.destination.droppableId
+            const toColumnIndex = result.destination.index
+            if (toColumnIndex !== fromColumnIndex || toColumnTitle !== fromColumnTitle) {
+                this.props.asyncMoveFragment(fromColumnTitle, fromColumnIndex,
+                    toColumnTitle, toColumnIndex)
+            }
         }
     }
     public handleCreateFragmentColumnSuccess = (title: string) => {

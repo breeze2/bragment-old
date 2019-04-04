@@ -72,6 +72,21 @@ export async function asyncCreateSubDirectoryRecursively (root: string, path: st
     return titles.join('/')
 }
 
+export function asyncMoveFile(oldPath: string, newPath: string) {
+    return new Promise<boolean>((resolve, reject) => {
+        if (NodeJSFS.existsSync(newPath)) {
+            return resolve(false)
+        } else {
+            NodeJSFS.rename(oldPath, newPath, (err: any) => {
+                if (err) {
+                    return reject(err)
+                }
+                return resolve(true)
+            })
+        }
+    })
+}
+
 export function asyncCreateFile(path: string, content: string = '') {
     return new Promise<boolean>((resolve, reject) => {
         if (NodeJSFS.existsSync(path)) {
@@ -135,6 +150,8 @@ const Utils = {
     asyncCreateSubDirectoryRecursively,
     asyncDownloadImage,
     asyncListDirectoryFile,
+    asyncMoveFile,
+
     formatFileUrl,
     getPathBasename,
     joinPath,
