@@ -1,8 +1,10 @@
+import { Icon } from 'antd'
 import React, { PureComponent } from 'react'
-import { Draggable, DraggableProvided, DraggableStateSnapshot } from 'react-beautiful-dnd'
+import { Draggable, DraggableProvided, DraggableStateSnapshot, Droppable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
+// import { Droppable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
 import CreateFragmentFrom from './CreateFragmentFrom'
-import FragmentColumnContent from './FragmentColumnContent'
-import FragmentColumnHeader from './FragmentColumnHeader'
+import FragmentCard from './FragmentCard'
+// import FragmentColumnContent from './FragmentColumnContent'
 
 import '../styles/FragmentColumn.less'
 
@@ -27,12 +29,25 @@ class FragmentColumn extends PureComponent<IFragmentColumnProps> {
                 {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
                     <div className={`fragment-column ${this.props.fragments.length ? '' : 'empty-content'}`}
                         ref={provided.innerRef} {...provided.draggableProps}>
-                        <FragmentColumnHeader
-                            title={this.props.title}
-                            isDragging={snapshot.isDragging}
-                            dragHandleProps={provided.dragHandleProps} />
-                        <FragmentColumnContent droppableId={this.props.draggableId} title={this.props.title} fragments={this.props.fragments} />
-                        <div className="fragment-column-footer" >
+                        <div className="fragment-column-header" {...provided.dragHandleProps}>
+                            <div className="header-right">
+                                <Icon type="ellipsis" />
+                            </div>
+                            <p className="column-title">{this.props.title}</p>
+                        </div>
+                        {/* <FragmentColumnContent droppableId={this.props.draggableId} title={this.props.title} fragments={this.props.fragments} /> */}
+                        <Droppable droppableId={this.props.title} type="QUOTE" >
+                            {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) => (
+                                <div className="fragment-column-content" ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
+                                    {this.props.fragments.map((fragment, i) => (
+                                        <FragmentCard key={fragment.title} title={fragment.title} index={i}
+                                            draggableId={this.props.title + '///\\\\\\' + fragment.title} />
+                                    ))}
+                                    {dropProvided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                        <div className="fragment-column-footer">
                             <CreateFragmentFrom onSuccess={this.handleCreateFragmentSuccess} />
                         </div>
                     </div>

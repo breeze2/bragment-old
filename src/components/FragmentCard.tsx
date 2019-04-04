@@ -13,8 +13,7 @@ class FragmentCard extends Component<IFragmentCardProps> {
         return (
             <Draggable draggableId={this.props.draggableId} index={this.props.index}>
                 {(provided: DraggableProvided, snapshot: DraggableStateSnapshot) => (
-                    <div className="fragment-card" ref={provided.innerRef}
-                        style={{ backgroundColor: snapshot.draggingOver ? 'blue' : 'grey' }}
+                    <div className={`fragment-card ${snapshot.isDragging ? 'is-dragging' : ''}`} ref={provided.innerRef}
                         {...provided.draggableProps} {...provided.dragHandleProps}>
                         <Card hoverable>
                             <p className="card-title">{this.props.title}</p>

@@ -53,8 +53,10 @@ function* moveFragmentSaga(action: IAction) {
 
             // save in lowdb
             lowdb.set('fragment_columns', fragmentColumns.concat([])).write()
+            return result
         }
     }
+    return true
 }
 
 function* createFragmentSaga(action: IAction) {
