@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import React, { PureComponent } from 'react'
-import { DragDropContext, DragUpdate, Droppable, DroppableProvided, DropResult, ResponderProvided } from 'react-beautiful-dnd'
+import { DragDropContext, DraggableLocation, DragStart, DragUpdate, Droppable, DroppableProvided, DropResult, ResponderProvided } from 'react-beautiful-dnd'
 import { RouteComponentProps } from 'react-router-dom'
 
 import { LowDBSyncWrapper } from '../api'
@@ -25,9 +25,19 @@ interface IBoardPageProps extends RouteComponentProps {
     asyncPushInFragmentColumns: (fragmentColumn: IFragmentColumn) => any
 }
 
+interface IBoardPageState {
+    droppablePlacehodlerStyle: React.CSSProperties
+}
+
 class BoardPage extends PureComponent<IBoardPageProps> {
+    public state: IBoardPageState
+    public initColumnDroppablePlacehodlerStyle: (from: DraggableLocation, to: DraggableLocation) => void
     public constructor(props: IBoardPageProps) {
         super(props)
+        this.state = {
+            droppablePlacehodlerStyle: { display: 'none' },
+        }
+        this.initColumnDroppablePlacehodlerStyle = Utils.debounce(this._initColumnDroppablePlacehodlerStyle, 100)
     }
     public componentDidMount() {
         this._initCurrentBoard(this.props)
@@ -37,6 +47,14 @@ class BoardPage extends PureComponent<IBoardPageProps> {
     }
     public handleDragUpdate = (initial: DragUpdate, provided: ResponderProvided) => {
         console.log(initial, provided)
+        if (initial.type === 'COLUMN' && initial.destination) {
+            this.initColumnDroppablePlacehodlerStyle(initial.source, initial.destination)
+        }
+    }
+    public handleDragStart = (initial: DragStart, provided: ResponderProvided) => {
+        if (initial.type === 'COLUMN') {
+            this.initColumnDroppablePlacehodlerStyle(initial.source, initial.source)
+        }
     }
     public handleDragEnd = (result: DropResult) => {
         console.log(result)
@@ -71,7 +89,7 @@ class BoardPage extends PureComponent<IBoardPageProps> {
                         this.props.currentBoard.image)}?t=${this.props.bgImageTimestamp})` : undefined,
                 }} />
                 <div className="board-foreground">
-                    <DragDropContext onDragEnd={this.handleDragEnd} onDragUpdate={this.handleDragUpdate}>
+                    <DragDropContext onDragEnd={this.handleDragEnd} onDragUpdate={this.handleDragUpdate} onDragStart={this.handleDragStart}>
                         <Droppable droppableId="board" type="COLUMN" direction="horizontal">
                             {(provided: DroppableProvided) => (
                                 <div className="board-container" ref={provided.innerRef} {...provided.droppableProps} >
@@ -80,7 +98,8 @@ class BoardPage extends PureComponent<IBoardPageProps> {
                                             fragments={fragmentColumn.fragments} title={fragmentColumn.title}
                                             draggableId={fragmentColumn.title} />
                                     ))}
-                                    { provided.placeholder }
+                                    {provided.placeholder}
+                                    {provided.placeholder && <div style={this.state.droppablePlacehodlerStyle} />}
                                     <div className="board-action">
                                         <CreateFragmentColumnForm onSuccess={this.handleCreateFragmentColumnSuccess} />
                                     </div>
@@ -100,6 +119,51 @@ class BoardPage extends PureComponent<IBoardPageProps> {
                 const board = boardList.find(el => el._id === params.id) || null
                 this.props.asyncInitCurretnBoard(board)
             }
+        }
+    }
+    private _initColumnDroppablePlacehodlerStyle(from: DraggableLocation, to: DraggableLocation) {
+        const fromIndex = from.index
+        const toIndex = to.index
+        const container = document.querySelector('.board-container')
+        if (container) {
+            const columns = container.querySelectorAll('.fragment-column')
+            const fromColumn = columns[fromIndex] as HTMLDivElement
+            const toColumn = columns[toIndex] as HTMLDivElement
+            if (fromColumn && toColumn) {
+                const style: React.CSSProperties = {
+                    backgroundColor: 'rgba(0, 0, 0, 0.45)',
+                    borderRadius: '4px',
+                    display: 'block',
+                    height: this._getColumnHeight(fromColumn),
+                    left: 266 * toIndex + 16 * toIndex + 16 + 'px',
+                    position: 'absolute',
+                    top: '16px',
+                    width: '266px',
+                }
+                this.setState({
+                    droppablePlacehodlerStyle: style,
+                })
+            } else {
+                this.setState({
+                    droppablePlacehodlerStyle: {
+                        display: 'none',
+                    },
+                })
+            }
+        }
+    }
+    private _getColumnHeight(column: HTMLDivElement) {
+        const header = column.querySelector('.column-header') as HTMLDivElement
+        const footer = column.querySelector('.column-footer') as HTMLDivElement
+        const content = column.querySelector('.column-content') as HTMLDivElement
+        console.log(header, footer, content)
+        if (header && footer && content) {
+            console.log(header.offsetHeight, footer.offsetHeight, content.offsetHeight)
+            return header.offsetHeight +
+                footer.offsetHeight +
+                content.offsetHeight + 'px'
+        } else {
+            return column.offsetHeight || '0px'
         }
     }
 }

@@ -29,7 +29,7 @@ class FragmentColumn extends PureComponent<IFragmentColumnProps> {
                     <div className={`fragment-column ${this.props.fragments.length ? '' : 'empty-content'}`}
                         ref={dragProvided.innerRef} {...dragProvided.draggableProps}>
                         {/* header */}
-                        <div className="fragment-column-header" {...dragProvided.dragHandleProps}>
+                        <div className="column-header" {...dragProvided.dragHandleProps}>
                             <div className="header-right">
                                 <Icon type="ellipsis" />
                             </div>
@@ -38,7 +38,7 @@ class FragmentColumn extends PureComponent<IFragmentColumnProps> {
                         {/* content */}
                         <Droppable droppableId={this.props.title} type="QUOTE" >
                             {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) => (
-                                <div className="fragment-column-content" ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
+                                <div className="column-content" ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
                                     {this.props.fragments.map((fragment, i) => (
                                         <FragmentCard key={fragment.title} fragment={fragment} index={i}
                                             draggableId={this.props.title + '///\\\\\\' + fragment.title} />
@@ -48,7 +48,7 @@ class FragmentColumn extends PureComponent<IFragmentColumnProps> {
                             )}
                         </Droppable>
                         {/* footer */}
-                        <div className="fragment-column-footer">
+                        <div className="column-footer">
                             <CreateFragmentFrom onSuccess={this.handleCreateFragmentSuccess} />
                         </div>
                     </div>
