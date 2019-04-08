@@ -1,6 +1,7 @@
 import { List } from 'immutable'
 import React, { PureComponent } from 'react'
-import { DragDropContext, DraggableLocation, DragStart, DragUpdate, Droppable, DroppableProvided, DropResult, ResponderProvided } from 'react-beautiful-dnd'
+import { DragDropContext, DraggableLocation, DragStart, DragUpdate,
+    Droppable, DroppableProvided, DroppableStateSnapshot, DropResult, ResponderProvided } from 'react-beautiful-dnd'
 import { RouteComponentProps } from 'react-router-dom'
 
 import { LowDBSyncWrapper } from '../api'
@@ -26,18 +27,27 @@ interface IBoardPageProps extends RouteComponentProps {
 }
 
 interface IBoardPageState {
-    droppablePlacehodlerStyle: React.CSSProperties
+    draggingOverColumnDroppableId: string | undefined
+    columnDroppablePlacehodlerStyle: React.CSSProperties | undefined
+    fragmentDroppablePlacehodlerStyle: React.CSSProperties | undefined
 }
 
 class BoardPage extends PureComponent<IBoardPageProps> {
     public state: IBoardPageState
     public initColumnDroppablePlacehodlerStyle: (from: DraggableLocation, to: DraggableLocation) => void
+    public initFragmentDroppablePlacehodlerStyle: (from: DraggableLocation, to: DraggableLocation) => void
     public constructor(props: IBoardPageProps) {
         super(props)
         this.state = {
-            droppablePlacehodlerStyle: { display: 'none' },
+            columnDroppablePlacehodlerStyle: undefined,
+            draggingOverColumnDroppableId: undefined,
+            fragmentDroppablePlacehodlerStyle: undefined,
         }
         this.initColumnDroppablePlacehodlerStyle = Utils.debounce(this._initColumnDroppablePlacehodlerStyle, 100)
+        this.initFragmentDroppablePlacehodlerStyle = Utils.debounce(this._initFragmentDroppablePlacehodlerStyle, 100)
+    }
+    public componentDidUpdate() {
+        // console.log(11)
     }
     public componentDidMount() {
         this._initCurrentBoard(this.props)
@@ -46,18 +56,23 @@ class BoardPage extends PureComponent<IBoardPageProps> {
         this._initCurrentBoard(props)
     }
     public handleDragUpdate = (initial: DragUpdate, provided: ResponderProvided) => {
-        console.log(initial, provided)
-        if (initial.type === 'COLUMN' && initial.destination) {
-            this.initColumnDroppablePlacehodlerStyle(initial.source, initial.destination)
+        if (initial.destination) {
+            if (initial.type === 'COLUMN') {
+                this.initColumnDroppablePlacehodlerStyle(initial.source, initial.destination)
+            } else {
+                this.initFragmentDroppablePlacehodlerStyle(initial.source, initial.destination)
+            }
         }
     }
     public handleDragStart = (initial: DragStart, provided: ResponderProvided) => {
         if (initial.type === 'COLUMN') {
             this.initColumnDroppablePlacehodlerStyle(initial.source, initial.source)
+        } else {
+            this.initFragmentDroppablePlacehodlerStyle(initial.source, initial.source)
         }
     }
     public handleDragEnd = (result: DropResult) => {
-        console.log(result)
+        // console.log(result)
         if (result.type === 'COLUMN' && result.destination) {
             this.props.asyncMoveInFragmentColumns(result.source.index, result.destination.index)
         } else if (result.type === 'QUOTE' && result.destination) {
@@ -70,6 +85,11 @@ class BoardPage extends PureComponent<IBoardPageProps> {
                     toColumnTitle, toColumnIndex)
             }
         }
+        this.setState({
+            columnDroppablePlacehodlerStyle: undefined,
+            draggingOverColumnDroppableId: undefined,
+            fragmentDroppablePlacehodlerStyle: undefined,
+        })
     }
     public handleCreateFragmentColumnSuccess = (title: string) => {
         const fragmentColumn: IFragmentColumn = {
@@ -91,15 +111,16 @@ class BoardPage extends PureComponent<IBoardPageProps> {
                 <div className="board-foreground">
                     <DragDropContext onDragEnd={this.handleDragEnd} onDragUpdate={this.handleDragUpdate} onDragStart={this.handleDragStart}>
                         <Droppable droppableId="board" type="COLUMN" direction="horizontal">
-                            {(provided: DroppableProvided) => (
+                            {(provided: DroppableProvided, snapshot: DroppableStateSnapshot) => (
                                 <div className="board-container" ref={provided.innerRef} {...provided.droppableProps} >
+                                    {<div className="column-placeholder" style={this.state.columnDroppablePlacehodlerStyle} />}
                                     {this.props.fragmentColumns.map((fragmentColumn, i) => (
                                         <FragmentColumn key={fragmentColumn.title} index={i}
-                                            fragments={fragmentColumn.fragments} title={fragmentColumn.title}
-                                            draggableId={fragmentColumn.title} />
+                                            fragments={fragmentColumn.fragments} title={fragmentColumn.title} draggableId={fragmentColumn.title}
+                                            fragmentDroppablePlacehodlerStyle={this.state.fragmentDroppablePlacehodlerStyle}
+                                            draggingOverColumnDroppableId={this.state.draggingOverColumnDroppableId} />
                                     ))}
                                     {provided.placeholder}
-                                    {provided.placeholder && <div style={this.state.droppablePlacehodlerStyle} />}
                                     <div className="board-action">
                                         <CreateFragmentColumnForm onSuccess={this.handleCreateFragmentColumnSuccess} />
                                     </div>
@@ -121,6 +142,39 @@ class BoardPage extends PureComponent<IBoardPageProps> {
             }
         }
     }
+    private _initFragmentDroppablePlacehodlerStyle(from: DraggableLocation, to: DraggableLocation) {
+        const fromTitle = from.droppableId
+        const toTitle = to.droppableId
+        const fromIndex = from.index
+        const toIndex = to.index
+        const container = document.querySelector('.board-container')
+        if (container) {
+            const fromColumn = container.querySelector(`.fragment-column[data-title=${fromTitle}]`) as HTMLDivElement
+            const toColumn = container.querySelector(`.fragment-column[data-title=${toTitle}]`) as HTMLDivElement
+            if (fromColumn && toColumn) {
+                const fromCards = fromColumn.querySelectorAll('.fragment-card') || []
+                const toCards = toColumn.querySelectorAll('.fragment-card') || []
+                const fromCard = fromCards[fromIndex] as HTMLDivElement
+                if (fromCard) {
+                    const style: React.CSSProperties = {
+                        display: 'block',
+                        height: fromCard.offsetHeight + 'px',
+                        position: 'absolute',
+                        top: this._getCardTop(Array.prototype.slice.call(toCards, 0, toIndex)),
+                    }
+                    this.setState({
+                        draggingOverColumnDroppableId: toTitle,
+                        fragmentDroppablePlacehodlerStyle: style,
+                    })
+                } else {
+                    this.setState({
+                        draggingOverColumnDroppableId: undefined,
+                        fragmentDroppablePlacehodlerStyle: undefined,
+                    })
+                }
+            }
+        }
+    }
     private _initColumnDroppablePlacehodlerStyle(from: DraggableLocation, to: DraggableLocation) {
         const fromIndex = from.index
         const toIndex = to.index
@@ -131,23 +185,18 @@ class BoardPage extends PureComponent<IBoardPageProps> {
             const toColumn = columns[toIndex] as HTMLDivElement
             if (fromColumn && toColumn) {
                 const style: React.CSSProperties = {
-                    backgroundColor: 'rgba(0, 0, 0, 0.45)',
-                    borderRadius: '4px',
                     display: 'block',
                     height: this._getColumnHeight(fromColumn),
                     left: 266 * toIndex + 16 * toIndex + 16 + 'px',
                     position: 'absolute',
                     top: '16px',
-                    width: '266px',
                 }
                 this.setState({
-                    droppablePlacehodlerStyle: style,
+                    columnDroppablePlacehodlerStyle: style,
                 })
             } else {
                 this.setState({
-                    droppablePlacehodlerStyle: {
-                        display: 'none',
-                    },
+                    columnDroppablePlacehodlerStyle: undefined,
                 })
             }
         }
@@ -156,15 +205,20 @@ class BoardPage extends PureComponent<IBoardPageProps> {
         const header = column.querySelector('.column-header') as HTMLDivElement
         const footer = column.querySelector('.column-footer') as HTMLDivElement
         const content = column.querySelector('.column-content') as HTMLDivElement
-        console.log(header, footer, content)
         if (header && footer && content) {
-            console.log(header.offsetHeight, footer.offsetHeight, content.offsetHeight)
             return header.offsetHeight +
                 footer.offsetHeight +
                 content.offsetHeight + 'px'
         } else {
             return column.offsetHeight || '0px'
         }
+    }
+    private _getCardTop(cards: HTMLDivElement[]) {
+        let top = 0
+        cards.forEach(card => {
+            top += card.offsetHeight + 4
+        })
+        return top + 8
     }
 }
 

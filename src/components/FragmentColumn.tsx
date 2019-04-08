@@ -1,5 +1,5 @@
 import { Icon } from 'antd'
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import { Draggable, DraggableProvided, DraggableStateSnapshot, Droppable, DroppableProvided, DroppableStateSnapshot } from 'react-beautiful-dnd'
 import IFragment from '../schemas/IFragment'
 import CreateFragmentFrom from './CreateFragmentFrom'
@@ -12,12 +12,27 @@ interface IFragmentColumnProps {
     draggableId: string
     title: string
     fragments: IFragment[]
+    draggingOverColumnDroppableId: string
+    fragmentDroppablePlacehodlerStyle: React.CSSProperties
     asyncCreateFragment: (columnTitle: string, fragmentTitle: string) => Promise<boolean>
 }
 
-class FragmentColumn extends PureComponent<IFragmentColumnProps> {
+class FragmentColumn extends Component<IFragmentColumnProps> {
     public componentDidUpdate() {
         console.log(11)
+    }
+    public shouldComponentUpdate(nextProps: IFragmentColumnProps) {
+        const props = this.props
+        if (props.index !== nextProps.index || props.draggableId !== nextProps.draggableId ||
+            props.title !== nextProps.title || props.fragments !== nextProps.fragments) {
+            return true
+        }
+
+        if (props.draggingOverColumnDroppableId === props.title ||
+            nextProps.draggingOverColumnDroppableId === nextProps.title) {
+            return true
+        }
+        return false
     }
     public handleCreateFragmentSuccess = (fragmentTitle: string) => {
         this.props.asyncCreateFragment(this.props.title, fragmentTitle + '.md')
@@ -27,7 +42,7 @@ class FragmentColumn extends PureComponent<IFragmentColumnProps> {
             <Draggable draggableId={this.props.draggableId} index={this.props.index}>
                 {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
                     <div className={`fragment-column ${this.props.fragments.length ? '' : 'empty-content'}`}
-                        ref={dragProvided.innerRef} {...dragProvided.draggableProps}>
+                    data-title={this.props.title} ref={dragProvided.innerRef} {...dragProvided.draggableProps}>
                         {/* header */}
                         <div className="column-header" {...dragProvided.dragHandleProps}>
                             <div className="header-right">
@@ -39,11 +54,14 @@ class FragmentColumn extends PureComponent<IFragmentColumnProps> {
                         <Droppable droppableId={this.props.title} type="QUOTE" >
                             {(dropProvided: DroppableProvided, dropSnapshot: DroppableStateSnapshot) => (
                                 <div className="column-content" ref={dropProvided.innerRef} {...dropProvided.droppableProps}>
+                                    {<div className="fragment-placeholder"
+                                        style={dropSnapshot.isDraggingOver ? this.props.fragmentDroppablePlacehodlerStyle : undefined} />}
                                     {this.props.fragments.map((fragment, i) => (
                                         <FragmentCard key={fragment.title} fragment={fragment} index={i}
                                             draggableId={this.props.title + '///\\\\\\' + fragment.title} />
                                     ))}
                                     {dropProvided.placeholder}
+                                    {<div className="sdfsdfs" />}
                                 </div>
                             )}
                         </Droppable>
