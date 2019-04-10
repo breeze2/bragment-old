@@ -1,5 +1,5 @@
 import { Icon, Layout, Menu } from 'antd'
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Link, Route, RouteComponentProps } from 'react-router-dom'
 
@@ -14,7 +14,7 @@ interface IHomePageProps extends RouteComponentProps {
 
 const { Header, Content, Footer, Sider } = Layout
 
-class HomePage extends Component<IHomePageProps> {
+class HomePage extends PureComponent<IHomePageProps> {
     public constructor(props: IHomePageProps) {
         super(props)
     }

@@ -9,7 +9,7 @@ import '../styles/FragmentColumn.less'
 
 interface IFragmentColumnProps {
     index: number
-    draggableId: string
+    boardId: string
     title: string
     fragments: IFragment[]
     draggingOverColumnDroppableId: string
@@ -23,7 +23,7 @@ class FragmentColumn extends Component<IFragmentColumnProps> {
     }
     public shouldComponentUpdate(nextProps: IFragmentColumnProps) {
         const props = this.props
-        if (props.index !== nextProps.index || props.draggableId !== nextProps.draggableId ||
+        if (props.index !== nextProps.index || props.boardId !== nextProps.boardId ||
             props.title !== nextProps.title || props.fragments !== nextProps.fragments) {
             return true
         }
@@ -39,7 +39,7 @@ class FragmentColumn extends Component<IFragmentColumnProps> {
     }
     public render() {
         return (
-            <Draggable draggableId={this.props.draggableId} index={this.props.index}>
+            <Draggable draggableId={this.props.title} index={this.props.index}>
                 {(dragProvided: DraggableProvided, dragSnapshot: DraggableStateSnapshot) => (
                     <div className={`fragment-column ${this.props.fragments.length ? '' : 'empty-content'}`}
                     data-title={this.props.title} ref={dragProvided.innerRef} {...dragProvided.draggableProps}>
@@ -58,7 +58,7 @@ class FragmentColumn extends Component<IFragmentColumnProps> {
                                         style={dropSnapshot.isDraggingOver ? this.props.fragmentDroppablePlacehodlerStyle : undefined} />}
                                     {this.props.fragments.map((fragment, i) => (
                                         <FragmentCard key={fragment.title} fragment={fragment} index={i}
-                                            draggableId={this.props.title + '///\\\\\\' + fragment.title} />
+                                        boardId={this.props.boardId} columnTitle={this.props.title} />
                                     ))}
                                     {dropProvided.placeholder}
                                     {<div className="sdfsdfs" />}

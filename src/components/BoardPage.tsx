@@ -13,7 +13,11 @@ import CreateFragmentColumnForm from './CreateFragmentColumnForm'
 
 import '../styles/BoardPage.less'
 
-interface IBoardPageProps extends RouteComponentProps {
+interface IBoardPageRouteParams {
+    id: string
+}
+
+interface IBoardPageProps extends RouteComponentProps<IBoardPageRouteParams> {
     bgImageTimestamp: number
     boardLowdb: LowDBSyncWrapper<any> | null
     boardList: List<IBoard>
@@ -116,7 +120,8 @@ class BoardPage extends PureComponent<IBoardPageProps> {
                                     {<div className="column-placeholder" style={this.state.columnDroppablePlacehodlerStyle} />}
                                     {this.props.fragmentColumns.map((fragmentColumn, i) => (
                                         <FragmentColumn key={fragmentColumn.title} index={i}
-                                            fragments={fragmentColumn.fragments} title={fragmentColumn.title} draggableId={fragmentColumn.title}
+                                            fragments={fragmentColumn.fragments} title={fragmentColumn.title}
+                                            boardId={this.props.currentBoard ? this.props.currentBoard._id : ''}
                                             fragmentDroppablePlacehodlerStyle={this.state.fragmentDroppablePlacehodlerStyle}
                                             draggingOverColumnDroppableId={this.state.draggingOverColumnDroppableId} />
                                     ))}
@@ -134,10 +139,10 @@ class BoardPage extends PureComponent<IBoardPageProps> {
     }
     private _initCurrentBoard(props: IBoardPageProps) {
         const boardList = props.boardList
-        const params: any = props.match.params
-        if (params.id) {
-            if (!props.currentBoard || props.currentBoard._id !== params.id) {
-                const board = boardList.find(el => el._id === params.id) || null
+        const id = props.match.params.id
+        if (id) {
+            if (!props.currentBoard || props.currentBoard._id !== id) {
+                const board = boardList.find(el => el._id === id) || null
                 this.props.asyncInitCurretnBoard(board)
             }
         }

@@ -1,6 +1,22 @@
 const { override, fixBabelImports, addLessLoader } = require('customize-cra');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+
+const addMonacoWebpackPlugin = config => {
+    config.plugins.push(new MonacoWebpackPlugin({
+        features: ['accessibilityHelp', 'bracketMatching', 'caretOperations', 'clipboard',
+        'codeAction', 'codelens', 'comment', 'contextmenu', 'cursorUndo', 'dnd',
+        'find', 'folding', 'format', 'hover', 'inPlaceReplace','inspectTokens',
+        'iPadShowKeyboard', 'linesOperations', 'links', 'multicursor', 'parameterHints',
+        'smartSelect', 'snippets', 'suggest', 'toggleHighContrast', 'toggleTabFocusMode',
+        'transpose', 'wordHighlighter', 'wordOperations', 'wordPartOperations'],
+        languages: ['javascript', 'html', 'css', 'markdown', 'php'],
+    }))
+    return config
+}
+
 
 module.exports = override(
+    addMonacoWebpackPlugin,
     fixBabelImports('import', {
         libraryName: 'antd',
         libraryDirectory: 'es',

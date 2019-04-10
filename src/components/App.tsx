@@ -5,6 +5,7 @@ import { HashRouter as Router, Route } from 'react-router-dom'
 import BoardPage from '../containers/BoardPage'
 import HomePage from '../containers/HomePage'
 import messages from '../locales'
+import FragmentPage from './FragmentPage'
 
 import AppHeader from '../containers/AppHeader'
 import CreateBoardModal from '../containers/CreateBoardModal'
@@ -43,6 +44,7 @@ class App extends PureComponent<IAppProps> {
                         <div className="app-content">
                             <Route exact path={['/', '/home', '/home/boards', '/home/logs']} component={HomePage} />
                             <Route exact path="/board/:id" component={BoardPage} />
+                            <Route exact path="/fragment/:boardId/:columnTitle/:title" component={FragmentPage} />
                             <Route path="/" render={props => <CreateBoardModal visible={this.props.createBoardModalVisible}
                                 onCancel={this.handleCreateBoardModalCancel}
                                 onOk={this.handleCreateBoardModalOk} {...props}
