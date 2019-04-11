@@ -1,10 +1,12 @@
 import { languages } from 'monaco-editor'
 
-export const conf: languages.LanguageConfiguration = {
+export const conf: languages.LanguageConfiguration & any = {
     autoClosingPairs: [
         { open: '{', close: '}' },
         { open: '[', close: ']' },
         { open: '(', close: ')' },
+        { open: '"', close: '"' },
+        { open: '\'', close: '\'' },
         { open: '<', close: '>', notIn: ['string'] },
     ],
     brackets: [
@@ -17,8 +19,8 @@ export const conf: languages.LanguageConfiguration = {
     },
     folding: {
         markers: {
-            end: new RegExp("^\\s*<!--\\s*#?endregion\\b.*-->"),
-            start: new RegExp("^\\s*<!--\\s*#?region\\b.*-->"),
+            end: new RegExp('^\\s*<!--\\s*#?endregion\\b.*-->'),
+            start: new RegExp('^\\s*<!--\\s*#?region\\b.*-->'),
         },
     },
     surroundingPairs: [
@@ -50,7 +52,7 @@ export const language: languages.IMonarchLanguage & any = {
         root: [
 
             // headers (with #)
-            [/^(\s{0,3})(#+)((?:[^\\#]|@escapes)+)((?:#+)?)/, ['white', 'keyword', 'keyword', 'keyword']],
+            [/^(\s{0,3})(#+)((?:[^\\#]|@escapes)+)((?:#+)?)/, ['white', 'md-heading', 'md-heading', 'md-heading']],
 
             // headers (with =)
             [/^\s*(=+|\-+)\s*$/, 'keyword'],
@@ -59,7 +61,7 @@ export const language: languages.IMonarchLanguage & any = {
             [/^\s*((\*[ ]?)+)\s*$/, 'meta.separator'],
 
             // quote
-            [/^\s*>+/, 'comment'],
+            [/^(\s*)(>+)(.*)/, ['white', 'md-comment.tag', 'md-comment.content']],
 
             // list (starting with * or number)
             [/^\s*([\*\-+:]|\d+\.)\s/, 'keyword'],
@@ -103,7 +105,10 @@ export const language: languages.IMonarchLanguage & any = {
             [/\*\*([^\\*]|@escapes|\*(?!\*))+\*\*/, 'strong'],
             [/\b_[^_]+_\b/, 'emphasis'],
             [/\*([^\\*]|@escapes)+\*/, 'emphasis'],
-            [/`([^\\`]|@escapes)+`/, 'variable'],
+            [/`([^\\`]|@escapes)+`/, 'md-variable'],
+            [/(~~)((?:~?!~|@escapes|[^\\~])+)(~~)/, ['md-deleting.tag', 'md-deleting.content', 'md-deleting.tag']],
+            [/(==)((?:=?!=|@escapes|[^\\=])+)(==)/, ['md-marking.tag', 'md-marking.content', 'md-marking.tag']],
+            [/(\+)((?:\+?!\+|@escapes|[^\\\+])+)(\+)/, ['md-inserting.tag', 'md-inserting.content', 'md-inserting.tag']],
 
             // links
             [/\{+[^}]+\}+/, 'string.target'],

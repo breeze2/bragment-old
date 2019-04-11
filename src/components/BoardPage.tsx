@@ -23,7 +23,7 @@ interface IBoardPageProps extends RouteComponentProps<IBoardPageRouteParams> {
     boardList: List<IBoard>
     currentBoard: IBoard | null
     fragmentColumns: List<IFragmentColumn>
-    asyncInitCurretnBoard: (board: IBoard | null) => any
+    asyncInitCurrentBoard: (board: IBoard | null) => any
     asyncFetchFragmentColumns: () => any
     asyncMoveFragment: (fromColumnTitle: string, fromColumnIndex: number, toColumnTitle: string, toColumnIndex: number) => Promise<boolean>
     asyncMoveInFragmentColumns: (from: number, to: number) => any
@@ -49,12 +49,13 @@ class BoardPage extends PureComponent<IBoardPageProps> {
         }
         this.initColumnDroppablePlacehodlerStyle = Utils.debounce(this._initColumnDroppablePlacehodlerStyle, 100)
         this.initFragmentDroppablePlacehodlerStyle = Utils.debounce(this._initFragmentDroppablePlacehodlerStyle, 100)
+        this._initCurrentBoard(props)
     }
     public componentDidUpdate() {
         // console.log(11)
     }
     public componentDidMount() {
-        this._initCurrentBoard(this.props)
+        // this._initCurrentBoard(this.props)
     }
     public componentWillReceiveProps(props: IBoardPageProps) {
         this._initCurrentBoard(props)
@@ -143,7 +144,7 @@ class BoardPage extends PureComponent<IBoardPageProps> {
         if (id) {
             if (!props.currentBoard || props.currentBoard._id !== id) {
                 const board = boardList.find(el => el._id === id) || null
-                this.props.asyncInitCurretnBoard(board)
+                this.props.asyncInitCurrentBoard(board)
             }
         }
     }

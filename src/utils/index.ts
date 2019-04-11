@@ -87,6 +87,18 @@ export function asyncMoveFile(oldPath: string, newPath: string) {
     })
 }
 
+export function asyncGetFileContent(path: string) {
+    return new Promise<string>((resolve, reject) => {
+        NodeJSFS.readFile(path, 'utf8', (err: any, data: string) => {
+            if (err) {
+                return reject(err)
+            } else {
+                return resolve(data)
+            }
+        })
+    })
+}
+
 export function asyncCreateFile(path: string, content: string = '') {
     return new Promise<boolean>((resolve, reject) => {
         if (NodeJSFS.existsSync(path)) {
@@ -149,6 +161,7 @@ const Utils = {
     asyncCreateFile,
     asyncCreateSubDirectoryRecursively,
     asyncDownloadImage,
+    asyncGetFileContent,
     asyncListDirectoryFile,
     asyncMoveFile,
 

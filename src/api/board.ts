@@ -108,6 +108,11 @@ async function parseFragments(path: string, fragments: IFragment[]) {
     }
 }
 
+async function getBoard(id: string) {
+    const board = await pouch.get(id)
+    return board
+}
+
 async function getAllBoards() {
     const boards = await pouch.findAll(
         { path: { $gt: null }, updated_at: { $gt: null } },
@@ -122,6 +127,7 @@ export default {
 
     createBoard,
     getAllBoards,
+    getBoard,
     parseFragmentColumns,
     parseFragments,
 }

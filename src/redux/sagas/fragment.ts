@@ -1,6 +1,6 @@
 import { List } from 'immutable'
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects'
-import { LowDBSyncWrapper } from '../../api'
+import Api, { LowDBSyncWrapper } from '../../api'
 import IAction, { IAsyncAction } from '../../schemas/IAction'
 import IBoard from '../../schemas/IBoard'
 import IFragment from '../../schemas/IFragment'
@@ -9,6 +9,7 @@ import Utils from '../../utils'
 import { BoardActionTypes, FragmentActionTypes } from '../actions'
 import { handlePromiseWrapper, nerverThrowWrapper } from './helpers'
 import { getBoard } from './selectors'
+import IFragmentInfo from '../../schemas/IFragmentInfo';
 
 function* moveFragmentSaga(action: IAction) {
     const boardStore = yield select(getBoard)
@@ -95,9 +96,28 @@ function* createFragmentSaga(action: IAction) {
     return true
 }
 
+function* featchFragmentInfoSaga(action: IAction) {
+    const boardId: string = action.payload.boardId
+    const columnTitle: string = action.payload.columnTitle
+    const title: string = action.payload.fragmentTitle
+    const board: IBoard = yield call(Api.board.getBoard, boardId)
+    const path: string = Utils.joinPath(board.path, columnTitle, title)
+    const content = yield call(Utils.asyncGetFileContent, path)
+    const info: IFragmentInfo = {
+        boardId,
+        boardPath: board.path,
+        boardTitle: board.title,
+        columnTitle,
+        content,
+        title,
+    }
+    return info
+}
+
 const fragmentMethodsMap: { [key: string]: (action: IAction) => IterableIterator<any> } = {
     [FragmentActionTypes.ASYNC_CREATE_FRAGMENT]: createFragmentSaga,
     [FragmentActionTypes.ASYNC_MOVE_FRAGMENT]: moveFragmentSaga,
+    [FragmentActionTypes.ASYNC_FETCH_FRAGMENT_INFO]: featchFragmentInfoSaga,
 }
 
 function* fragmentActionsDispatcher(action: IAsyncAction | IAction) {
@@ -113,6 +133,10 @@ function* fragmentActionsDispatcher(action: IAsyncAction | IAction) {
 
 export function* watchCreateFragment() {
     yield takeLatest(FragmentActionTypes.ASYNC_CREATE_FRAGMENT, fragmentActionsDispatcher)
+}
+
+export function* watchFetchFragmentInfo() {
+    yield takeLatest(FragmentActionTypes.ASYNC_FETCH_FRAGMENT_INFO, fragmentActionsDispatcher)
 }
 
 export function* watchMoveFragment() {

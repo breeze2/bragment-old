@@ -3,9 +3,9 @@ import { IntlProvider } from 'react-intl'
 import { HashRouter as Router, Route } from 'react-router-dom'
 
 import BoardPage from '../containers/BoardPage'
+import FragmentPage from '../containers/FragmentPage'
 import HomePage from '../containers/HomePage'
 import messages from '../locales'
-import FragmentPage from './FragmentPage'
 
 import AppHeader from '../containers/AppHeader'
 import CreateBoardModal from '../containers/CreateBoardModal'

@@ -1,143 +1,204 @@
 import { editor } from 'monaco-editor'
 
 export const theme: editor.IStandaloneThemeData = {
-    "base": "vs-dark",
-    "colors": {
-        "editor.background": "#323232",
-        "editor.foreground": "#FFFFFF",
-        "editor.lineHighlightBackground": "#353637",
-        "editor.selectionBackground": "#5A647E",
-        "editorCursor.foreground": "#91FF00",
-        "editorWhitespace.foreground": "#404040",
+    base: 'vs-dark',
+    colors: {
+        'editor.background': '#323232',
+        'editor.foreground': '#FFFFFF',
+        'editor.lineHighlightBackground': '#353637',
+        'editor.selectionBackground': '#5A647E',
+        'editorCursor.foreground': '#91FF00',
+        'editorWhitespace.foreground': '#404040',
     },
-    "inherit": true,
-    "rules": [
+    inherit: true,
+    rules: [
+        // special for md
         {
-            "foreground": "ffffff",
-            "token": "text",
+            fontStyle: 'bold',
+            foreground: '569cd6',
+            token: 'md-heading',
         },
         {
-            "background": "282828",
-            "foreground": "cdcdcd",
-            "token": "source",
+            foreground: 'ababab',
+            token: 'md-comment',
         },
         {
-            "fontStyle": "italic",
-            "foreground": "bc9458",
-            "token": "comment",
+            background: 'ababab',
+            fontStyle: 'bold md-comment.tag',
+            token: 'md-comment.tag',
         },
         {
-            "foreground": "ffe5bb",
-            "token": "meta.tag",
+            fontStyle: 'italic',
+            token: 'md-comment.content',
         },
         {
-            "foreground": "ffe5bb",
-            "token": "declaration.tag",
+            foreground: 'd4d4d4',
+            token: 'md-deleting.tag',
         },
         {
-            "foreground": "ffe5bb",
-            "token": "meta.doctype",
+            fontStyle: 'italic',
+            foreground: 'd3d3d3',
+            token: 'md-deleting.content',
         },
         {
-            "foreground": "ffc66d",
-            "token": "entity.name",
+            foreground: 'd4d4d4',
+            token: 'md-inserting.tag',
         },
         {
-            "foreground": "fff980",
-            "token": "source.ruby entity.name",
+            fontStyle: 'underline',
+            token: 'md-inserting.content',
         },
         {
-            "foreground": "b7dff8",
-            "token": "variable.other",
+            foreground: 'd4d4d4',
+            token: 'md-marking.tag',
         },
         {
-            "foreground": "cccc33",
-            "token": "support.class.ruby",
+            background: '74b0df',
+            foreground: 'f3f3f3',
+            token: 'md-marking.content',
+        },
+
+        {
+            background: 'cc7833',
+            foreground: 'efefef',
+            token: 'md-variable',
+        },
+        // special for md
+
+        {
+            foreground: '569cd6',
+            token: 'strong',
         },
         {
-            "foreground": "6c99bb",
-            "token": "constant",
+            foreground: 'cc7833',
+            token: 'emphasis',
         },
         {
-            "foreground": "6c99bb",
-            "token": "support.constant",
+            foreground: 'ffffff',
+            token: 'text',
         },
         {
-            "foreground": "cc7833",
-            "token": "keyword",
+            background: '282828',
+            foreground: 'cdcdcd',
+            token: 'source',
         },
         {
-            "foreground": "d0d0ff",
-            "token": "other.preprocessor.c",
+            fontStyle: 'italic',
+            foreground: 'bc9458',
+            token: 'comment',
         },
         {
-            "fontStyle": "italic",
-            "token": "variable.parameter",
+            foreground: 'ffe5bb',
+            token: 'meta.tag',
         },
         {
-            "background": "575757",
-            "foreground": "ffffff",
-            "token": "source comment.block",
+            foreground: 'ffe5bb',
+            token: 'declaration.tag',
         },
         {
-            "foreground": "a5c261",
-            "token": "string",
+            foreground: 'ffe5bb',
+            token: 'meta.doctype',
         },
         {
-            "foreground": "aaaaaa",
-            "token": "string constant.character.escape",
+            foreground: 'ffc66d',
+            token: 'entity.name',
         },
         {
-            "background": "cccc33",
-            "foreground": "000000",
-            "token": "string.interpolated",
+            foreground: 'fff980',
+            token: 'source.ruby entity.name',
         },
         {
-            "foreground": "cccc33",
-            "token": "string.regexp",
+            foreground: 'b7dff8',
+            token: 'variable.other',
         },
         {
-            "foreground": "cccc33",
-            "token": "string.literal",
+            foreground: 'cccc33',
+            token: 'support.class.ruby',
         },
         {
-            "foreground": "787878",
-            "token": "string.interpolated constant.character.escape",
+            foreground: '6c99bb',
+            token: 'constant',
         },
         {
-            "fontStyle": "underline",
-            "token": "entity.name.class",
+            foreground: '6c99bb',
+            token: 'support.constant',
         },
         {
-            "fontStyle": "italic underline",
-            "token": "entity.other.inherited-class",
+            foreground: 'cc7833',
+            token: 'keyword',
         },
         {
-            "foreground": "b83426",
-            "token": "support.function",
+            foreground: 'd0d0ff',
+            token: 'other.preprocessor.c',
         },
         {
-            "foreground": "6ea533",
-            "token": "markup.list.unnumbered.textile",
+            fontStyle: 'italic',
+            token: 'variable.parameter',
         },
         {
-            "foreground": "6ea533",
-            "token": "markup.list.numbered.textile",
+            background: '575757',
+            foreground: 'ffffff',
+            token: 'source comment.block',
         },
         {
-            "fontStyle": "bold",
-            "foreground": "c2c2c2",
-            "token": "markup.bold.textile",
+            foreground: 'a5c261',
+            token: 'string',
         },
         {
-            "background": "ff0000",
-            "foreground": "ffffff",
-            "token": "invalid",
+            foreground: 'aaaaaa',
+            token: 'string constant.character.escape',
         },
         {
-            "background": "fff980",
-            "foreground": "323232",
-            "token": "collab.user1",
+            background: 'cccc33',
+            foreground: '000000',
+            token: 'string.interpolated',
+        },
+        {
+            foreground: 'cccc33',
+            token: 'string.regexp',
+        },
+        {
+            foreground: 'cccc33',
+            token: 'string.literal',
+        },
+        {
+            foreground: '787878',
+            token: 'string.interpolated constant.character.escape',
+        },
+        {
+            fontStyle: 'underline',
+            token: 'entity.name.class',
+        },
+        {
+            fontStyle: 'italic underline',
+            token: 'entity.other.inherited-class',
+        },
+        {
+            foreground: 'b83426',
+            token: 'support.function',
+        },
+        {
+            foreground: '6ea533',
+            token: 'markup.list.unnumbered.textile',
+        },
+        {
+            foreground: '6ea533',
+            token: 'markup.list.numbered.textile',
+        },
+        {
+            fontStyle: 'bold',
+            foreground: 'c2c2c2',
+            token: 'markup.bold.textile',
+        },
+        {
+            background: 'ff0000',
+            foreground: 'ffffff',
+            token: 'invalid',
+        },
+        {
+            background: 'fff980',
+            foreground: '323232',
+            token: 'collab.user1',
         },
     ],
 }

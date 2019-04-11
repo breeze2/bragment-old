@@ -66,7 +66,7 @@ export const asyncFetchStandbyBgImagesAction = (): IAction => ({
     type: BoardActionTypes.ASYNC_FETCH_STANDBY_BG_IMAGES,
 })
 
-export const asyncInitCurretnBoardAction = (board: IBoard | null): IAction => ({
+export const asyncInitCurrentBoardAction = (board: IBoard | null): IAction => ({
     payload: { board },
     type: BoardActionTypes.ASYNC_INIT_CURRENT_BOARD,
 })

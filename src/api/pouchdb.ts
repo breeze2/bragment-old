@@ -13,6 +13,9 @@ export class PouchDBWrapper<Type> {
     public setCreateIndexRequestMap(requestMap: {[key: string]: Promise<PouchDB.Find.CreateIndexResponse<Type>>}) {
         this._createIndexRequestMap = requestMap
     }
+    public get(id: string) {
+        return this._db.get(id)
+    }
     public put(doc: Type) {
         return this._db.put(doc)
     }
