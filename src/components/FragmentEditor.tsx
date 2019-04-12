@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import monaco, { LANGUAGE_ID } from '../editor/monaco'
+import monaco, { LANGUAGE_ID } from '../api/monaco-editor'
 import Utils from '../utils'
 
 import '../styles/FragmentEditor.less'
@@ -16,7 +16,7 @@ interface IFragmentEditorState {
 
 class FragmentEditor extends PureComponent<IFragmentEditorProps> {
     public state: IFragmentEditorState
-    public emitValueChange = Utils.debounce(this._emitValueChange, 200)
+    public emitValueChange = Utils.debounce(this._emitValueChange, 100)
     private _ref: HTMLDivElement | null = null
     private _editor: monaco.editor.IStandaloneCodeEditor | null = null
     public constructor(props: IFragmentEditorProps) {
@@ -63,6 +63,7 @@ class FragmentEditor extends PureComponent<IFragmentEditorProps> {
                     enabled: false,
                 },
                 value: this.props.value,
+                wordWrap: 'off',
             })
             this._editor.onDidChangeModelContent((e: monaco.editor.IModelContentChangedEvent) => {
                 this.emitValueChange()

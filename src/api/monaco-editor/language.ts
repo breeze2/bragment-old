@@ -101,14 +101,14 @@ export const language: languages.IMonarchLanguage & any = {
             [/@escapes/, 'escape'],
 
             // various markup
-            [/\b__([^\\_]|@escapes|_(?!_))+__\b/, 'strong'],
-            [/\*\*([^\\*]|@escapes|\*(?!\*))+\*\*/, 'strong'],
-            [/\b_[^_]+_\b/, 'emphasis'],
-            [/\*([^\\*]|@escapes)+\*/, 'emphasis'],
+            [/\b__(?!\s)([^\\_]|@escapes|_(?!_))+(?!\s)__\b/, 'strong'],
+            [/\*\*(?!\s)([^\\*]|@escapes|\*(?!\*))+(?!\s)\*\*/, 'strong'],
+            [/\b_(?!\s)[^_]+(?!\s)_\b/, 'emphasis'],
+            [/\*(?!\s)([^\\*]|@escapes)+(?!\s)\*/, 'emphasis'],
             [/`([^\\`]|@escapes)+`/, 'md-variable'],
-            [/(~~)((?:~?!~|@escapes|[^\\~])+)(~~)/, ['md-deleting.tag', 'md-deleting.content', 'md-deleting.tag']],
-            [/(==)((?:=?!=|@escapes|[^\\=])+)(==)/, ['md-marking.tag', 'md-marking.content', 'md-marking.tag']],
-            [/(\+)((?:\+?!\+|@escapes|[^\\\+])+)(\+)/, ['md-inserting.tag', 'md-inserting.content', 'md-inserting.tag']],
+            [/(~~)((?!\s)(?:~?!~|@escapes|[^\\~])+(?!\s))(~~)/, ['md-deleting.tag', 'md-deleting.content', 'md-deleting.tag']],
+            [/(==)((?!\s)(?:=?!=|@escapes|[^\\=])+(?!\s))(==)/, ['md-marking.tag', 'md-marking.content', 'md-marking.tag']],
+            [/(\+\+)((?!\s)(?:\+?!\+|@escapes|[^\\\+])+(?!\s))(\+\+)/, ['md-inserting.tag', 'md-inserting.content', 'md-inserting.tag']],
 
             // links
             [/\{+[^}]+\}+/, 'string.target'],

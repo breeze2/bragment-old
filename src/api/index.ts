@@ -4,6 +4,9 @@ import lowdb from './lowdb'
 import pouchdb from './pouchdb'
 import unsplash from './unsplash'
 
+import { htmlSecureParser } from './htmlparser'
+import { mdParser } from './mdparser'
+
 export * from './lowdb'
 export * from './pouchdb'
 
@@ -13,6 +16,9 @@ const Api = {
     lowdb,
     pouchdb,
     unsplash,
+
+    htmlSecureParser,
+    mdParser,
 }
 
 export default Api
