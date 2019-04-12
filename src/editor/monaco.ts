@@ -9,4 +9,5 @@ monaco.languages.setLanguageConfiguration(LANGUAGE_ID, conf)
 monaco.languages.setMonarchTokensProvider(LANGUAGE_ID, language)
 monaco.editor.defineTheme(THEME_ID, theme)
 monaco.editor.setTheme(THEME_ID)
+
 export default monaco

@@ -4,6 +4,7 @@ import { RouteComponentProps } from 'react-router-dom'
 
 import IFragmentInfo from '../schemas/IFragmentInfo'
 import FragmentEditor from './FragmentEditor'
+import FragmentViewer from './FragmentViewer'
 import TextInputChanger from './TextInputChanger'
 
 import '../styles/FragmentEditor.less'
@@ -27,6 +28,8 @@ interface IFragmentPageState {
 class FragmentPage extends PureComponent<IFragmentPageProps> {
     public state: IFragmentPageState
     private _fragmentInfo: IFragmentInfo | null
+    private _editorRef: FragmentEditor | null
+    private _viewerRef: FragmentViewer | null
     public constructor(props: IFragmentPageProps) {
         super(props)
         this.state = {
@@ -34,6 +37,8 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
             title: '',
         }
         this._fragmentInfo = null
+        this._editorRef = null
+        this._viewerRef = null
     }
     public componentWillMount() {
         this.setState({
@@ -51,29 +56,40 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
             })
         })
     }
+    public assignEditorRef = (editor: FragmentEditor) => {
+        this._editorRef = editor
+    }
+    public assignViewerRef = (viewer: FragmentViewer) => {
+        this._viewerRef = viewer
+    }
+    public handleEditorValueChange = (content: string) => {
+        console.log(content)
+        if (this._viewerRef) {
+            this._viewerRef.setValue(content)
+        }
+    }
     public render() {
         return (
             <div className="fragment-page">
                 <div className="page-header">
                     <div className="page-label">
                         <div className="label-left">
-                            <Icon type="left" />
+                            <Icon type="left" className="handler" />
                         </div>
                         <div className="label-main">
-                            <TextInputChanger status='text' bluredInputHide textValue={this.state.title} inputValue={this.state.title} />
+                            <TextInputChanger status='text' textValue={this.state.title} inputValue={this.state.title} />
                         </div>
-                        <div className="label-right" />
-                    </div>
-                    <div className="editor-menu">
-                        <Icon type="edit" />
+                        <div className="label-right" >
+                            <Icon type="edit" className="handler" />
+                        </div>
                     </div>
                 </div>
                 <div className="page-content">
                     <div className="content-left">
-                        {/* <FragmentEditor value={this.state.content} /> */}
+                        <FragmentEditor ref={this.assignEditorRef} value='' onChange={this.handleEditorValueChange} />
                     </div>
                     <div className="content-right">
-                        sdfsd
+                        <FragmentViewer ref={this.assignViewerRef} value=''  />
                     </div>
                 </div>
             </div>

@@ -38,8 +38,8 @@ interface IBoardPageState {
 
 class BoardPage extends PureComponent<IBoardPageProps> {
     public state: IBoardPageState
-    public initColumnDroppablePlacehodlerStyle: (from: DraggableLocation, to: DraggableLocation) => void
-    public initFragmentDroppablePlacehodlerStyle: (from: DraggableLocation, to: DraggableLocation) => void
+    public initColumnDroppablePlacehodlerStyle = Utils.debounce(this._initColumnDroppablePlacehodlerStyle, 100)
+    public initFragmentDroppablePlacehodlerStyle = Utils.debounce(this._initFragmentDroppablePlacehodlerStyle, 100)
     public constructor(props: IBoardPageProps) {
         super(props)
         this.state = {
@@ -47,8 +47,6 @@ class BoardPage extends PureComponent<IBoardPageProps> {
             draggingOverColumnDroppableId: undefined,
             fragmentDroppablePlacehodlerStyle: undefined,
         }
-        this.initColumnDroppablePlacehodlerStyle = Utils.debounce(this._initColumnDroppablePlacehodlerStyle, 100)
-        this.initFragmentDroppablePlacehodlerStyle = Utils.debounce(this._initFragmentDroppablePlacehodlerStyle, 100)
         this._initCurrentBoard(props)
     }
     public componentDidUpdate() {

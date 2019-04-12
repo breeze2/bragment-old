@@ -25,9 +25,12 @@ class FragmentViewer extends PureComponent<IFragmentViewerProps> {
     public assignRef = (div: HTMLDivElement) => {
         this._ref = div
     }
+    public setValue(value: string) {
+        
+    }
     public render() {
         return (
-            <div className="fragment-viewer" >
+            <div className="fragment-viewer" ref={this.assignRef} >
             df
             </div>
         )
