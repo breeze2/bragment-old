@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { IntlProvider } from 'react-intl'
-import { HashRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import BoardPage from '../containers/BoardPage'
 import FragmentPage from '../containers/FragmentPage'

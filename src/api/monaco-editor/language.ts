@@ -73,7 +73,8 @@ export const language: languages.IMonarchLanguage & any = {
             [/^\s*~~~\s*((?:\w|[\/\-#])+)?\s*$/, { token: 'string', next: '@codeblock' }],
 
             // github style code blocks (with backticks and language)
-            [/^\s*```\s*((?:\w|[\/\-#])+).*$/, { token: 'string', next: '@codeblockgh', nextEmbedded: '$1' }],
+            // [/^\s*```\s*((?:\w|[\/\-#])+).*$/, { token: 'string', next: '@codeblockgh', nextEmbedded: '$1' }],
+            [/^\s*```\s*((?:\w|[\/\-#])+)?\s*$/, { token: 'string', next: '@codeblock' }],
 
             // github style code blocks (with backticks but no language)
             [/^\s*```\s*$/, { token: 'string', next: '@codeblock' }],
@@ -89,10 +90,10 @@ export const language: languages.IMonarchLanguage & any = {
         ],
 
         // github style code blocks
-        codeblockgh: [
-            [/```\s*$/, { token: 'variable.source', next: '@pop', nextEmbedded: '@pop' }],
-            [/[^`]+/, 'variable.source'],
-        ],
+        // codeblockgh: [
+        //     [/```\s*$/, { token: 'variable.source', next: '@pop', nextEmbedded: '@pop' }],
+        //     [/[^`]+/, 'variable.source'],
+        // ],
 
         linecontent: [
 

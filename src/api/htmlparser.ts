@@ -1,5 +1,5 @@
 import cheerio from 'cheerio'
-// (window as any).cheerio = cheerio
+
 export function htmlSecureParser(html: string) {
     const $ = cheerio.load('<div class="TEMPORARY_WRAPPER">' + html + '</div>')
     $('img').each((i, el) => {

@@ -1,8 +1,12 @@
+import mermaid from 'mermaid'
 import React, { PureComponent } from 'react'
-import '../styles/FragmentViewer.less'
-
 import Api from '../api'
 import Utils from '../utils'
+
+import 'github-markdown-css/github-markdown.css'
+import 'katex/dist/katex.css'
+import '../styles/FragmentViewer.less'
+
 
 interface IFragmentViewerProps {
     value: string
@@ -21,6 +25,9 @@ class FragmentViewer extends PureComponent<IFragmentViewerProps> {
         this.state = {
             innerHtml: '',
         }
+    }
+    public componentDidUpdate() {
+        mermaid.init('.mermaid')
     }
     public assignRef = (div: HTMLDivElement) => {
         this._ref = div
