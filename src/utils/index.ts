@@ -153,6 +153,33 @@ export function throttle<F extends (...params: any[]) => void>(fn: F, delay: num
     return wrapper
 }
 
+export function asyncSmoothScrollWrapper(scroll: (position: number) => any, from: number, to: number, time: number) {
+    return new Promise((resolve, reject) => {
+        const diff = to - from
+        const animateScroll = (elapsedTime: number, increment: number = 20) => {
+            elapsedTime += increment
+            const position = easeInOut(elapsedTime, from, diff, time)
+            scroll(position)
+            if (elapsedTime < time) {
+                setTimeout(() => {
+                    animateScroll(elapsedTime)
+                }, increment)
+            } else {
+                resolve()
+            }
+        }
+        animateScroll(0)
+    })
+    function easeInOut(currentTime: number, start: number, change: number, duration: number) {
+        currentTime /= duration / 2
+        if (currentTime < 1) {
+            return change / 2 * currentTime * currentTime + start
+        }
+        currentTime -= 1
+        return -change / 2 * (currentTime * (currentTime - 2) - 1) + start
+    }
+}
+
 const Utils = {
     debounce,
     throttle,
@@ -164,6 +191,7 @@ const Utils = {
     asyncGetFileContent,
     asyncListDirectoryFile,
     asyncMoveFile,
+    asyncSmoothScrollWrapper,
 
     formatFileUrl,
     getPathBasename,

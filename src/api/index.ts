@@ -1,6 +1,7 @@
 import board from './board'
 import electron from './electron'
 import lowdb from './lowdb'
+import { createMonacoEditor } from './monaco-editor'
 import pouchdb from './pouchdb'
 import unsplash from './unsplash'
 
@@ -17,6 +18,7 @@ const Api = {
     pouchdb,
     unsplash,
 
+    createMonacoEditor,
     htmlSecureParser,
     mdParser,
 }

@@ -27,6 +27,8 @@ interface IFragmentPageState {
 
 class FragmentPage extends PureComponent<IFragmentPageProps> {
     public state: IFragmentPageState
+    public isSettingEditorScrollLine = 0
+    public isSettingViewerScrollLine = 0
     private _fragmentInfo: IFragmentInfo | null
     private _editorRef: FragmentEditor | null
     private _viewerRef: FragmentViewer | null
@@ -68,6 +70,16 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
             this._viewerRef.setValue(content)
         }
     }
+    public handleEditorScroll = (lineNumber: number) => {
+        if (this._viewerRef && !this._viewerRef.isMouseHover()) {
+            this._viewerRef.setScrollLine(lineNumber)
+        }
+    }
+    public handleViewerScroll = (lineNumber: number) => {
+        if (this._editorRef && !this._editorRef.isMouseHover()) {
+            this._editorRef.setScrollLine(lineNumber)
+        }
+    }
     public render() {
         return (
             <div className="fragment-page">
@@ -86,10 +98,10 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
                 </div>
                 <div className="page-content">
                     <div className="content-left">
-                        <FragmentEditor ref={this.assignEditorRef} value='' onChange={this.handleEditorValueChange} />
+                        <FragmentEditor ref={this.assignEditorRef} value='' onChange={this.handleEditorValueChange} onScroll={this.handleEditorScroll} />
                     </div>
                     <div className="content-right">
-                        <FragmentViewer ref={this.assignViewerRef} value=''  />
+                        <FragmentViewer ref={this.assignViewerRef} value='' onScroll={this.handleViewerScroll} />
                     </div>
                 </div>
             </div>
