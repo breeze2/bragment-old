@@ -1,3 +1,4 @@
+import { Icon, Popover } from 'antd'
 import mermaid from 'mermaid'
 import React, { PureComponent } from 'react'
 import Api from '../api'
@@ -13,7 +14,8 @@ interface IFragmentViewerProps {
 }
 
 interface IFragmentViewerState {
-    innerHtml: string
+    content: string
+    toc: string
 }
 
 class FragmentViewer extends PureComponent<IFragmentViewerProps> {
@@ -25,7 +27,8 @@ class FragmentViewer extends PureComponent<IFragmentViewerProps> {
     public constructor(props: IFragmentViewerProps) {
         super(props)
         this.state = {
-            innerHtml: '',
+            content: '',
+            toc: '',
         }
     }
     public componentDidUpdate() {
@@ -68,21 +71,56 @@ class FragmentViewer extends PureComponent<IFragmentViewerProps> {
             toTop = toTop === null ? viewer.scrollHeight : toTop
             return Utils.asyncSmoothScrollWrapper((top: number) => {
                 viewer.scrollTop = top
-            }, viewer.scrollTop, toTop, 380)
+            }, viewer.scrollTop, toTop, 480)
+        }
+    }
+    public handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        const div = this._ref
+        if (div) {
+            const el = e.target as HTMLElement
+            if (el.tagName === 'A') {
+                const href = el.dataset.href || ''
+                if (href[0] === '#') {
+                    // scroll to target
+                    const target = div.querySelector(href)
+                    if (target) {
+                        const line = (target as HTMLElement).dataset.sourceLine
+                        if (line) {
+                            this.setScrollLine(parseInt(line, 10))
+                        }
+                    }
+                } else {
+                    // open with webview
+                }
+            }
         }
     }
     public render() {
         return (
-            <div className="fragment-viewer" ref={this.assignRef} onScroll={() => this.emitEditorScroll()}>
-                <div className="markdown-body" dangerouslySetInnerHTML={{__html: this.state.innerHtml}}/>
+            <div className="fragment-viewer" ref={this.assignRef}
+                onClick={this.handleClick}
+                onScroll={() => this.emitEditorScroll()}>
+                <div className="markdown-body" dangerouslySetInnerHTML={{
+                    __html: this.state.content,
+                }} />
+                <Popover trigger="click" content={
+                    <div className="toc-list-popover" dangerouslySetInnerHTML={{
+                        __html: this.state.toc,
+                    }} />
+                } arrowPointAtCenter={false}>
+                    <Icon style={{
+                        display: this.state.toc ? 'inline-block' : 'none',
+                    }} className="toc-icon" type="ordered-list" />
+                </Popover>
             </div>
         )
     }
-    public _parseMdContent(content: string) {
-        let html = Api.mdParser(content)
-        html = Api.htmlSecureParser(html)
+    public _parseMdContent(value: string) {
+        const html = Api.mdParser(value)
+        const { content, toc } = Api.htmlSecureParser(html)
         this.setState({
-            innerHtml: html,
+            content,
+            toc,
         })
     }
     private _emitViewerScroll() {

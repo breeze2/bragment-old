@@ -54,7 +54,7 @@ class FragmentEditor extends PureComponent<IFragmentEditorProps> {
         if (this._editor) {
             const editor = this._editor
             return Utils.asyncSmoothScrollWrapper((top) => editor.setScrollTop(top),
-                this._editor.getScrollTop(), lineNumber * 21 - 21, 380)
+                this._editor.getScrollTop(), lineNumber * 21 - 21, 480)
         }
     }
     public assignRef = (div: HTMLDivElement) => {
