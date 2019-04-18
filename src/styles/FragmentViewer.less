@@ -6,6 +6,7 @@
   border-top: @grey-border-color 0.5px solid;
   overflow-x: hidden;
   overflow-y: scroll;
+  background-color: #ffffff;
 
   .markdown-body {
     max-width: 512px;
@@ -25,7 +26,7 @@
 
     width: 36px;
     height: 36px;
-    background-color: #81a2be;
+    background-color: #bdbdbd;
     border-radius: 50%;
     opacity: 0.6;
     line-height: 40px;
@@ -36,12 +37,18 @@
   }
 }
 
-.toc-list-popover {
-  max-height: 400px;
-  max-width: 300px;
-  overflow-y: scroll;
-  overflow-x: hidden;
+.toc-popover {
+  .ant-popover-inner {
+    background-color: #f0f2f5;
+  }
+  .toc-list {
+    max-height: 400px;
+    max-width: 300px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
 }
+
 
 /*
 Style with support for custom container

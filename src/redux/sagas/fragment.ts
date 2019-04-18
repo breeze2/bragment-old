@@ -5,11 +5,11 @@ import IAction, { IAsyncAction } from '../../schemas/IAction'
 import IBoard from '../../schemas/IBoard'
 import IFragment from '../../schemas/IFragment'
 import IFragmentColumn from '../../schemas/IFragmentColumn'
+import IFragmentInfo from '../../schemas/IFragmentInfo'
 import Utils from '../../utils'
 import { BoardActionTypes, FragmentActionTypes } from '../actions'
 import { handlePromiseWrapper, nerverThrowWrapper } from './helpers'
 import { getBoard } from './selectors'
-import IFragmentInfo from '../../schemas/IFragmentInfo';
 
 function* moveFragmentSaga(action: IAction) {
     const boardStore = yield select(getBoard)
@@ -114,10 +114,18 @@ function* featchFragmentInfoSaga(action: IAction) {
     return info
 }
 
+function* saveFragmentContentSaga(action: IAction) {
+    const fragmentContent: string = action.payload.fragmentContent
+    const fragmentPath: string = action.payload.fragmentPath
+    const result = yield call(Utils.asyncSaveFileContent, fragmentPath, fragmentContent)
+    return result
+}
+
 const fragmentMethodsMap: { [key: string]: (action: IAction) => IterableIterator<any> } = {
     [FragmentActionTypes.ASYNC_CREATE_FRAGMENT]: createFragmentSaga,
     [FragmentActionTypes.ASYNC_MOVE_FRAGMENT]: moveFragmentSaga,
     [FragmentActionTypes.ASYNC_FETCH_FRAGMENT_INFO]: featchFragmentInfoSaga,
+    [FragmentActionTypes.ASYNC_SAVE_FRAGMENT_CONTENT]: saveFragmentContentSaga,
 }
 
 function* fragmentActionsDispatcher(action: IAsyncAction | IAction) {
@@ -137,6 +145,10 @@ export function* watchCreateFragment() {
 
 export function* watchFetchFragmentInfo() {
     yield takeLatest(FragmentActionTypes.ASYNC_FETCH_FRAGMENT_INFO, fragmentActionsDispatcher)
+}
+
+export function* watchSaveFragmentContent() {
+    yield takeLatest(FragmentActionTypes.ASYNC_SAVE_FRAGMENT_CONTENT, fragmentActionsDispatcher)
 }
 
 export function* watchMoveFragment() {

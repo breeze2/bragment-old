@@ -41,7 +41,7 @@ class FragmentEditor extends PureComponent<IFragmentEditorProps> {
     }
     public getValue() {
         if (this._editor) {
-            this._editor.getValue()
+            return this._editor.getValue()
         }
         return ''
     }

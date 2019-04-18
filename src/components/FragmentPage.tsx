@@ -1,4 +1,4 @@
-import { Icon } from 'antd'
+import { Button, Icon } from 'antd'
 import React, { PureComponent } from 'react'
 import { RouteComponentProps } from 'react-router-dom'
 
@@ -9,6 +9,7 @@ import TextInputChanger from './TextInputChanger'
 
 import '../styles/FragmentEditor.less'
 import '../styles/FragmentPage.less'
+import Utils from '../utils';
 
 interface IFragmentPageRouteParams {
     boardId: string
@@ -18,11 +19,12 @@ interface IFragmentPageRouteParams {
 
 interface IFragmentPageProps extends RouteComponentProps<IFragmentPageRouteParams> {
     asyncFetchFragmentInfo: (boardId: string, columnTitle: string, fragmentTitle: string) => Promise<IFragmentInfo>
+    asyncSaveFragmentContent: (fragmentPath: string, fragmentContent: string) => Promise<true>
 }
 
 interface IFragmentPageState {
     title: string
-    content: string
+    pageLayoutStatus: 'only-left' | 'only-right' | ''
 }
 
 class FragmentPage extends PureComponent<IFragmentPageProps> {
@@ -35,7 +37,7 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
     public constructor(props: IFragmentPageProps) {
         super(props)
         this.state = {
-            content: '',
+            pageLayoutStatus: 'only-right',
             title: '',
         }
         this._fragmentInfo = null
@@ -50,12 +52,13 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
         const title = params.title
         const boardId = params.boardId
         const columnTitle = params.columnTitle
+        this.setState({ title })
         this.props.asyncFetchFragmentInfo(boardId, columnTitle, title).then(info => {
             this._fragmentInfo = info
-            this.setState({
-                content: info.content,
-                title: info.title,
-            })
+            const editor = this._editorRef
+            if (editor) {
+                editor.setValue(info.content)
+            }
         })
     }
     public assignEditorRef = (editor: FragmentEditor) => {
@@ -80,6 +83,35 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
             this._editorRef.setScrollLine(lineNumber)
         }
     }
+    public showViewer = () => {
+        if (this.state.pageLayoutStatus === '') {
+            this.setState({
+                pageLayoutStatus: 'only-left',
+            })
+        } else {
+            this.setState({
+                pageLayoutStatus: '',
+            })
+        }
+    }
+    public showEditor = () => {
+        this.setState({
+            pageLayoutStatus: '',
+        })
+    }
+    public saveEditorContent = () => {
+        const editor = this._editorRef
+        const info = this._fragmentInfo
+        if (editor && info) {
+            const content = editor.getValue()
+            const path = Utils.joinPath(info.boardPath, info.columnTitle, info.title)
+            this.props.asyncSaveFragmentContent(path, content).then(() => {
+                this.setState({
+                    pageLayoutStatus: 'only-right',
+                })
+            })
+        }
+    }
     public render() {
         return (
             <div className="fragment-page">
@@ -92,11 +124,16 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
                             <TextInputChanger status='text' textValue={this.state.title} inputValue={this.state.title} />
                         </div>
                         <div className="label-right" >
-                            <Icon type="edit" className="handler" />
+                            {this.state.pageLayoutStatus === 'only-right' ?
+                                <Button shape="circle" icon="edit" className="label-action" onClick={this.showEditor} /> :
+                                <Button shape="circle" icon="download" className="label-action" onClick={this.saveEditorContent} />
+                            }
+                            <Button shape="circle" disabled={this.state.pageLayoutStatus === 'only-right'} icon={this.state.pageLayoutStatus === ''
+                                ? 'eye-invisible' : 'eye'} className="label-action" onClick={this.showViewer} />
                         </div>
                     </div>
                 </div>
-                <div className="page-content">
+                <div className={`page-content ${this.state.pageLayoutStatus}`}>
                     <div className="content-left">
                         <FragmentEditor ref={this.assignEditorRef} value='' onChange={this.handleEditorValueChange} onScroll={this.handleEditorScroll} />
                     </div>

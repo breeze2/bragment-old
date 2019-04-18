@@ -99,6 +99,18 @@ export function asyncGetFileContent(path: string) {
     })
 }
 
+export function asyncSaveFileContent(path: string, content: string) {
+    return new Promise<true>((resolve, reject) => {
+        NodeJSFS.writeFile(path, content, 'utf8', (err: any) => {
+            if (err) {
+                return reject(err)
+            } else {
+                return resolve(true)
+            }
+        })
+    })
+}
+
 export function asyncCreateFile(path: string, content: string = '') {
     return new Promise<boolean>((resolve, reject) => {
         if (NodeJSFS.existsSync(path)) {
@@ -191,6 +203,7 @@ const Utils = {
     asyncGetFileContent,
     asyncListDirectoryFile,
     asyncMoveFile,
+    asyncSaveFileContent,
     asyncSmoothScrollWrapper,
 
     formatFileUrl,

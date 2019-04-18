@@ -16,7 +16,6 @@ function createWindow() {
             webSecurity: false,
             nodeIntegration: true,
             contextIsolation: false,
-            preload: path.join(__dirname, './preload/index.js')
         },
         // width: 960,
         // height: 600,

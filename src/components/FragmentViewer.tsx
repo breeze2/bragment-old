@@ -103,11 +103,11 @@ class FragmentViewer extends PureComponent<IFragmentViewerProps> {
                 <div className="markdown-body" dangerouslySetInnerHTML={{
                     __html: this.state.content,
                 }} />
-                <Popover trigger="click" content={
-                    <div className="toc-list-popover" dangerouslySetInnerHTML={{
+                <Popover overlayClassName="toc-popover" trigger="click" content={
+                    <div className="toc-list" dangerouslySetInnerHTML={{
                         __html: this.state.toc,
                     }} />
-                } arrowPointAtCenter={false}>
+                } arrowPointAtCenter >
                     <Icon style={{
                         display: this.state.toc ? 'inline-block' : 'none',
                     }} className="toc-icon" type="ordered-list" />

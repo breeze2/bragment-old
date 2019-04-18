@@ -79,6 +79,8 @@ export const language: languages.IMonarchLanguage & any = {
             // github style code blocks (with backticks but no language)
             [/^\s*```\s*$/, { token: 'string', next: '@codeblock' }],
 
+            [/\b__(?!\s)([^_]|@escapes|_(?!_))+(?!\s)__\b/, 'strong'],
+
             // markup within lines
             { include: '@linecontent' },
         ],
@@ -103,9 +105,11 @@ export const language: languages.IMonarchLanguage & any = {
 
             // various markup
             [/\b__(?!\s)([^\\_]|@escapes|_(?!_))+(?!\s)__\b/, 'strong'],
-            [/\*\*(?!\s)([^\\*]|@escapes|\*(?!\*))+(?!\s)\*\*/, 'strong'],
-            [/\b_(?!\s)[^_]+(?!\s)_\b/, 'emphasis'],
+            [/\b_(?!\s).+(?!\s)_\b/, 'emphasis'],
+            // [/\*\*(?!\s)([^\\*]|@escapes|\*(?!\*))+(?!\s)\*\*/, 'strong'],
             [/\*(?!\s)([^\\*]|@escapes)+(?!\s)\*/, 'emphasis'],
+            [/\*\*(?!\s).+(?!\s)\*\*/, 'strong'],
+            // [/\*(?!\s)([^\\*]|@escapes)+(?!\s)\*/, 'emphasis'],
             [/`([^\\`]|@escapes)+`/, 'md-variable'],
             [/(~~)((?!\s)(?:~?!~|@escapes|[^\\~])+(?!\s))(~~)/, ['md-deleting.tag', 'md-deleting.content', 'md-deleting.tag']],
             [/(==)((?!\s)(?:=?!=|@escapes|[^\\=])+(?!\s))(==)/, ['md-marking.tag', 'md-marking.content', 'md-marking.tag']],

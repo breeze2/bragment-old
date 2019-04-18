@@ -19,6 +19,6 @@ export function createMonacoEditor(el: HTMLElement, value: string = '') {
             enabled: false,
         },
         value,
-        wordWrap: 'off',
+        wordWrap: 'on',
     })
 }
