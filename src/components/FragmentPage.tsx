@@ -46,21 +46,6 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
         this._viewerRef = null
     }
     public componentWillMount() {
-        // this.setState({
-        //     title: this.props.match.params.title,
-        // })
-        // const params = this.props.match.params
-        // const title = params.title
-        // const boardId = params.boardId
-        // const columnTitle = params.columnTitle
-        // this.setState({ title: Utils.fixedFragmentTitle(title) })
-        // this.props.asyncFetchFragmentInfo(boardId, columnTitle, title).then(info => {
-        //     this._fragmentInfo = info
-        //     const editor = this._editorRef
-        //     if (editor) {
-        //         editor.setValue(info.content)
-        //     }
-        // })
         this._initFragment(this.props)
     }
     public componentWillReceiveProps (props: IFragmentPageProps) {
@@ -173,7 +158,7 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
         const title = params.title
         const boardId = params.boardId
         const columnTitle = params.columnTitle
-        this.setState({ title: Utils.fixedFragmentTitle(title) })
+        this.setState({ title: Utils.elegantFragmentTitle(title) })
         props.asyncFetchFragmentInfo(boardId, columnTitle, title).then(info => {
             this._fragmentInfo = info
             const editor = this._editorRef

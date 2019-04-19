@@ -20,7 +20,7 @@ class FragmentCard extends Component<IFragmentCardProps> {
                     <div className={`fragment-card ${snapshot.isDragging ? 'is-dragging' : ''}`} ref={provided.innerRef}
                         {...provided.draggableProps} {...provided.dragHandleProps}>
                         <Link to={`/fragment/${this.props.boardId}/${this.props.columnTitle}/${this.props.fragment.title}`} ><Card hoverable>
-                            <p className="card-title">{Utils.fixedFragmentTitle(this.props.fragment.title)}</p>
+                            <p className="card-title">{Utils.elegantFragmentTitle(this.props.fragment.title)}</p>
                         </Card></Link>
                     </div>
                 )}

@@ -8,7 +8,7 @@ interface IDirent {
     isFile: () => boolean
 }
 
-export function fixedFragmentTitle (title: string) {
+export function elegantFragmentTitle (title: string) {
     if (title.substr(-3, 3) === '.md') {
         return title.slice(0, -3)
     }
@@ -213,7 +213,7 @@ const Utils = {
     asyncSaveFileContent,
     asyncSmoothScrollWrapper,
 
-    fixedFragmentTitle,
+    elegantFragmentTitle,
     formatFileUrl,
     getPathBasename,
     joinPath,
