@@ -8,6 +8,13 @@ interface IDirent {
     isFile: () => boolean
 }
 
+export function fixedFragmentTitle (title: string) {
+    if (title.substr(-3, 3) === '.md') {
+        return title.slice(0, -3)
+    }
+    return title
+}
+
 export function joinPath(...paths: string[]) {
     return NodeJSPath.join(...paths)
 }
@@ -206,6 +213,7 @@ const Utils = {
     asyncSaveFileContent,
     asyncSmoothScrollWrapper,
 
+    fixedFragmentTitle,
     formatFileUrl,
     getPathBasename,
     joinPath,

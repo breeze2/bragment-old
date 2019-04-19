@@ -1,7 +1,8 @@
 import { all, fork } from 'redux-saga/effects'
 import { watchCreateBoard, watchFetchBoardList, watchFetchFragmentColumns, watchFetchUnsplashStandbyImages,
     watchInitCurrentBoard, watchMoveInFragmentColumns, watchPushInFragmentColumns } from './board'
-import { watchCreateFragment, watchFetchFragmentInfo, watchMoveFragment, watchSaveFragmentContent } from './fragment'
+import { watchCreateFragment, watchFetchFragmentInfo, watchMoveFragment, watchRenameFragment,
+    watchSaveFragmentContent } from './fragment'
 import { watchSelectMenuKey } from './home'
 
 export default function* () {
@@ -18,6 +19,7 @@ export default function* () {
         fork(watchFetchFragmentInfo),
         fork(watchMoveFragment),
         fork(watchSaveFragmentContent),
+        fork(watchRenameFragment),
 
         fork(watchSelectMenuKey),
     ])

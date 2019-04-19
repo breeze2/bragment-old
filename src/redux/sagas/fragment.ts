@@ -114,6 +114,50 @@ function* featchFragmentInfoSaga(action: IAction) {
     return info
 }
 
+function* renameFragmentSaga(action: IAction) {
+    const boardId: string = action.payload.boardId
+    const columnTitle: string = action.payload.columnTitle
+    const title: string = action.payload.fragmentTitle
+    const newTitle: string = action.payload.newFragmentTitle
+
+    if (title === newTitle || newTitle === '') {
+        return true
+    }
+
+    const boardStore = yield select(getBoard)
+    const currentBoard: IBoard | null = boardStore.get('current')
+    let lowdb: LowDBSyncWrapper<any> | null = null
+    let boardPath: string = ''
+    if (currentBoard && currentBoard._id === boardId) {
+        lowdb = boardStore.get('lowdb')
+        boardPath = currentBoard.path
+    } else {
+        const board = yield call(Api.board.getBoard, boardId)
+        boardPath = board.path
+    }
+    if (!lowdb) {
+        lowdb = Api.lowdb.getBoardLowDB(boardPath)
+    }
+
+    const path: string = Utils.joinPath(boardPath, columnTitle, title)
+    const newPath: string = Utils.joinPath(boardPath, columnTitle, newTitle)
+    const result: boolean = yield call(Utils.asyncMoveFile, path, newPath)
+    if (result) {
+        // save in lowdb
+        const columns: IFragmentColumn[] = lowdb.get('fragment_columns', []).value()
+        const column = columns.find(el => el.title === columnTitle)
+        if (column) {
+            const fragment = column.fragments.find(el => el.title === title)
+            if (fragment) {
+                fragment.title = newTitle
+            }
+        }
+        lowdb.set('fragment_columns', columns).write()
+        return true
+    }
+    return false
+}
+
 function* saveFragmentContentSaga(action: IAction) {
     const fragmentContent: string = action.payload.fragmentContent
     const fragmentPath: string = action.payload.fragmentPath
@@ -126,6 +170,7 @@ const fragmentMethodsMap: { [key: string]: (action: IAction) => IterableIterator
     [FragmentActionTypes.ASYNC_MOVE_FRAGMENT]: moveFragmentSaga,
     [FragmentActionTypes.ASYNC_FETCH_FRAGMENT_INFO]: featchFragmentInfoSaga,
     [FragmentActionTypes.ASYNC_SAVE_FRAGMENT_CONTENT]: saveFragmentContentSaga,
+    [FragmentActionTypes.ASYNC_RENAME_FRAGMENT]: renameFragmentSaga,
 }
 
 function* fragmentActionsDispatcher(action: IAsyncAction | IAction) {
@@ -153,4 +198,8 @@ export function* watchSaveFragmentContent() {
 
 export function* watchMoveFragment() {
     yield takeLatest(FragmentActionTypes.ASYNC_MOVE_FRAGMENT, fragmentActionsDispatcher)
+}
+
+export function* watchRenameFragment() {
+    yield takeLatest(FragmentActionTypes.ASYNC_RENAME_FRAGMENT, fragmentActionsDispatcher)
 }

@@ -9,7 +9,7 @@ import TextInputChanger from './TextInputChanger'
 
 import '../styles/FragmentEditor.less'
 import '../styles/FragmentPage.less'
-import Utils from '../utils';
+import Utils from '../utils'
 
 interface IFragmentPageRouteParams {
     boardId: string
@@ -19,6 +19,7 @@ interface IFragmentPageRouteParams {
 
 interface IFragmentPageProps extends RouteComponentProps<IFragmentPageRouteParams> {
     asyncFetchFragmentInfo: (boardId: string, columnTitle: string, fragmentTitle: string) => Promise<IFragmentInfo>
+    asyncRenameFragment: (boardId: string, columnTitle: string, fragmentTitle: string, newFragmentTitle: string) => Promise<boolean>
     asyncSaveFragmentContent: (fragmentPath: string, fragmentContent: string) => Promise<true>
 }
 
@@ -45,27 +46,47 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
         this._viewerRef = null
     }
     public componentWillMount() {
-        this.setState({
-            title: this.props.match.params.title,
-        })
-        const params = this.props.match.params
-        const title = params.title
-        const boardId = params.boardId
-        const columnTitle = params.columnTitle
-        this.setState({ title })
-        this.props.asyncFetchFragmentInfo(boardId, columnTitle, title).then(info => {
-            this._fragmentInfo = info
-            const editor = this._editorRef
-            if (editor) {
-                editor.setValue(info.content)
-            }
-        })
+        // this.setState({
+        //     title: this.props.match.params.title,
+        // })
+        // const params = this.props.match.params
+        // const title = params.title
+        // const boardId = params.boardId
+        // const columnTitle = params.columnTitle
+        // this.setState({ title: Utils.fixedFragmentTitle(title) })
+        // this.props.asyncFetchFragmentInfo(boardId, columnTitle, title).then(info => {
+        //     this._fragmentInfo = info
+        //     const editor = this._editorRef
+        //     if (editor) {
+        //         editor.setValue(info.content)
+        //     }
+        // })
+        this._initFragment(this.props)
+    }
+    public componentWillReceiveProps (props: IFragmentPageProps) {
+        this._initFragment(props)
     }
     public assignEditorRef = (editor: FragmentEditor) => {
         this._editorRef = editor
     }
     public assignViewerRef = (viewer: FragmentViewer) => {
         this._viewerRef = viewer
+    }
+    public handleTitleChange = (newTitle: string) => {
+        newTitle = newTitle.trim()
+        if (this.state.title === newTitle) {
+            return
+        } else {
+            const params = this.props.match.params
+            const title = params.title
+            const boardId = params.boardId
+            const columnTitle = params.columnTitle
+            this.props.asyncRenameFragment(boardId, columnTitle, title, newTitle + '.md').then(result => {
+                if (result) {
+                    this.props.history.replace(`/fragment/${boardId}/${columnTitle}/${newTitle}.md`)
+                }
+            })
+        }
     }
     public handleEditorValueChange = (content: string) => {
         console.log(content)
@@ -118,10 +139,10 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
                 <div className="page-header">
                     <div className="page-label">
                         <div className="label-left">
-                            <Icon type="left" className="handler" />
+                            <Icon type="left" className="handler" onClick={this.props.history.goBack} />
                         </div>
                         <div className="label-main">
-                            <TextInputChanger status='text' textValue={this.state.title} inputValue={this.state.title} />
+                            <TextInputChanger status='text' onInputSubmit={this.handleTitleChange} textValue={this.state.title} inputValue={this.state.title} />
                         </div>
                         <div className="label-right" >
                             {this.state.pageLayoutStatus === 'only-right' ?
@@ -143,6 +164,23 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
                 </div>
             </div>
         )
+    }
+    private _initFragment(props: IFragmentPageProps) {
+        this.setState({
+            title: props.match.params.title,
+        })
+        const params = props.match.params
+        const title = params.title
+        const boardId = params.boardId
+        const columnTitle = params.columnTitle
+        this.setState({ title: Utils.fixedFragmentTitle(title) })
+        props.asyncFetchFragmentInfo(boardId, columnTitle, title).then(info => {
+            this._fragmentInfo = info
+            const editor = this._editorRef
+            if (editor) {
+                editor.setValue(info.content)
+            }
+        })
     }
 }
 

@@ -4,6 +4,7 @@ export const FragmentActionTypes = {
     ASYNC_CREATE_FRAGMENT: 'ASYNC_CREATE_FRAGMENT',
     ASYNC_FETCH_FRAGMENT_INFO: 'ASYNC_FETCH_FRAGMENT_INFO',
     ASYNC_MOVE_FRAGMENT: 'ASYNC_MOVE_FRAGMENT',
+    ASYNC_RENAME_FRAGMENT: 'ASYNC_RENAME_FRAGMENT',
     ASYNC_SAVE_FRAGMENT_CONTENT: 'ASYNC_SAVE_FRAGMENT_CONTENT',
 }
 
@@ -25,4 +26,9 @@ export const asyncFetchFragmentInfoAction = (boardId: string, columnTitle: strin
 export const asyncSaveFragmentContentAction = (fragmentPath: string, fragmentContent: string): IAction => ({
     payload: { fragmentContent, fragmentPath },
     type: FragmentActionTypes.ASYNC_SAVE_FRAGMENT_CONTENT,
+})
+
+export const asyncRenameFragmentAction = (boardId: string, columnTitle: string, fragmentTitle: string, newFragmentTitle: string): IAction => ({
+    payload: { boardId, columnTitle, fragmentTitle, newFragmentTitle },
+    type: FragmentActionTypes.ASYNC_RENAME_FRAGMENT,
 })
