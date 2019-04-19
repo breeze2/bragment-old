@@ -29,7 +29,7 @@ function* fetchBoardListSaga(action: IAction) {
     return boards
 }
 
-function* moveInFragmentColumnsSaga(action: IAction) {
+function* moveFragmentColumnSaga(action: IAction) {
     const from: number = action.payload.from
     const to: number = action.payload.to
     const boardStore = yield select(getBoard)
@@ -49,7 +49,7 @@ function* moveInFragmentColumnsSaga(action: IAction) {
     return true
 }
 
-function* pushInFragmentColumnsSaga(action: IAction) {
+function* createFragmentColumnSaga(action: IAction) {
     const boardStore = yield select(getBoard)
     const lowdb: LowDBSyncWrapper<any> | null = boardStore.get('lowdb')
     const board: IBoard | null = boardStore.get('current')
@@ -118,8 +118,8 @@ const boardMethodsMap: { [key: string]: (action: IAction) => IterableIterator<an
     [BoardActionTypes.ASYNC_FETCH_BOARD_LIST]: fetchBoardListSaga,
     [BoardActionTypes.ASYNC_FETCH_FRAGMENT_COLUMNS]: fetchFragmentColumnsSaga,
     [BoardActionTypes.ASYNC_INIT_CURRENT_BOARD]: initCurrentBoardSaga,
-    [BoardActionTypes.ASYNC_MOVE_IN_FRAGMENT_COLUMNS]: moveInFragmentColumnsSaga,
-    [BoardActionTypes.ASYNC_PUSH_IN_FRAGMENT_COLUMNS]: pushInFragmentColumnsSaga,
+    [BoardActionTypes.ASYNC_MOVE_FRAGMENT_COLUMN]: moveFragmentColumnSaga,
+    [BoardActionTypes.ASYNC_CREATE_FRAGMENT_COLUMN]: createFragmentColumnSaga,
 }
 
 function* boardActionsDispatcher(action: IAsyncAction | IAction) {
@@ -153,10 +153,10 @@ export function* watchInitCurrentBoard() {
     yield takeLatest(BoardActionTypes.ASYNC_INIT_CURRENT_BOARD, boardActionsDispatcher)
 }
 
-export function* watchMoveInFragmentColumns() {
-    yield takeLatest(BoardActionTypes.ASYNC_MOVE_IN_FRAGMENT_COLUMNS, boardActionsDispatcher)
+export function* watchMoveFragmentColumn() {
+    yield takeLatest(BoardActionTypes.ASYNC_MOVE_FRAGMENT_COLUMN, boardActionsDispatcher)
 }
 
-export function* watchPushInFragmentColumns() {
-    yield takeLatest(BoardActionTypes.ASYNC_PUSH_IN_FRAGMENT_COLUMNS, boardActionsDispatcher)
+export function* watchCreateFragmentColumn() {
+    yield takeLatest(BoardActionTypes.ASYNC_CREATE_FRAGMENT_COLUMN, boardActionsDispatcher)
 }

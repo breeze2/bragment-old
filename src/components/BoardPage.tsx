@@ -26,8 +26,8 @@ interface IBoardPageProps extends RouteComponentProps<IBoardPageRouteParams> {
     asyncInitCurrentBoard: (board: IBoard | null) => any
     asyncFetchFragmentColumns: () => any
     asyncMoveFragment: (fromColumnTitle: string, fromColumnIndex: number, toColumnTitle: string, toColumnIndex: number) => Promise<boolean>
-    asyncMoveInFragmentColumns: (from: number, to: number) => any
-    asyncPushInFragmentColumns: (fragmentColumn: IFragmentColumn) => any
+    asyncMoveFragmentColumn: (from: number, to: number) => any
+    asyncCreateFragmentColumn: (fragmentColumn: IFragmentColumn) => any
 }
 
 interface IBoardPageState {
@@ -77,7 +77,7 @@ class BoardPage extends PureComponent<IBoardPageProps> {
     public handleDragEnd = (result: DropResult) => {
         // console.log(result)
         if (result.type === 'COLUMN' && result.destination) {
-            this.props.asyncMoveInFragmentColumns(result.source.index, result.destination.index)
+            this.props.asyncMoveFragmentColumn(result.source.index, result.destination.index)
         } else if (result.type === 'QUOTE' && result.destination) {
             const fromColumnTitle = result.source.droppableId
             const fromColumnIndex = result.source.index
@@ -100,7 +100,7 @@ class BoardPage extends PureComponent<IBoardPageProps> {
             title,
         }
         setTimeout(() => {
-            this.props.asyncPushInFragmentColumns(fragmentColumn)
+            this.props.asyncCreateFragmentColumn(fragmentColumn)
         }, 100)
     }
     public render() {

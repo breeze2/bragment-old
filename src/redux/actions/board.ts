@@ -6,12 +6,12 @@ import IUnsplashPhoto from '../../schemas/IUnsplashPhoto'
 
 export const BoardActionTypes = {
     ASYNC_CREATE_BOARD: 'ASYNC_CREATE_BOARD',
+    ASYNC_CREATE_FRAGMENT_COLUMN: 'ASYNC_CREATE_FRAGMENT_COLUMN',
     ASYNC_FETCH_BOARD_LIST: 'ASYNC_FETCH_BOARD_LIST',
     ASYNC_FETCH_FRAGMENT_COLUMNS: 'ASYNC_FETCH_FRAGMENT_COLUMNS',
     ASYNC_FETCH_STANDBY_BG_IMAGES: 'ASYNC_FETCH_STANDBY_BG_IMAGES',
     ASYNC_INIT_CURRENT_BOARD: 'ASYNC_INIT_CURRENT_BOARD',
-    ASYNC_MOVE_IN_FRAGMENT_COLUMNS: 'ASYNC_MOVE_IN_FRAGMENT_COLUMNS',
-    ASYNC_PUSH_IN_FRAGMENT_COLUMNS: 'ASYNC_PUSH_IN_FRAGMENT_COLUMNS',
+    ASYNC_MOVE_FRAGMENT_COLUMN: 'ASYNC_MOVE_FRAGMENT_COLUMN',
 
     ADD_RECENTLY_VIEWED_BOARD: 'ADD_RECENTLY_VIEWED_BOARD',
     SET_BOARD_LIST: 'SET_BOARD_LIST',
@@ -71,12 +71,12 @@ export const asyncInitCurrentBoardAction = (board: IBoard | null): IAction => ({
     type: BoardActionTypes.ASYNC_INIT_CURRENT_BOARD,
 })
 
-export const asyncMoveInFragmentColumnsAction = (from: number, to: number): IAction => ({
+export const asyncMoveFragmentColumnAction = (from: number, to: number): IAction => ({
     payload: { from, to },
-    type: BoardActionTypes.ASYNC_MOVE_IN_FRAGMENT_COLUMNS,
+    type: BoardActionTypes.ASYNC_MOVE_FRAGMENT_COLUMN,
 })
 
-export const asyncPushInFragmentColumnsAction = (fragmentColumn: IFragmentColumn): IAction => ({
+export const asyncCreateFragmentColumnAction = (fragmentColumn: IFragmentColumn): IAction => ({
     payload: { fragmentColumn },
-    type: BoardActionTypes.ASYNC_PUSH_IN_FRAGMENT_COLUMNS,
+    type: BoardActionTypes.ASYNC_CREATE_FRAGMENT_COLUMN,
 })
