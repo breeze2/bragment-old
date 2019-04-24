@@ -1,4 +1,4 @@
-import { editor as MonacoEditor, IScrollEvent } from 'monaco-editor'
+import { editor as MonacoEditor, IScrollEvent, KeyCode, KeyMod } from 'monaco-editor'
 import React, { PureComponent } from 'react'
 import Api from '../api'
 import Utils from '../utils'
@@ -9,6 +9,7 @@ interface IFragmentEditorProps {
     value: string
     onChange?: (content: string) => any
     onScroll?: (lineNumber: number) => any
+    onSave?: (content: string) => any
 }
 
 interface IFragmentEditorState {
@@ -19,6 +20,7 @@ interface IFragmentEditorState {
 class FragmentEditor extends PureComponent<IFragmentEditorProps> {
     public state: IFragmentEditorState
     public emitValueChange = Utils.debounce(this._emitValueChange, 100)
+    public emitValueSave = Utils.debounce(this._emitValueSave, 100)
     public emitEditorScroll = Utils.debounce(this._emitEditorScroll, 400)
     private _ref: HTMLDivElement | null = null
     private _editor: MonacoEditor.IStandaloneCodeEditor | null = null
@@ -76,6 +78,11 @@ class FragmentEditor extends PureComponent<IFragmentEditorProps> {
             this.props.onScroll(lineNumber + 1)
         }
     }
+    private _emitValueSave() {
+        if (this.props.onSave && this._editor) {
+            this.props.onSave(this._editor.getValue())
+        }
+    }
     private _initEditor() {
         if (this._ref) {
             this._editor = Api.createMonacoEditor(this._ref)
@@ -85,6 +92,7 @@ class FragmentEditor extends PureComponent<IFragmentEditorProps> {
             this._editor.onDidScrollChange((e: IScrollEvent) => {
                 this.emitEditorScroll(e)
             })
+            this._editor.addCommand(KeyMod.CtrlCmd | KeyCode.KEY_S, () => this.emitValueSave())
         }
     }
 }

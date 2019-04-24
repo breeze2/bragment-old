@@ -79,6 +79,14 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
             this._viewerRef.setValue(content)
         }
     }
+    public handleEditorValueSave = (content: string) => {
+        const editor = this._editorRef
+        const info = this._fragmentInfo
+        if (editor && info) {
+            const path = Utils.joinPath(info.boardPath, info.columnTitle, info.title)
+            this.props.asyncSaveFragmentContent(path, content)
+        }
+    }
     public handleEditorScroll = (lineNumber: number) => {
         if (this._viewerRef && !this._viewerRef.isMouseHover()) {
             this._viewerRef.setScrollLine(lineNumber)
@@ -141,7 +149,9 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
                 </div>
                 <div className={`page-content ${this.state.pageLayoutStatus}`}>
                     <div className="content-left">
-                        <FragmentEditor ref={this.assignEditorRef} value='' onChange={this.handleEditorValueChange} onScroll={this.handleEditorScroll} />
+                        <FragmentEditor ref={this.assignEditorRef} value='' onScroll={this.handleEditorScroll}
+                            onChange={this.handleEditorValueChange} onSave={this.handleEditorValueSave}
+                        />
                     </div>
                     <div className="content-right">
                         <FragmentViewer ref={this.assignViewerRef} value='' onScroll={this.handleViewerScroll} />
@@ -164,6 +174,11 @@ class FragmentPage extends PureComponent<IFragmentPageProps> {
             const editor = this._editorRef
             if (editor) {
                 editor.setValue(info.content)
+            }
+            if (info.content.trim() === '') {
+                this.setState({
+                    pageLayoutStatus: '',
+                })
             }
         })
     }
