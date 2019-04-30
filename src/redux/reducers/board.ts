@@ -6,7 +6,7 @@ import IFragmentColumn from '../../schemas/IFragmentColumn'
 import IUnsplashPhoto from '../../schemas/IUnsplashPhoto'
 import { BoardActionTypes } from '../actions'
 
-function getLocalRecentlyViewedBoards(): IBoard[] {
+function getLocalRecentlyViewedBoards() {
     let localRecentlyViewedBoards = []
     try {
         const temp = localStorage.getItem('RECENTLY_VIEWED_BOARDS')
@@ -19,7 +19,7 @@ function getLocalRecentlyViewedBoards(): IBoard[] {
     if (!Array.isArray(localRecentlyViewedBoards)) {
         localRecentlyViewedBoards = []
     }
-    return localRecentlyViewedBoards as IBoard[]
+    return List<IBoard>(localRecentlyViewedBoards)
 }
 
 const InitialBoardState = Immutable.fromJS({
@@ -35,10 +35,11 @@ const InitialBoardState = Immutable.fromJS({
 const board = (state = InitialBoardState, action: IAction) => {
     switch (action.type) {
         case BoardActionTypes.ADD_RECENTLY_VIEWED_BOARD:
-            let newRecentlyViewed: IBoard[] = [action.payload.board]
+            const recentlyViwedBoard: IBoard = action.payload.board
             const oldRecentlyViewed: List<IBoard> = state.get('recentlyViewed')
+            let newRecentlyViewed: IBoard[] = [recentlyViwedBoard]
             oldRecentlyViewed.forEach(el => {
-                if (el._id !== newRecentlyViewed[0]._id) {
+                if (el._id !== recentlyViwedBoard._id) {
                     newRecentlyViewed.push(el)
                 }
             })

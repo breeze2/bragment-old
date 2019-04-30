@@ -29,76 +29,23 @@ class HomeBoards extends Component<IHomeBoardsProps> {
     public render() {
         return (
             <div className="home-boards">
-                <div className="recently-boards">
+                {this.props.recentlyList.size > 0 && <div className="recently-boards">
                     <p className="boards-label">
                         <Icon type="clock-circle" />
                         <FormattedMessage id="recently" />
                     </p>
                     <div className="boards-grid">
                         <Row gutter={12}>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <Link to={`/board/1`}><BoardCard /></Link>
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <Link to={`/board/1`}><BoardCard /></Link>
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <Link to={`/board/1`}><BoardCard /></Link>
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <Link to={`/board/1`}><BoardCard /></Link>
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <Link to={`/board/1`}><BoardCard /></Link>
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
-                            <Col className="gutter-row" lg={6} md={8} sm={12} xs={24}>
-                                <BoardCard />
-                            </Col>
+                            {this.props.recentlyList.map(board => (
+                                <Col key={board._id} className="gutter-row" lg={6} md={8} sm={12} xs={24}>
+                                    <Link to={`/board/${board._id}`}>
+                                        <BoardCard color={board.color} image={board.image} path={board.path} />
+                                    </Link>
+                                </Col>
+                            ))}
                         </Row>
                     </div>
-                </div>
+                </div> }
                 <div className="personal-boards">
                     <p className="boards-label">
                         <Icon type="user" />

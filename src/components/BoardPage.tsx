@@ -23,6 +23,7 @@ interface IBoardPageProps extends RouteComponentProps<IBoardPageRouteParams> {
     boardList: List<IBoard>
     currentBoard: IBoard | null
     fragmentColumns: List<IFragmentColumn>
+    addRecentlyViewedBoard: (board: IBoard) => any
     asyncInitCurrentBoard: (board: IBoard | null) => any
     asyncFetchFragmentColumns: () => any
     asyncMoveFragment: (fromColumnTitle: string, fromColumnIndex: number, toColumnTitle: string, toColumnIndex: number) => Promise<boolean>
@@ -143,6 +144,9 @@ class BoardPage extends PureComponent<IBoardPageProps> {
             if (!props.currentBoard || props.currentBoard._id !== id) {
                 const board = boardList.find(el => el._id === id) || null
                 this.props.asyncInitCurrentBoard(board)
+                if (board) {
+                    this.props.addRecentlyViewedBoard(board)
+                }
             }
         }
     }

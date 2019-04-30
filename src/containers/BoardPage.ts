@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import BoardPage from '../components/BoardPage'
-import { asyncActionDispatcher, asyncCreateFragmentColumnAction, asyncFetchFragmentColumnsAction, asyncInitCurrentBoardAction,
+import { addRecentlyViewedBoardAction, asyncActionDispatcher, asyncCreateFragmentColumnAction, asyncFetchFragmentColumnsAction, asyncInitCurrentBoardAction,
     asyncMoveFragmentAction, asyncMoveFragmentColumnAction } from '../redux/actions'
 import IBoard from '../schemas/IBoard'
 import IFragmentColumn from '../schemas/IFragmentColumn'
@@ -17,6 +17,7 @@ const mapStateToProps = (store: any, props: any) => {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
+    addRecentlyViewedBoard: (board: IBoard) => dispatch(addRecentlyViewedBoardAction(board)),
     asyncCreateFragmentColumn: (fragmentColumn: IFragmentColumn) => dispatch(asyncCreateFragmentColumnAction(fragmentColumn)),
     asyncFetchFragmentColumns: () => dispatch(asyncFetchFragmentColumnsAction()),
     asyncInitCurrentBoard: (board: IBoard | null) => dispatch(asyncInitCurrentBoardAction(board)),
