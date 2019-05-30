@@ -8,7 +8,7 @@ import IFragmentColumn from '../../schemas/IFragmentColumn'
 import IFragmentInfo from '../../schemas/IFragmentInfo'
 import Utils from '../../utils'
 import { BoardActionTypes, FragmentActionTypes } from '../actions'
-import { handlePromiseWrapper, nerverThrowWrapper } from './helpers'
+import { sagaWorkersDispatcher } from './helpers'
 import { getBoard } from './selectors'
 
 function* moveFragmentSaga(action: IAction) {
@@ -165,41 +165,30 @@ function* saveFragmentContentSaga(action: IAction) {
     return result
 }
 
-const fragmentMethodsMap: { [key: string]: (action: IAction) => IterableIterator<any> } = {
+const worker = sagaWorkersDispatcher({
     [FragmentActionTypes.ASYNC_CREATE_FRAGMENT]: createFragmentSaga,
     [FragmentActionTypes.ASYNC_MOVE_FRAGMENT]: moveFragmentSaga,
     [FragmentActionTypes.ASYNC_FETCH_FRAGMENT_INFO]: featchFragmentInfoSaga,
     [FragmentActionTypes.ASYNC_SAVE_FRAGMENT_CONTENT]: saveFragmentContentSaga,
     [FragmentActionTypes.ASYNC_RENAME_FRAGMENT]: renameFragmentSaga,
-}
-
-function* fragmentActionsDispatcher(action: IAsyncAction | IAction) {
-    const method = fragmentMethodsMap[action.type]
-    if (method) {
-        if ('reject' in action && 'resolve' in action) {
-            yield handlePromiseWrapper(action as IAsyncAction, method)
-        } else {
-            yield nerverThrowWrapper(action, method)
-        }
-    }
-}
+})
 
 export function* watchCreateFragment() {
-    yield takeLatest(FragmentActionTypes.ASYNC_CREATE_FRAGMENT, fragmentActionsDispatcher)
+    yield takeLatest(FragmentActionTypes.ASYNC_CREATE_FRAGMENT, worker)
 }
 
 export function* watchFetchFragmentInfo() {
-    yield takeLatest(FragmentActionTypes.ASYNC_FETCH_FRAGMENT_INFO, fragmentActionsDispatcher)
+    yield takeLatest(FragmentActionTypes.ASYNC_FETCH_FRAGMENT_INFO, worker)
 }
 
 export function* watchSaveFragmentContent() {
-    yield takeLatest(FragmentActionTypes.ASYNC_SAVE_FRAGMENT_CONTENT, fragmentActionsDispatcher)
+    yield takeLatest(FragmentActionTypes.ASYNC_SAVE_FRAGMENT_CONTENT, worker)
 }
 
 export function* watchMoveFragment() {
-    yield takeLatest(FragmentActionTypes.ASYNC_MOVE_FRAGMENT, fragmentActionsDispatcher)
+    yield takeLatest(FragmentActionTypes.ASYNC_MOVE_FRAGMENT, worker)
 }
 
 export function* watchRenameFragment() {
-    yield takeLatest(FragmentActionTypes.ASYNC_RENAME_FRAGMENT, fragmentActionsDispatcher)
+    yield takeLatest(FragmentActionTypes.ASYNC_RENAME_FRAGMENT, worker)
 }

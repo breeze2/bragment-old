@@ -7,7 +7,7 @@ import IFragment from '../../schemas/IFragment'
 import IFragmentColumn from '../../schemas/IFragmentColumn'
 import Utils from '../../utils'
 import { BoardActionTypes } from '../actions'
-import { handlePromiseWrapper, nerverThrowWrapper } from './helpers'
+import { sagaWorkersDispatcher } from './helpers'
 import { getBoard } from './selectors'
 
 function* fetchUnsplashStandbyImagesSaga() {
@@ -112,7 +112,7 @@ function* initCurrentBoardSaga(action: IAction) {
     return true
 }
 
-const boardMethodsMap: { [key: string]: (action: IAction) => IterableIterator<any> } = {
+const worker = sagaWorkersDispatcher({
     [BoardActionTypes.ASYNC_CREATE_BOARD]: createBoardSaga,
     [BoardActionTypes.ASYNC_FETCH_STANDBY_BG_IMAGES]: fetchUnsplashStandbyImagesSaga,
     [BoardActionTypes.ASYNC_FETCH_BOARD_LIST]: fetchBoardListSaga,
@@ -120,43 +120,32 @@ const boardMethodsMap: { [key: string]: (action: IAction) => IterableIterator<an
     [BoardActionTypes.ASYNC_INIT_CURRENT_BOARD]: initCurrentBoardSaga,
     [BoardActionTypes.ASYNC_MOVE_FRAGMENT_COLUMN]: moveFragmentColumnSaga,
     [BoardActionTypes.ASYNC_CREATE_FRAGMENT_COLUMN]: createFragmentColumnSaga,
-}
-
-function* boardActionsDispatcher(action: IAsyncAction | IAction) {
-    const method = boardMethodsMap[action.type]
-    if (method) {
-        if ('reject' in action && 'resolve' in action) {
-            yield handlePromiseWrapper(action as IAsyncAction, method)
-        } else {
-            yield nerverThrowWrapper(action, method)
-        }
-    }
-}
+})
 
 export function* watchCreateBoard() {
-    yield takeLatest(BoardActionTypes.ASYNC_CREATE_BOARD, boardActionsDispatcher)
+    yield takeLatest(BoardActionTypes.ASYNC_CREATE_BOARD, worker)
 }
 
 export function* watchFetchUnsplashStandbyImages() {
-    yield takeLatest(BoardActionTypes.ASYNC_FETCH_STANDBY_BG_IMAGES, boardActionsDispatcher)
+    yield takeLatest(BoardActionTypes.ASYNC_FETCH_STANDBY_BG_IMAGES, worker)
 }
 
 export function* watchFetchBoardList() {
-    yield takeLatest(BoardActionTypes.ASYNC_FETCH_BOARD_LIST, boardActionsDispatcher)
+    yield takeLatest(BoardActionTypes.ASYNC_FETCH_BOARD_LIST, worker)
 }
 
 export function* watchFetchFragmentColumns() {
-    yield takeLatest(BoardActionTypes.ASYNC_FETCH_FRAGMENT_COLUMNS, boardActionsDispatcher)
+    yield takeLatest(BoardActionTypes.ASYNC_FETCH_FRAGMENT_COLUMNS, worker)
 }
 
 export function* watchInitCurrentBoard() {
-    yield takeLatest(BoardActionTypes.ASYNC_INIT_CURRENT_BOARD, boardActionsDispatcher)
+    yield takeLatest(BoardActionTypes.ASYNC_INIT_CURRENT_BOARD, worker)
 }
 
 export function* watchMoveFragmentColumn() {
-    yield takeLatest(BoardActionTypes.ASYNC_MOVE_FRAGMENT_COLUMN, boardActionsDispatcher)
+    yield takeLatest(BoardActionTypes.ASYNC_MOVE_FRAGMENT_COLUMN, worker)
 }
 
 export function* watchCreateFragmentColumn() {
-    yield takeLatest(BoardActionTypes.ASYNC_CREATE_FRAGMENT_COLUMN, boardActionsDispatcher)
+    yield takeLatest(BoardActionTypes.ASYNC_CREATE_FRAGMENT_COLUMN, worker)
 }

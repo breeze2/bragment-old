@@ -17,3 +17,16 @@ export function* handlePromiseWrapper(action: IAsyncAction, method: (a: IAction)
         return action.reject(e)
     }
 }
+
+export function sagaWorkersDispatcher(workersMap: { [key: string]: (action: IAction) => IterableIterator<any> }) {
+    return function* (action: IAction) {
+        const worker = workersMap[action.type]
+        if (worker) {
+            if ('reject' in action && 'resolve' in action) {
+                yield handlePromiseWrapper(action as IAsyncAction, worker)
+            } else {
+                yield nerverThrowWrapper(action, worker)
+            }
+        }
+    }
+}
