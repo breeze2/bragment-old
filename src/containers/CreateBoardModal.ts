@@ -13,7 +13,7 @@ const mapStateToProps = (store: any, props: any) => {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
-    asyncCreateBoard: (board: IBoardBase) => asyncActionDispatcher<string>(dispatch, asyncCreateBoardAction, board),
+    asyncCreateBoard: (board: IBoardBase) => asyncActionDispatcher<string>(dispatch, asyncCreateBoardAction(board)),
     asyncFetchStandbyBgImages: () => dispatch(asyncFetchStandbyBgImagesAction()),
     setBgImageTimestamp: (time: number) => dispatch(setBgImageTimestampAction(time)),
 })

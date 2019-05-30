@@ -22,7 +22,7 @@ const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
     asyncFetchFragmentColumns: () => dispatch(asyncFetchFragmentColumnsAction()),
     asyncInitCurrentBoard: (board: IBoard | null) => dispatch(asyncInitCurrentBoardAction(board)),
     asyncMoveFragment: (fromColumnTitle: string, fromColumnIndex: number, toColumnTitle: string, toColumnIndex: number) => asyncActionDispatcher<boolean>(dispatch,
-        asyncMoveFragmentAction, fromColumnTitle, fromColumnIndex, toColumnTitle, toColumnIndex),
+        asyncMoveFragmentAction(fromColumnTitle, fromColumnIndex, toColumnTitle, toColumnIndex)),
     asyncMoveFragmentColumn: (from: number, to: number) => dispatch(asyncMoveFragmentColumnAction(from, to)),
 })
 

@@ -11,11 +11,11 @@ const mapStateToProps = (store: any, props: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
     asyncFetchFragmentInfo: (boardId: string, columnTitle: string, fragmentTitle: string) => asyncActionDispatcher<IFragmentInfo>(dispatch,
-        asyncFetchFragmentInfoAction, boardId, columnTitle, fragmentTitle),
+        asyncFetchFragmentInfoAction(boardId, columnTitle, fragmentTitle)),
     asyncRenameFragment: (boardId: string, columnTitle: string, fragmentTitle: string, newFragmentTitle: string) => asyncActionDispatcher<boolean>(dispatch,
-        asyncRenameFragmentAction, boardId, columnTitle, fragmentTitle, newFragmentTitle),
+        asyncRenameFragmentAction(boardId, columnTitle, fragmentTitle, newFragmentTitle)),
     asyncSaveFragmentContent: (fragmentPath: string, fragmentContent: string) => asyncActionDispatcher<true>(dispatch,
-        asyncSaveFragmentContentAction, fragmentPath, fragmentContent),
+        asyncSaveFragmentContentAction(fragmentPath, fragmentContent)),
 })
 
 export default connect(

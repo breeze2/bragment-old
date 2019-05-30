@@ -10,7 +10,7 @@ const mapStateToProps = (store: any, props: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<any>, props: any) => ({
     asyncCreateFragment: (columnTitle: string, fragmentTitle: string) => asyncActionDispatcher<boolean>(dispatch,
-        asyncCreateFragmentAction, columnTitle, fragmentTitle),
+        asyncCreateFragmentAction(columnTitle, fragmentTitle)),
 })
 
 export default connect(
